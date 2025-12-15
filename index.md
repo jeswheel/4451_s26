@@ -1,5 +1,5 @@
 ---
-title: "Math 4450 (Fall 2025) 'Mathematical Statistics I'"
+title: "Math 4451 (Spring 2026) 'Mathematical Statistics II'"
 author: "Instructor: Jesse Wheeler"
 output:
   html_document:
@@ -12,7 +12,7 @@ output:
 
 The first of a two-part sequence on:
 Probability, random variables, discrete and continuous distributions, order statistics, limit theorems, point and interval estimation, uniformly most powerful tests, likelihood ratio tests, chi-square and F tests, nonparametric tests. 
-PREREQ: MATH 3326 and MATH 3352. Offered Odd Years in the Fall Semester.
+PREREQ: MATH 3326 and MATH 3352. Offered Even Years in the Spring Semester.
 
 For this sequence of courses, we will stick closely to Chapters 1-10 of the third edition of "Mathematical Statistics and Data Analysis", by John A. Rice.
 This is a well-known textbook to use as an introduction to mathematical statistics at the advanced undergraduate level.
@@ -26,7 +26,8 @@ Tentatively, we will plan on covering the material in Chapters 1-6 in Math 4450,
 
 ## Class notes
 
-- [Final Exam Review Session](examReview/Dec9Review.pdf)
+
+### Math 4450 Notes (Fall 2025)
 
 1. [Chapter 1: Probability](01/index.html)
 
@@ -40,6 +41,9 @@ Tentatively, we will plan on covering the material in Chapters 1-6 in Math 4450,
 
 6. [Chapter 6: Distributions Derived from the Normal Distribution](06/index.html)
 
+
+### Current Course Notes
+
 <!--
 
 -->
@@ -50,13 +54,10 @@ Tentatively, we will plan on covering the material in Chapters 1-6 in Math 4450,
 
 Please read the [grading rubric](rubric_homework.html) before submitting homework.
 
+<!--- 
 
 * [Homework 1](hw01/hw01.pdf), due Wed Sep 10, 11:59pm.
 [TeX file](hw01/hw01.tex)
-
-<!---[Solution](hw01/sol01.html). -->
-
-
 
 * [Homework 2](hw02/hw02.pdf), due Wed Sep 17, 11:59pm.
 [TeX file](hw02/hw02.tex).
@@ -89,6 +90,8 @@ Please read the [grading rubric](rubric_homework.html) before submitting homewor
 
 * [Homework 10 (Final Exam Review)](hw10/hw10.pdf), due Sun Dec 14, 11:59pm
 [TeX file](hw10/hw10.tex)
+
+-->
 
 <!--- 
 
@@ -129,13 +132,19 @@ Please read the [grading rubric](rubric_homework.html) before submitting homewor
 
 ## Midterm
 
+<!--
+
 * [Review](midterm/MidtermReview.pdf).
 
 * [Formula Sheet](midterm/formulaSheet.pdf)
 
+-->
+
 -------------
 
 ## Final Exam
+
+TODO: Update. 
 
 The final exam will be help in our regular classroom on Dec 18, 10:00 a.m. -- 12:00 p.m. The final exam will be comprehensive, closed book.
 
