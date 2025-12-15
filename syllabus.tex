@@ -1,0 +1,413 @@
+\documentclass[11pt]{article}\usepackage[]{graphicx}\usepackage[]{xcolor}
+% maxwidth is the original width if it is less than linewidth
+% otherwise use linewidth (to make sure the graphics do not exceed the margin)
+\makeatletter
+\def\maxwidth{ %
+  \ifdim\Gin@nat@width>\linewidth
+    \linewidth
+  \else
+    \Gin@nat@width
+  \fi
+}
+\makeatother
+
+\setcounter{secnumdepth}{0} % No numbering for sections and below
+
+\definecolor{fgcolor}{rgb}{0.345, 0.345, 0.345}
+\newcommand{\hlnum}[1]{\textcolor[rgb]{0.686,0.059,0.569}{#1}}%
+\newcommand{\hlsng}[1]{\textcolor[rgb]{0.192,0.494,0.8}{#1}}%
+\newcommand{\hlcom}[1]{\textcolor[rgb]{0.678,0.584,0.686}{\textit{#1}}}%
+\newcommand{\hlopt}[1]{\textcolor[rgb]{0,0,0}{#1}}%
+\newcommand{\hldef}[1]{\textcolor[rgb]{0.345,0.345,0.345}{#1}}%
+\newcommand{\hlkwa}[1]{\textcolor[rgb]{0.161,0.373,0.58}{\textbf{#1}}}%
+\newcommand{\hlkwb}[1]{\textcolor[rgb]{0.69,0.353,0.396}{#1}}%
+\newcommand{\hlkwc}[1]{\textcolor[rgb]{0.333,0.667,0.333}{#1}}%
+\newcommand{\hlkwd}[1]{\textcolor[rgb]{0.737,0.353,0.396}{\textbf{#1}}}%
+\newcommand{\Rlogo}{\protect\includegraphics[height=1.8ex,keepaspectratio]{Rlogo.png}}
+\let\hlipl\hlkwb
+
+\usepackage{framed}
+\makeatletter
+\newenvironment{kframe}{%
+ \def\at@end@of@kframe{}%
+ \ifinner\ifhmode%
+  \def\at@end@of@kframe{\end{minipage}}%
+  \begin{minipage}{\columnwidth}%
+ \fi\fi%
+ \def\FrameCommand##1{\hskip\@totalleftmargin \hskip-\fboxsep
+ \colorbox{shadecolor}{##1}\hskip-\fboxsep
+     % There is no \\@totalrightmargin, so:
+     \hskip-\linewidth \hskip-\@totalleftmargin \hskip\columnwidth}%
+ \MakeFramed {\advance\hsize-\width
+   \@totalleftmargin\z@ \linewidth\hsize
+   \@setminipage}}%
+ {\par\unskip\endMakeFramed%
+ \at@end@of@kframe}
+\makeatother
+
+\definecolor{shadecolor}{rgb}{.97, .97, .97}
+\definecolor{messagecolor}{rgb}{0, 0, 0}
+\definecolor{warningcolor}{rgb}{1, 0, 1}
+\definecolor{errorcolor}{rgb}{1, 0, 0}
+\newenvironment{knitrout}{}{} % an empty environment to be redefined in TeX
+
+\usepackage{alltt}
+\usepackage{hanging}
+\usepackage{longtable}
+
+% \renewcommand\thefigure{L-\arabic{figure}}
+% \renewcommand\thetable{L-\arabic{table}}
+% \renewcommand\thepage{L-\arabic{page}}
+% \renewcommand\theequation{L\arabic{equation}}
+
+\newcommand\vsp{\vspace{2mm}}
+
+\usepackage{fullpage}
+\usepackage{bm}
+
+\usepackage{amsmath,amsthm}
+\usepackage{nameref,hyperref}
+\usepackage[normalem]{ulem}% to use \sout in feedback commands
+\usepackage{comment}
+\usepackage{enumitem}
+% \usepackage{wallpaper}
+
+\excludecomment{hidden}
+% \bibliographystyle{apalike}
+
+% Use the PLoS provided BiBTeX style
+% \bibliographystyle{../plos2015}
+% \usepackage{cite}
+
+% Remove brackets from numbering in List of References
+\makeatletter
+\renewcommand{\@biblabel}[1]{\quad#1.}
+\makeatother
+
+\usepackage{verbatim}
+\usepackage{graphicx}
+\usepackage{amsmath,amssymb}
+\usepackage{amsfonts}
+ \usepackage{url}
+\usepackage{color}
+
+\newcommand\code[1]{\texttt{#1}}
+\newcommand\paramVec{\theta}
+
+\newcommand\seq[2]{{#1}\!:\!{#2}}
+\newcommand\vaccClass{Z}
+\newcommand\vaccCounter{z}
+\newcommand\muRS{\mu_{RS}}
+\newcommand\sigmaProc{\sigma_{\mathrm{proc}}}
+\newcommand\transmissionTrend{\zeta}
+\newcommand\transmission{\beta}
+% \input{../edits.tex}
+%\usepackage[sectionbib]{natbib}
+
+%\usepackage{xr}
+%\externaldocument{../ms}
+
+%\newcommand\ifLetter[2]{{#1}}
+
+\parskip 7pt
+\parindent 0pt
+\setlength\parindent{0pt}
+\newcommand\report[1]{{\color{mygreen} \vspace{1mm}\hspace{0.25in}\parbox{6in}{\em #1}}}
+\newcommand\reportN[1]{{\color{mygreen} \vspace{1mm}\hspace{0.35in}\parbox{5.75in}{\em #1}}}
+\newcommand\article[1]{{\color{blue} \vspace{1mm}\hspace{0.25in}\parbox{6in}{\em #1}}}
+\newcommand\blue[1]{{\color{blue}{#1}}}
+
+%\topmargin -0.3in % for EI dvips
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\begin{document}
+
+% \ThisULCornerWallPaper{1}{ISUletterhead2025.pdf}
+
+
+
+\rule{0cm}{0.3cm}
+
+%\vspace{-28mm}
+\vspace{-8mm}
+
+\includegraphics[width=\textwidth,trim={0 25.2cm 0 1.6cm},clip]{ISUletterhead2025.pdf}
+
+% \vspace{10mm}
+
+\begin{center}
+{\bf \LARGE Course Overview and Syllabus:}
+{\bf \LARGE Math 4450, Sec 01. ``Mathematical Statistics I", Fall 2025}
+\end{center}
+
+\vspace{3mm}
+
+Course Website: \href{https://jeswheel.github.io/4450\_f25}{https://jeswheel.github.io/4450\_f25}
+
+\section{Instructor Information}
+
+Jesse Wheeler \\
+Mathematics and Statistics Department \\
+Email: jessewheeler@isu.edu\\
+Office: PS 314C\\
+Office Hours: 
+\begin{itemize}
+  \item Tuesdays + Thursdays 12:15 pm - 1:30 pm (right after class).
+  \item Mondays + Wednesdays 9:45 am - 11:00 am.
+  \item Also by appointment if necessary.
+\end{itemize}
+
+You can contact me during office hours or via Email. 
+I will try my best to respond to questions within 24 hours during Mon-Fri.
+Feel free to email me over the weekends, but I may not be actively monitoring my emails during these times and you may have longer response times.
+
+\section{Course Description}
+
+The first of a two-part sequence on:
+Probability, random variables, discrete and continuous distributions, order statistics, limit theorems, point and interval estimation, uniformly most powerful tests, likelihood ratio tests, chi-square and F tests, nonparametric tests. 
+PREREQ: MATH 3326 and MATH 3352. Offered Odd Years in the Fall Semester.
+
+Multivariate calculus (MATH 2275) is not a formal prerequisite for the class, but we will use a little bit throughout the course. This will arise primarily in the derivation of theorems in course lectures, but it is not expected that students will need a complete understanding of the topic for this course.
+
+This course is 3 Credit Hours, and we meet every Tuesday and Thursday, 11:00 am - 12:15 pm, PS 313, with the exception of university-observed holidays and breaks.
+
+This course is a prerequisite for Math 4451. A student must earn a C- or better in this class in order to use this as a pre-requisite for this course.
+
+\subsection{Course Objectives and Outcomes}
+
+\begin{itemize}
+  \item Students will use methods of intermediate probability theory.
+  \begin{itemize}
+    \item Perform probability calculations.
+    \item Develop probability models.
+    \item Prove elementary results about probability.
+  \end{itemize}
+  \item Students will use random variables.
+  \begin{itemize}
+    \item Perform rigorous probability calculations involving random variables.
+    \item Obtain distributional information about a random variable.
+  \end{itemize}
+  \item Students will use theory associated with random variables.
+  \begin{itemize}
+    \item Determine the distribution of a functional combination of a list of random variables.
+    \item Determine the distribution of the limit of a sequence of random variables.
+  \end{itemize}
+\end{itemize}
+
+\section{Course Format}
+
+This is a standard class where we will meet in-person.
+All students are required to attend all classes during the first week. 
+Any student having to miss during the first week needs instructor approval. 
+Students will be dropped from their courses if they do not attend the first week and do not have permission from the instructor.
+
+After the first week of classes, attendance is expected but will not be recorded.
+Lectures will not be recorded, but slides will be available to students who miss lecture.
+Course materials, activities, and assignments will be posted on Canvas.
+
+\textbf{General course information can be found at the course website:} \url{https://jeswheel.github.io/4450\_f25}
+
+\subsection{Assessment Methods}
+
+Student understanding will be assessed via homework, quizes, a midterm exam, and a final exam.
+
+\section{Textbook and Course Materials}
+
+\subsection{Required Text}
+\begin{hangparas}{0.25in}{1}
+Rice, J. A., 2007. \emph{Mathematical Statistics and Data Analysis}. Vol. 371. Belmont, CA: Thomson/Brooks/Cole. Third Edition. ISBN: 0-534-39942-8.
+\end{hangparas}
+
+This text will be required, and our lectures will follow the textbook closely.
+
+\subsection{Supplemental Text}
+
+The John A. Rice textbook is a nice introduction to the topic, but as an undergraduate level text, it sometimes misses details that would be nice to have. 
+As such, I recommend the following as supplemental text on the topic if you would like to learn more; I also will occasionally draw material from these textbooks when relevant, though these texts are not required.
+
+\begin{hangparas}{0.25in}{1}
+Casella, G. and Berger, R., 2024. \emph{Statistical inference}. Chapman and Hall/CRC. Second Edition. ISBN: 0-534-24312-6.
+\end{hangparas}
+
+\begin{hangparas}{0.25in}{1}
+Resnick, S. I, 2019. \emph{A probability path}. Springer. ISBN: 978-0-8176-8408-2
+.
+\end{hangparas}
+
+My brief description of each book: Casella and Berger covers the same basic topics as the John Rice textbook, but at a higher-level (master's student). Specifically, it covers both probability and statistics, and could be used as a textbook for 4450/4451. While the book is more advanced, it does not provide a rigourous, measure-theoretic approach to probability.
+Resnick is a great textbook for a measure-theoretic approach to probability and statistics, geared towards an advanced student of statistics. It's often used as a reference for a PhD level course, but can also be a nice reference for advanced probability for both math and statistics students (geared towards the latter).
+
+\subsection{Software}
+
+For Math 4450, I do not anticipate that we will use any statistical software (or any software for that matter). However, for Math 4451, I anticipate that we will use the \Rlogo\, programming language; 
+for the purpose of our class, think of this software as a special calculator used for Statistics.
+To interact with this software, I highly recommend using RStudio, an Integrated Development Environment (IDE) built for writing \Rlogo\, code.
+
+\textbf{Why R?} R and RStudio are both free, and widely used software in both academia and industry. 
+R has been built specifically to help practicioners do statistics easily.
+
+\begin{itemize}
+  \item Installing \Rlogo: \href{https://cran.r-project.org/}{https://cran.r-project.org/}
+  \item Installing RStudio: \href{https://posit.co/download/rstudio-desktop/}{https://posit.co/download/rstudio-desktop/}. 
+  Note that you should install \Rlogo\, prior to installing RStudio.
+\end{itemize}
+
+Other types of calculators are permitted, but it is not anticipated that they will be beneficial beyond what you can do in R.
+
+\section{Grading}
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{|c|c|}
+\hline
+\textbf{Grade} & \textbf{Percentage Range} \\
+\hline
+Participation Quizes & $5\%$ \\
+Homework & $50\%$ \\
+Midterm & $15\%$ \\
+Final & $30\%$ \\
+\hline
+\end{tabular}
+\caption{Assignment Weights}
+\end{table}
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{|c|c|}
+\hline
+\textbf{Grade} & \textbf{Percentage Range} \\
+\hline
+A  & 93--100 \\
+A- & 90--92.99 \\\hline
+B+ & 87--89.99 \\
+B  & 83--86.99 \\
+B- & 80--82.99 \\\hline
+C+ & 77--79.99 \\
+C  & 73--76.99 \\
+C- & 70--72.99 \\\hline
+D+ & 67--69.99 \\
+D  & 65--66.99 \\
+D- & 60--64.99 \\\hline
+F  & 0--54.99 \\
+\hline
+\end{tabular}
+\caption{Grade Breakdown}
+\end{table}
+
+An instructor may give an X grade when a student has not attended or stops attending, therefore giving the instructor no basis to calculate a grade for that student.
+The X grade is equivalent to an F. 
+No credits or grade points are awarded in any courses for which an X grade is reported.
+
+\section{Schedule (Tentative)}
+
+The table below provides a tentative schedule of the course. 
+This table will be updated on the course website as needed.
+
+\begin{longtable}{|c|l|c|}
+\hline
+\textbf{Week} & \textbf{Dates (T Th)} & \textbf{Textbook Chapters} \\
+\hline
+\endhead
+
+1 & Aug 26, 28     & 1\\\hline
+2 & Sep 2, 4       & 1\\\hline
+3 & Sep 9, 11      & 1 + 2\\\hline
+4 & Sep 16, 18     & 2 \\\hline
+5 & Sep 23, 25     & 2 \\\hline
+6 & Sep 30, Oct 2  & 3 \\\hline
+7 & Oct 7, 9       & 3 \\\hline
+8 & Oct 14, {\color{blue} \textbf{16}} & 3 + 4\\\hline
+9 & Oct 21, 23     &  4 \\\hline
+10 & Oct 28, 30    &  4 \\\hline
+11 & Nov 4, 6      &  5 \\\hline
+12 & Nov 11, 13    &  5 \\\hline
+13 & Nov 18, 20    &  5 + 6\\\hline
+14 & \multicolumn{2}{|c|}{\textit{Fall Break (No Classes, Nov 25 \& 27)}} \\\hline
+15 & Dec 2, 4      &  6 \\\hline
+16 & Dec 9, 11     &  6 \\\hline
+17 & Dec 15--19 & Finals Week ({\color{blue}Dec \textbf{18}}) \\ \hline
+
+\end{longtable}
+
+
+For other important dates and deadlines, please see the University academic calendar: \url{https://www.isu.edu/academiccalendar/}.
+
+\subsection{Exams}
+
+\begin{itemize}
+  \item \textbf{Final Exam}: Thursday, Dec 18, 10:00 a.m. -- 12:00 p.m. The location will be our regular classroom. The exam will be closed book.
+  \item \textbf{Midterm}: Planned for {\color{blue} \textbf{Oct 16}}, during regular class time. Tentatively, the midterm will cover Chapters 1--3.
+\end{itemize}
+
+\subsection{Homeworks}
+
+Homeworks make up the largest portion of your final grade.
+There will be 10 homework assignments, each worth $5\%$ of your grade.
+Homework assignments will be due one week after they are assigned, which will be made clear to students via Canvas announcements.
+Late homework submissions will not be accepted, unless permission is provided by the instructor.
+
+Homeworks will be 10 points total: 9 points for contribution (correct and original responses), 1 point for academic integrity.
+You can use any resources to help you with your homework, including the internet and generative AI.
+Before using outside sources, you are required to work on a given problem for at least one hour (honor-system).
+
+The order of preferred sources are:
+\begin{itemize}
+  \item Lecture Slides, Lecture Notes, and the Textbook.
+  \item Office hours.
+  \item Classmates.
+  \item The internet.
+  \item Other.
+\end{itemize}
+When looking for outside sources, please try your best to not search directly for a solution.
+To obtain full points for ``academic integrity", each homework assignment must include a statement at the start of the assignment indicating which sources they used, how long they worked on the problem before looking for alternative sources, and what they learned from the source they found.
+More details regarding the 1 academic integrity point can be found at \url{https://jeswheel.github.io/4450\_f25/rubric\_homework.html} 
+
+
+\subsection{Quizes}
+
+There may be periodic quizes on Canvas. The point of these quizes is the assess student comprehension and satisfaction with the course.
+Some questions will be knowledge based, others survey / opinion based. 
+Students who complete the quizes will be awarded full points, regardless of whether or not they answer questions correctly.
+
+\section{Academic Complaints / Grievances}
+
+Students with academic complaints / grievances should first meet with the instroctor responsible for the policy, proceedure, or decision that resulted in the student's initial complaint/grievance. If the student is still dissatisfied after that meeting, the student should next meet with the instructor's department chair (Dr. Rault, PS 318B, patrickrault@isu.edu) and then with the dean of the college (Dr. Widman, PS 120A, jameswidmann@isu.edu). For more information, see: \url{https://www.isu.edu/deanofstudents/advocacy-services/}.
+
+\section{Tutoring / Resources}
+
+The following link to the University Tutoring website includes hours of operation, a link for online (Zoom) tutoring, and other information: \url{https://www.isu.edu/tutoring/}
+
+\section{Accessibility Statement}
+
+Our program is committed to all students achieving their potential. 
+If you have a disability or think you have a disability (physical, learning disability, hearing, vision, psychiatric) which may need a reasonable accommodation, please contact Disability Services located in the Rendezvous Complex, Room 125, 282-3599 as early as possible.
+
+\section{Academic Integretiy}
+
+Academic integrity is expected of all students. Academic dishonesty, including cheating or plagiarism, is unacceptable. 
+The Idaho State University academic dishonesty policy allows an instructor to impose one of several penalties for cheating that range from a warning up to assigning a failing grade for the course or dismissal from the University. 
+ANY use of an electronic device or other form of unauthorized materials during an exam or other assessment will be considered cheating. 
+
+For more information, see the ISU Policies and Procedures Student Conduct System.
+\url{http://coursecat.isu.edu/undergraduate/academic\_integrity\_and\_dishonesty\_policy/}
+
+\section{Title IX}
+
+Idaho State University is committed to fostering an environment in which students, faculty and staff from all backgrounds can live, work and learn free from the insidious and debilitating effects of prejudice, discrimination and marginialization.
+As such, ISU is committed to providing an environment free of all forms of discrimination, including sexual and gender-based discrimination, harassment, and violence such as sexual assault, dating violence, domestic violence, and stalking.
+If you (or someone you know) has experienced or is experiencing these types of behaviors, we have resources available to help.  
+
+ISU faculty and staff are concerned about the well-being and development of our students. 
+If you inform me of any experience regarding harassment or discrimination, I (Jesse Wheeler) am obligated to share information with the ISU Title IX Coordinator to ensure that the student’s safety and welfare is being addressed, consistent with the requirements of law.
+If you would like to talk to the Title IX Coordinator, Ian Parker directly, you may contact him at (208) 282-1439 or ianparker@isu.edu, located in Rendezvous 235.
+If you would like more information regarding Title IX or to make an online report please visit the Title IX homepage at https://www.isu.edu/title-ix/how-to-report/.
+
+\section{Health and Saftey on Campus}
+
+Idaho State University strongly encourages all individuals to receive a COVID-19 vaccine.
+Students who are experiencing COVID-19-like symptoms should not attend class in person.
+Individuals who are exhibiting symptoms of COVID-19 should contact University Health at (208) 282-2330 or their health care provider and complete the University’s self-report form.
+Students are encouraged to notify faculty of illness and expected duration of absenteeism.
+Students are required to fully participate in the University’s contact tracing process and follow all instructions related to quarantine and isolation.
+
+\end{document}
+

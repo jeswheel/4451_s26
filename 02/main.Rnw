@@ -1,0 +1,1716 @@
+\input{../header}
+
+% \mode<beamer>{\usetheme{AnnArbor}}
+\mode<beamer>{\usetheme{metropolis}}
+\mode<beamer>{\metroset{block=fill}}
+% \mode<beamer>{\usecolortheme{wolverine}}
+
+\mode<beamer>{\setcounter{tocdepth}{2}}
+\mode<beamer>{\setbeamertemplate{section in toc}[sections numbered]}
+\mode<beamer>{\setbeamertemplate{subsection in toc}[subsections numbered indented]}
+
+% \mode<beamer>{\usefonttheme{serif}}
+\mode<beamer>{\setbeamertemplate{footline}}
+\mode<beamer>{\setbeamertemplate{footline}[frame number]}
+\mode<beamer>{\setbeamertemplate{frametitle continuation}[from second][\insertcontinuationcountroman]}
+\mode<beamer>{\setbeamertemplate{navigation symbols}{}}
+
+\mode<handout>{\pgfpagesuselayout{2 on 1}[letterpaper,border shrink=5mm]}
+
+\newcommand\CHAPTER{2}
+% \newcommand\answer[2]{\textcolor{blue}{#2}} % to show answers
+% \newcommand\answer[2]{\textcolor{red}{#2}} % to show answers
+ \newcommand\answer[2]{#1} % to show blank space
+
+\title{\vspace{2mm} \link{https://jeswheel.github.io/4450_f25/}{Mathematical Statistics I}\\ \vspace{2mm}
+Chapter \CHAPTER: Random Variables}
+\author{Jesse Wheeler}
+\date{}
+
+\setbeamertemplate{footline}[frame number]
+
+<<setup,include=FALSE,cache=FALSE,purl=FALSE,child="../setup.Rnw">>=
+@
+
+\begin{document}
+
+\maketitle
+
+\mode<article>{\tableofcontents}
+
+\mode<presentation>{
+  \begin{frame}{Outline}
+    \tableofcontents
+  \end{frame}
+}
+
+\section{Introduction}
+
+\begin{frame}{Introduction}
+  
+  \begin{itemize}
+
+  \item This material is based on Chapter~2 of \citet{rice07}.
+  \item Formally, a \alert{random variable} is a function from a sample space $\Omega$ to the real numbers\footnote{In this class, will assume real-valued spaces, though more generally a random variable can map to any measureable space}.
+  
+  \item That is, for any element $\omega \in \Omega$, a random variable $X$ will map $\omega$ to a real number: $X(\omega) \in \R$.
+  
+  \item Most often people think of random variables as random numbers rather than functions; in most instances in this class, this treatment will be sufficient.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Example of a random variable}
+  Consider the experiment of flipping three coins. The sample space is
+  $$
+  \Omega = \{hhh, hht, hth, thh, htt, tht, tth, ttt\}.
+  $$
+  
+  \begin{itemize}
+    \item Some possible random variables include (1) the number of heads, (2) the number of tails, (3) the number of heads minus the number of tails.
+  
+    \item Importantly, a random variable must assign a value to all possible outcomes $\omega \in \Omega$.
+  \end{itemize}
+  
+  \begin{exampleblock}{Number of Heads}
+    Let $X$ be the random variable representing the number of heads. If the result of the experiment is the outcome $hth$, then $X(\{hth\}) = 2$.
+  \end{exampleblock}
+  
+\end{frame}
+
+\begin{frame}{A few comments on random variables}
+  \begin{itemize}
+    \item Sometimes in this course I will use the abbreviation RV to mean ``random variable", and you can do so as well.
+    \item It is conventional to use uppercase letters (math text or italics) to denote random variables.
+    \item While a random variable is a function, the outcome of an experiment $\omega \in \Omega$ is random (that's the point), and we only ever see a single outcome.
+    \item Thus, the fact that $X$ is a function is often dropped, and we just write $X$. 
+    The realized value of $X$ is random, because the input is random. 
+  \end{itemize}
+\end{frame}
+
+\section{Discrete Random Variables}
+
+\begin{frame}{Discrete Random Variables}
+  \begin{block}{Definition: Discrete random variable}
+    A discrete random variable is a random variable that can take on only a finite or at most a countably infinite number of values.
+  \end{block}
+  
+  \begin{itemize}
+    \item Example: The number of heads in three coin flips can only be in the set $\{0, 1, 2, 3\}$. Alternatively, consider flipping a coin indefinitely until you achieve a heads. The possible outcomes are in the set $\{1, 2, 3, \ldots\}$, which is countably infinite.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]{Probabilities}
+
+  \begin{itemize}
+
+    \item The probability measure on the sample space determines the probability of the values of $X$.
+    
+    \item In our example, if a coin is fair, then we can assign a uniform probability measure on the sample set of flipping a coin three times. 
+  
+    \item That is, all outcomes are equally likely, each with probability $1/8$.
+    
+    \item The probability that $X$ takes on it's potential values is easily computed, by counting the number of outcomes that result in the particular value of $X$:
+  \end{itemize}
+  
+  \begin{align*}
+    P(X = 0) &= \frac{1}{8} \\
+    P(X = 1) &= \frac{3}{8} \\
+    P(X = 2) &= \frac{3}{8} \\
+    P(X = 3) &= \frac{1}{8}.
+  \end{align*}
+  
+  \framebreak
+  
+  \begin{itemize}
+    \item These simple examples gives us some intuition to derive formulas for the more general case.
+    \item More generally, let's assume that $X$ is a discrete RV, and denote the possible values as $x_1, x_2, \ldots$.
+  There exists a function $p$ such that $p(x_i) = P(X = x_i)$ that satisfies $\sum_i p(x_i) = 1$.
+  This function $p$ is called the \alert{probability mass function} (pmf) of the random variable $X$. 
+  
+    \item We may also be interested in calculating for all values $x \in \R$, the probability $F(x) = P(X \leq x)$; the function $F$ is called the \alert{cumulative distribution function} (cdf).
+  The cdf plays a number of important roles in probability and statistics that we will see later on.
+  \end{itemize}
+  
+  \framebreak
+  
+  Some notes: 
+  
+  \begin{itemize}
+    \item The cdf is non-decreasing (see Theorem 1.2), and
+    $$
+    \lim_{x \rightarrow -\infty} F(x) = 0 \quad \text{and} \quad \lim_{x \rightarrow \infty} F(x) = 1.
+    $$
+    \item The pmf and cdf are connected: the cdf ``jumps" at all values that the pdf $p(x) > 0$.
+    \item Conventionally, the pmf is usually denoted with lower-case letters (e.g., $p$, $f$), whereas the cdf is usually denoted with upper-case letters (e.g., $F$). 
+  \end{itemize}
+  
+  \mode<article>{
+    See Figures 2.1 and 2.2 of \citet{rice07} for a depiction of the pmf and cdf of the 3-coin example.
+  }
+  
+\end{frame}
+
+\begin{frame}{Independence}
+
+  \begin{itemize}
+    \item Jumping ahead a little bit, we will define what it means for random variables to be independent (a chapter 3 topic).
+  \end{itemize}
+  
+  \begin{block}{Definition: Independent random variables}
+    Let $X$ and $Y$ be discrete random variables defined on the same probability space, taking values $x_1, x_2, \ldots$ and $y_1, y_2, \ldots$, respectively. $X$ and $Y$ are said to be independent if, for all $i, j$, 
+    $$
+    P(X = x_i, Y = y_i) = P(X = x_i)P(Y = y_i).
+    $$
+  \end{block}
+  
+  \begin{itemize}
+    \item This definition follows very similarly to that of independent events. We can also extend this definition to \alert{mutual independence} of many variables if the probabilities of all combinations of variables can be factored.
+  \end{itemize}
+  
+\end{frame}
+
+\subsection{Common random variables}
+
+\subsubsection{Bernoulli Random Variables}
+
+\begin{frame}{Bernoulli Random Variables}
+
+  \begin{itemize}
+    \item A Bernoulli RV only takes on two values\footnote{Sometimes you'll see the random variable take values $-1$ and $1$.}, $0$ and $1$, with probabilities $1-p$ and $p$, respectively.
+  The pmf is therefore
+  \begin{align*}
+    p(1) &= p \\
+    p(0) &= 1-p \\
+    p(x) &= 0, \quad \text{if } x \neq 0 \text{ and } x\neq 1.
+  \end{align*}
+
+    \item By using the output of $0$ and $1$, the pmf is usually written in a more compact form:
+  $$
+  p(x) = \begin{cases} 
+    p^x(1 - p)^{1-x}, & \text{if } x = 0\, \text{ or } x = 1,\\
+    0 & \text{otherwise}
+  \end{cases}
+  $$
+  \end{itemize}
+  
+\end{frame}
+
+\begin{frame}{Indicator functions}
+  \begin{itemize}
+    \item A common instance of a Bernoulli RV is an \alert{indicator random variable}.
+  Let $I_A$ be the random variable that takes on the value of $1$ if the event $A \subset \Omega$ occurs, and $0$ otherwise:
+  $$
+  I_A(\omega) = \begin{cases}
+    1 & \omega \in A \\
+    0 & \text{otherwise}
+  \end{cases}
+  $$
+  \item Here, we see that $P(I_A = 1) = P(A)$. 
+  \end{itemize}
+\end{frame}
+
+\subsubsection{Binomail Distribution}
+
+\begin{frame}[allowframebreaks]{Binomial Distribution}
+
+  \begin{itemize}
+    \item Using what we know about independent RVs and Bernoulli RVs, we can derive the pmf for a Binomial distribution.
+  
+    \item Suppose that we have $n$ independent experiments, where $n$ is a fixed (positive) integer.
+  Let each experiment have two outcomes with probabilities $p$ and $1-p$, respectively, which we call ``success" or ``failure".
+  We are interested now in the random variable $X$, the number of ``successes" in $n$ independent trials.
+  
+  \item \emph{Question:} What is the probability that $X = k$, for some $k \in \{0, 1, 2, \ldots\}$?
+  \end{itemize}
+  
+  \framebreak
+  
+  \emph{Solution Sketch}: 
+  
+  \mode<article>{
+  
+    \begin{itemize}
+      \item For $X = k$, we must have \emph{exactly} $k$ successes and $n-k$ failures. By the multiplication law, any one such sequence has probability $p^k(1 - p)^{n-k}$ (for instance suppose $n = 3$. What is the probability of the event $SFS$? it's $p \times (1-p) \times p = p^2(1-p)^{3-2}$.)
+    
+      \item Because we only care about the \emph{number} of successes, not the order, we now have a counting problem: with $n$ total trials (positions), how many ways can we arrange the $k$ successes? Another way of thinking is: ``How many ways can we choose $k$ out of $n$ locations in a sequence to place the successes?".
+    
+    \item The answer is $\binom{n}{k}$, so in total, the probability that $X = k$ is: 
+    $$
+    p(k) = P(X = k) = \binom{n}{k}p^k(1- p)^{n-k}.
+    $$
+    
+    \item The function $p$ above is the pmf for the binomial distribution.
+    \end{itemize}
+  }
+  
+  \framebreak
+  
+  \begin{exampleblock}{Flipping Coins}
+    Suppose that a coin is flipped $10$ times. What is the probability that the coin lands heads heads exactly $6$ times? 
+    
+    Here, $n = 10$, and success$ = $ Heads. Assuming the coin is fair, we have
+    $$
+    P(\text{Num Heads} = 6) = \binom{10}{6}(0.5)^6(0.5)^4 \approx 210 \times 0.00098 \approx .205
+    $$
+  \end{exampleblock}
+  
+  \framebreak
+  
+  \begin{exampleblock}{Example: multiple dice}
+    Suppose a five 6-sided (fair) dice are rolled simultaneously. What is the probability that at least two of the dice show the value 6?
+    \mode<article>{
+    \emph{Solution:}
+    \begin{itemize}
+    \item Let $X$ denote the number of 6s in this experiment, which takes values in the set $\{0, 1, \ldots 5\}$.
+    We want the probability that $X \geq 2$. 
+    
+    \item Because the different values of $X$ are mutually exclusive events (i.e., $X=2$ implies $X \neq 3$), we can calculate this as:
+    $$
+    P(X \geq 2) = \sum_{i \in \{2, 3, 4, 5\}} p(i) \approx \Sexpr{1 - dbinom(0, 5, 1/6) - dbinom(1, 5, 1/6)},
+    $$
+    where $p(i)$ is the pmf of the binomial$(5, 1/6)$ distribution. 
+    
+    \item Alternatively, we can use the complement set, which is smaller:
+    $$
+    P(X \geq 2) = 1 - P(X < 2) = 1 - \big(p(0) + p(1)\big) \approx \Sexpr{1 - dbinom(0, 5, 1/6) - dbinom(1, 5, 1/6)}
+    $$
+  \end{itemize}
+    }
+  \end{exampleblock}
+  
+  \framebreak
+
+  
+ \begin{itemize} 
+  \item \emph{Note:} A binomial RV can be expressed as the sum of independent Bernoulli RVs. That is, let $X_1, X_2, \ldots, X_n$ be independent Bernoulli RVs, each with $P(X_i = 1) = p$. Then,
+  $Y = X_1 + X_2 + \ldots + X_n$ is a Binomial RV, with parameters $(n, p)$.
+  \end{itemize}
+  
+\end{frame}
+  
+\subsubsection{Geometric and Negative Binomial Distributions}
+
+\begin{frame}[allowframebreaks]{Geometric Distribution}
+  
+  \begin{itemize}
+    \item We can construct a \alert{geometric} RV in a similar way that we did with the binomial distribution.
+    
+    \item Suppose instead of having a fixed number of trials, we continue having a trial until our first success. That means that if $X = k$, we will have $k-1$ failures, one success, and then stop.
+    
+    \item Thus, the pmf can easily be constructed to be: 
+    $$
+    p(k) = P(X = k) = (1-p)^{k-1}p, \quad k = 1, 2, 3, \ldots
+    $$
+  \end{itemize}
+  
+  \framebreak
+  
+  \begin{block}{Geometric Series}
+    Recall from calculus the geometric series:
+    $$
+    \sum_{i = 0}^\infty r^i = \frac{1}{1 - r}, \quad \text{if } 0 < r < 1.
+    $$
+    This identity occurs in the pmf of the geometric series. Let $0 < p < 1$, then
+    $$
+    \sum_{k = 1}^\infty (1 - p)^{k-1}p = p\sum_{j = 0}^\infty (1-p)^j = p\frac{1}{1 - (1-p)} = 1.
+    $$
+  \end{block}
+  
+\end{frame}
+
+\begin{frame}[allowframebreaks]{Negative Binomial Distribution}
+  
+  \begin{itemize}
+    \item The \alert{negative binomial} (NB) distribution can be thought of as a generalization of the geometric distribution; rather than stopping when we have exactly one success, we now will stop when we have $r$ successes.
+  
+    \item For any particular sequence of trials of length $k$ that satisfy this condition, the probability is $p^r(1 - p)^{k - r}$.
+  
+    \item The last trial must be a success (because we stopped), so we need to choose the location of the remaining $r - 1$ successes. 
+    
+    \item Thus, if $X$ has a negative binomial distribution, the pmf is:
+  $$
+  p(k) = P(X = k) = \binom{k-1}{r - 1}p^r(1-p)^{k-r}.
+  $$
+  \end{itemize}
+  
+  \framebreak
+  
+    \begin{itemize}
+      \item Another way that can be helpful for thinking about the NB-distribution is considering it as the sum of $r$ independent geometric random variables: 
+  
+      \item We want to represent the total number of trials until the $r$th success, which is the sum of the number of trials until (and including) the first success, plus the number of trials from the first success until (and including) the second success, and continued until we get $r$ successes.
+    \end{itemize}
+  
+  \begin{exampleblock}{Negative Binomial Lottery}
+    Suppose that there is a type of lottery where each purchased ticket has equal probability of winning $(p = 1/100)$, and there are 3 total prizes to be won. 
+    What is the probability that exactly $k$ tickets will be sold until all prizes have been won? 
+    $$
+    P(X = k) = \binom{k-1}{3 - 1}(0.01)^3(0.99)^{k-3}.
+    $$
+    
+  \end{exampleblock}
+  
+\end{frame}
+
+\subsubsection{Hypergeometric and Poisson Distribution}
+
+\begin{frame}[allowframebreaks]{The Hypergeometric Distribution}
+
+  \begin{itemize}
+    \item Suppose that there is a total population of size $n$, and $r$ have some trait of interest (``success"), and $n-r$ do not (``failure").
+    
+    \item If we sample $m$ items from the population, then the total number of ``successes" in our sample of size $m$ follows a hypergeometric distribution:
+$$
+P(X = k) = \frac{\binom{r}{k}\binom{n-r}{m-k}}{\binom{n}{m}}.
+$$
+  \end{itemize}
+
+\framebreak
+
+  \begin{itemize}
+  
+  \item Combinatorially, for $X = k$, we must select $k$ successes out of the total possible $r$ successes in the entire population; there are $\binom{r}{k}$ ways to do this.
+
+  \item Since we selected $m$ objects in our sample, and we want $m-k$ of them to be failures, we must pick $m-k$ failures from the $n-r$ failures in the population; there are $\binom{n-r}{m-k}$ ways to do this.
+
+  \item Together, the multiplication principle implies there are $\binom{r}{k}\binom{n-r}{m-k}$ ways that a sample of size $m$ contains $k$ successes from described population.
+
+\mode<presentation>{
+  \item Finally, there are a total of $\binom{n}{m}$ ways we can pick our sample.
+}
+
+\mode<article>{
+\item Finally, there are a total of $\binom{n}{m}$ ways we can pick our sample:
+
+$$
+P(X = k) = \frac{\binom{r}{k}\binom{n-r}{m-k}}{\binom{n}{m}}.
+$$
+}
+
+\end{itemize}
+
+\begin{exampleblock}{Balls in a basket}
+  Suppose that there are $n$ balls in a basket, and $r$ balls are black, $n-r$ balls are some other color. If we select $1 \leq m < n$ balls randomly (without replacement), let $X$ denote the number of black balls in our sample of size $m$. Then, for all $0 \leq k \leq r$,
+  $$
+  P(X = k) = \frac{\binom{r}{k}\binom{n-r}{m-k}}{\binom{n}{m}}.
+  $$
+\end{exampleblock}
+
+\end{frame}
+
+\begin{frame}[allowframebreaks]{The Poisson Distribution}
+
+  \begin{itemize}
+    \item The Poisson distribution is used very frequently in both theory and practice, though the derivation is less intuitive than other distributions, so we will first just provide the pmf:
+  \end{itemize}
+  
+  \begin{block}{Definition: Poisson Distribution}
+    The pmf of a random variable $X$ that follows a Poisson distribution with parameter $\lambda > 0$ is
+    $$
+    p(k) = P(X = k) = \frac{\lambda^k}{k!}e^{-\lambda}, \quad k = 0, 1, 2, \ldots
+    $$
+  \end{block}
+  
+  \framebreak
+  
+  \begin{itemize}
+    \item Recall from calculus that $e^x = \sum_{n = 0}^\infty \frac{x^n}{n!}$. Thus, like all pmf's, the pmf of a Poisson distributed RV sums to one:
+  \end{itemize}
+  
+  \begin{align*}
+    \sum_{k = 0}^\infty p(k) &= \sum_{k = 0} \frac{\lambda^k}{k!}e^{-\lambda} \\
+    &= e^{-\lambda}\sum_{k = 0} \frac{\lambda^k}{k!} \\
+    &= e^{-\lambda}e^\lambda = 1.
+  \end{align*}
+  
+  \framebreak
+  
+  \begin{itemize}
+    \item The value of $\lambda$ controls the \emph{shape} of the distribution:
+  \end{itemize}
+  
+  \begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.55\textwidth]{poisson.png}
+  \caption{\label{fig:poisson}Shape of the Poisson distribution for various values of $\lambda$ \citep{wiki:poisson}.}
+  \end{figure}
+ 
+\framebreak
+
+\begin{itemize}
+  \item The Poisson distribution can be derived as the limit of a binomial distribution as the number of trials $n \rightarrow \infty$, and $p\rightarrow 0$, such that $np = \lambda$.
+\end{itemize}
+
+\mode<presentation>{
+  See next slide.
+}
+
+\framebreak
+
+\emph{Derivation:} 
+
+\mode<article>{
+
+\vspace{2mm}
+
+Recall the pmf of the binomal distribution can be expressed as
+$$
+p(k) = \frac{n!}{k!(n - k)!}p^k(1- p)^{n-k}.
+$$
+Setting $np = \lambda$, the expression becomes:
+\begin{align*}
+  p(k) &= \frac{n!}{k!(n - k)!} \Big(\frac{\lambda}{n}\Big)^k \Big(1 - \frac{\lambda}{n}\Big)^{n-k} \\
+  &= \frac{\lambda^k}{k!}\frac{n!}{(n-k)!}\frac{1}{n^k}\Big(1 - \frac{\lambda}{n}\Big)^n\Big(1 - \frac{\lambda}{n}\Big)^{-k}
+\end{align*}
+
+Now taking the limit $n \rightarrow \infty$,
+\begin{align*}
+  \frac{\lambda}{n} &\rightarrow 0 \\
+  \frac{n!}{(n-k)!n^k} &\rightarrow 1 \\
+  \Big(1 - \frac{\lambda}{n}\Big)^n &\rightarrow e^{-\lambda} \\
+  \Big(1 - \frac{\lambda}{n}\Big)^{-k} &\rightarrow 1
+\end{align*}
+
+And therefore
+$$
+p(k)\rightarrow \frac{\lambda^ke^{-\lambda}}{k!}.
+$$
+}
+
+\framebreak
+
+\mode<presentation>{
+\emph{Derivation (continued):} 
+}
+
+\framebreak
+
+This derivation suggests how a Poisson distribution can arise in practice.
+
+\begin{itemize}
+  \item Let $X$ denote the random variable representing the number of times some event occurs in a fixed time interval.
+  \item Think of dividing the interval into very large number of small sub-intervals of equal length.
+  \item Assume that the sub-intervals are so small that the probability of more than one event in a sub-interval is negligible relative to the probability of one event (which itself is small).
+  \item Finally, assume that the probability of an event in a given sub-interval is identical and independent of that of other sub-intervals.
+\end{itemize}
+
+\framebreak
+
+\begin{itemize}
+  \item Following this, X is nearly binomially distributed, with $n$ being the number of sub-intervals, and $p = \lambda / n$ the probability of the event in each sub-interval.
+  \item Taking the limit, we get something that is nearly Poisson distributed.
+\end{itemize}
+
+\framebreak
+
+\begin{itemize}
+
+\item This idea can actually be formalized and made rigorous; you would probably see something like this in a course on stochastic processes.
+
+\item The Poisson distribution is often used to model the number of events that occur in a fixed interval.
+\end{itemize}
+
+\framebreak
+
+The Poisson distribution is often good model for the number of events in a fixed time interval if the following conditions are met:
+\begin{itemize}
+  \item The occurrence of one event does not affect the occurrence of another.
+  \item The rate at which events occur is fixed.
+  \item Two events cannot occur at the exact same instant.
+\end{itemize}
+
+In this scenario, the random (stochastic) process that generates the data is called a \alert{Poisson process}, which gives rise to the name \alert{rate} for the parameter $\lambda$.
+
+\framebreak
+
+\begin{block}{Definition: Poisson Process}
+  Let $\lambda > 0$ be fixed. We let $N(t)$ be a random variable denoting the number of events that occur from time $t = 0$ up to time $t$. The counting process $\{N(t),\, t\in[0, \infty)\}$ is called a Poisson process with rate $\lambda$ if the following conditions hold:
+  \begin{itemize}
+    \item $N(0) = 0$.
+    \item $N(t)$ has independent increments.
+    \item The number of ``arrivals" in any interval of length $\tau > 0$ is Poisson$(\lambda \tau)$ distributed.
+  \end{itemize}
+\end{block}
+
+\framebreak
+
+\begin{itemize}
+  \item Though $N(t)$ counts the number of events, and follows a Poisson distribution, the time between events follow expontential distributions.
+  \item If $X_1, X_2, \ldots$ denote time in between events, then it can be shown that the $X_i$ are independent and $X_i \sim \text{Exponential}(\lambda)$.
+  \item Poisson processes are also used to model spatial processes, rather than those that evolve over time.
+  \item If there is interest, we can discuss these more later.
+\end{itemize}
+
+\framebreak
+
+\begin{exampleblock}{Example: Telephone calls}
+  Suppose that an office receives telephone calls as a Poisson process with $\lambda = 0.5$ calls per minute.
+  The number of calls in a 5-min. interval follows a Poisson distribution with parameter $5\lambda = 2.5$. Thus, the probability of no calls in a 5-min. interval is $p(0) = e^{-2.5} \approx .082$; the probability one one call is $p(1) = 2.5 e^{-2.5} \approx .205$
+\end{exampleblock}
+
+\end{frame}
+
+\section{Continuous Random Variables}
+
+\begin{frame}[allowframebreaks]{The distribution function}
+  \begin{itemize}
+    \item All random variables have an associated distribution function.
+    \item We have discussed how this arises in the context of discrete random variables, now we want to discuss this for continuous random variables.
+    \item If $X$ is a random variable, then its cumulative distribution function is given by
+    $$
+    F(x) = P(X \leq x), \quad \text{for all } x.
+    $$
+    \item Some general properties of $F$ can be shown, but requires a more formal definition of probability spaces, so we will just state the result.
+  \end{itemize}
+  
+  \framebreak
+  
+  \begin{block}{Theorem~\CHAPTER.1: The cdf}
+    The function $F(x)$ is a cdf if and only if the following conditions hold
+    \begin{itemize}
+      \item $\lim_{x \rightarrow -\infty}F(x) = 0$ and $\lim_{x \rightarrow \infty}F(x) = 1$.
+      \item $F(x)$ is a non-decreasing function of $x$.
+      \item $F(x)$ is right-continuous; that is, for every number $x_0$, $\lim_{x\downarrow x_0}F(x) = F(x_0)$.
+    \end{itemize}
+  \end{block}
+  
+  \begin{itemize}
+    \item An interesting aspect of this theorem is that it states that every function that satisfies these conditions is a cdf for some random variable.
+    \item The definition of cdf also leads to an alternative definition of continuous vs discrete random variables, which is that a continuous random variable has continuous cdf, and a discrete random variable does not.
+    \item One important thing to note is that the cdf completely determines the probability distribution of a random variable, which is why it is sometimes called the distribution function.
+    \item We will formalize this with a definition and a theorem.
+  \end{itemize}
+  
+  \begin{block}{Definition: Identical Distribution}
+    Random variables $X$ and $Y$ are said to be \alert{identically} distributed if for every (measurable) set $A \subset \R$, $P(X \in A) = P(Y \in A)$.
+  \end{block}
+
+  \begin{itemize}
+    \item If $X$ and $Y$ are identically distributed, we often use the shorthand(s):
+    $$
+    X \overset{d}{=} Y, \quad \text{ or } \quad X \sim Y.
+    $$
+    \item This definition is intuitive, but it can be hard to show that $X$ and $Y$ have the same distribution, as it would require checking all possible sets.
+    \item The following theorem gives us an easier way to check the equivalence of distributions.
+  \end{itemize}
+  
+    \begin{block}{Theorem~\CHAPTER.2: Identical distributions}
+    Random variables $X$ and $Y$ are identically distributed if and only if $F_X(x) = F_Y(x)$ for every $x$.
+    \mode<article>{
+          We will only prove the forward direction; the opposite direction requires more background on sigma-algebras than we would like to develop for this class. 
+    \begin{proof}
+      If $X$ and $Y$ are identically distributed, then by definition, $P(X \in (-\infty, x)) = P(Y \in (-\infty, x))$, because $(-\infty, x)$ is a measurable set for all $x$. But $F_X(x) = P(X \in (-\infty, x)) = P(Y \in (-\infty, x)) = F_Y(x)$, proving the statement.
+    \end{proof}
+    }
+  \end{block}
+  
+  \begin{itemize}
+      \item Because the distribution is determined by the cdf, we often use the shorthand $X \sim F(x)$ to mean that ``$X$ has a distribution given by F(x)".
+      \item As we have already seen for discrete RVs, the cdf is connected to the pmf in the following way: 
+    $$
+    F(x) = P(X \leq x) = \sum_{i = -\infty}^x p(i).
+    $$
+      \item A natural extension of this idea for continuous random variables is to replace the sum with an integral.
+  \end{itemize}
+  
+  \begin{block}{Definition: probability density function}
+    Let $X$ be a random variable with distribution function $F$. Then the \alert{probability density function} of $X$ is any function $f(x)$ that satisfies
+    $$
+    F_X(x) = \int_{-\infty}^x f(t)dt,\quad \text{for all } x.
+    $$
+  \end{block}
+  
+  \begin{itemize}
+    \item By the fundamental theorem of calculus, we can see that if $F$ is continuous, then $\frac{d}{dx}F(x) = f(x)$, or that taking the derivative of the cdf gives the pdf.
+    \item An interesting thing to notice about the definition of a pdf is that it is not necessarily unique; it is only unique ``almost everywhere", meaning the area where the functions don't match integrates to zero.
+    \item For any given distribution, the density function may not exist, because $F$ may exist and be continuous but not differentiable. We will avoid these pathological cases in this class.
+    \item We also note that any non-negative function with a finite positive integral over a set $A$ can be turned into a pdf. 
+    \item For example, suppose $h(x)$ is positive over the set $A$, and
+    $$
+    \int_{A} h(t)dt = K,
+    $$
+    then $$
+    f(x) = \begin{cases}
+      h(x) / K & x \in A \\
+      0 & x \notin A
+    \end{cases}
+    $$
+    is a valid pdf. 
+  \end{itemize}
+  
+  \begin{block}{Theorem~2.2: properties of pmf / pdf}
+    Given the definition of pmf and pdf, we can readily deduce the following properties. Let $f(x)$ be the pdf or pmf of a random variable $X$. Then
+    \begin{itemize}
+      \item $f(x)\geq 0$ for all $x$.
+      \item $\sum_{x} f(x) = 1 \quad \text{(if pmf)}$
+      \item $\int_x f(x)\, dx = 1 \quad \text{(if pdf)}$.
+    \end{itemize}
+  \end{block}
+  \begin{itemize}
+    \item The proof to these are not so interesting or difficult, so they are left for practice.
+  \end{itemize}
+  
+\end{frame}
+
+\begin{frame}{Continuous Random Variables}
+
+  \begin{itemize}
+    \item Because discrete RVs take only a finite number of possibilities, they are relatively simple to define by assigning probabilities to each possible outcome.
+  
+    \item In many situations, however, we are interested in random variables that can take on a continuum of values rather than a finite (or countably infinite) number.
+  \end{itemize}
+  
+  \begin{exampleblock}{Example: Lifetime of electronic}
+    We might be interested in the lifetime of an electronic component; the total lifetime may be random, but may take on any positive real number.
+  \end{exampleblock}
+  
+\end{frame}
+
+\begin{frame}{Probabilities}
+  \begin{itemize}
+    \item If $X$ is a random variable with a density function $f$, then for any $a \leq b$, the probability that $X$ falls in the interval $(a, b)$ (with the treatment that if $a = b$, the interval collapses to the set $\{a\}$) is given by: 
+  $$
+  P(a < X < b) = F(b) - F(a) = \int_{a}^b f(x) dx.
+  $$
+  \item An immediate consequence of this definition is that $P(X = a) = 0$ for any $a \in \R$.
+  
+  \item Additionally,
+$$
+P(a < X < b) = P(a \leq X < b) = P(a < X \leq b).
+$$
+  \item This is because the probability $X$ being any particular value is zero; if this were not the case, then the probability of the entire set would infinite (and probabilities must sum to one).
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}[allowframebreaks]{Example: Continuous uniform random variable}
+  
+  \begin{itemize}
+    \item By \emph{uniform} probability, we mean that all outcomes in the given set are equally as likely.
+    \item Specifically, if $S \subset \R^p$ for some $p$, then for any $A \subset S$, $X$ is uniformly distributed on $S$ if $P(X \in A) = \text{volume}(A) / \text{volume}(S)$. 
+    \item For example, if $X$ is a RV with uniform distribution on the interval $[0, 1]$, then any real number in this interval is equally likely, and the probability that $X$ is in a sub-interval of length $h$ should be equal to $h$. 
+    \item You can verify that the following density satisfies this condition: 
+
+$$
+f(x) = \begin{cases}
+1, & 0 \leq x \leq 1\\
+0 & x < 0 \text{ or } x > 1.
+\end{cases}
+$$
+\end{itemize}
+
+\mode<article>{
+
+\begin{itemize}
+  \item For instance, we can pick some $c \in [0, 1]$, and $h \in (0, 1-c)$. Then the probability that $X \in (c, c+h)$ is given by:
+\end{itemize}
+
+$$
+P(c < X < c+h) = \int_{c}^{c+h}1_{0 \leq x \leq 1}dx = \int_c^{c+h}1dx = (c + h) - c = h.
+$$
+
+}
+
+\framebreak
+
+\begin{itemize}
+  \item The previous density can be generalized to any interval $[a, b]$, such that $a < b$.
+\end{itemize}
+
+\subsection{The Uniform Random Variable}
+
+\begin{block}{Continuous uniform density}
+  If $X$ is a RV uniformly distributed on an interval $[a, b]$, where $a < b$, then the corresponding density function is: 
+  $$
+  f(x) = \begin{cases}
+  1 / (b - a) & a \leq x \leq b\\
+  0 & x < a \text{ or } x > b.
+  \end{cases}
+  $$
+\end{block}
+
+\framebreak
+
+\begin{exampleblock}{cdf of continuous uniform density}
+    From the definition, we can calculate the cdf of the continuous uniform density rather easily. Suppose that $X$ is uniformly distributed on $[0, 1]$. Find the CDF of $X$.:
+    % $$
+    % F(x) = \int_{-\infty}^x f(x)\, dx.
+    % $$
+    \mode<article>{
+    \begin{align*}
+      F(x) &= \int_{-\infty}^x f(x)\,dx \\
+      &= \int_{-\infty}^x 1[0 \leq x \leq 1]\,dx \\
+      &= \begin{cases}
+        0 & x < 0 \\
+        x & 0 \leq x \leq 1 \\
+        1 & x > 1.
+      \end{cases}
+    \end{align*}
+    }
+
+  \end{exampleblock}
+
+\end{frame}
+
+\subsection{Common random variables}
+\subsubsection{The Exponential Distribution}
+
+\begin{frame}[allowframebreaks]{Exponential Distribution}
+  \begin{itemize}
+    \item The exponential density function is:
+  $$
+  f(x) = \begin{cases}
+    \lambda e^{-\lambda x} & x \geq 0 \\
+    0 & x < 0
+  \end{cases}
+  $$
+  \item Like the Poisson distribution, the exponential density function depends on a single parameter $\lambda$.
+  
+  \item When this is the case, we refer to it as the \alert{family} of exponential densities that is \emph{indexed} by the parameter $\lambda$.
+  \end{itemize}
+  
+  \framebreak
+  
+  \begin{itemize}
+    \item The cdf is easily found via the fundamental theorem of calculus: 
+  $$
+  F(x) = \int_{-\infty}^x f(u)du = \begin{cases}
+    1 - e^{-\lambda x} & x \geq 0 \\
+    0 & x < 0
+  \end{cases}
+  $$
+  %   \item From this, we can easily find quantiles of the distribution, such as the median: by solving $F(x_{(.5)}) = 1/2$
+  % $$
+  % 1 - e^{-\lambda x_{(.5)}} = \frac{1}{2} \quad \implies \quad x_{(.5)} = \frac{\log 2}{\lambda}.
+  % $$
+  \end{itemize}
+  
+  \framebreak
+  
+  \begin{itemize}
+    \item The exponential distribution is often used to model lifetimes or waiting times (time-to-event).
+    \item In this context, it's conventional to replace the variable $x$ with $t$. 
+  
+    \item The exponential distribution has a unique property known as the \alert{memoryless} property.
+  
+    \item That is, if something follows an exponential distribution and has already lasted a time of $s$, then the probability that it will last another $t$ units of time does not depend on $s$:
+  \end{itemize}
+  
+  \framebreak
+  
+  \emph{Memoryless property:} Let $T$ be an exponentially distributed RV, and $s, t > 0$. Calculate $P(T > t + s | T > s)$.
+  
+  \mode<article>{
+    \begin{align*}
+      P(T > t+s | T > s) &= \frac{P(T > t + s \text{ and } T > s)}{P(T > s)} \\
+      &= \frac{P(T > t+s)}{P(T > s)} \\
+      &= \frac{1 - F(t+s)}{1 - F(s)} \\
+      &= \frac{e^{-\lambda(t + s)}}{e^{-\lambda s}} \\
+      &= e^{-\lambda t} = P(T > t).
+    \end{align*}
+  }
+  
+  
+  \framebreak
+  
+  \begin{itemize}
+    \item It can be shown that any continuous RV with the \emph{memoryless} property must be exponentially distributed.
+  
+    \item Similarly, it can be shown that any discrete RV with the \emph{memoryless} property must be geometrically distributed (maybe a HW question?)
+  \end{itemize}
+  
+  \framebreak
+  
+  \begin{itemize}
+    \item The exponential distribution is also related to the \emph{Poisson process} that we have discussed.
+    \item Consider a poisson process with rate $\lambda$ over an interval $\mathcal{T} \subset \R$.
+  
+    \item While the number of events in any interval $T_0 \subset \mathcal{T}$ of length $t$ follows a Poisson distribution, the time-to-next-event $T$ follows an exponential distribution:
+  
+  \mode<article>{
+  \item Suppose that an event occurs at time $t_0 \in T_0$, and let $T$ denote the time until next event. Then:
+  \begin{align*}
+  P(T > t) &= P\big(\text{no events in} (t_0, t_0 + t)\big) \\
+  &= P(X = 0), \quad \text{where } X \sim \text{Pois}(\lambda t). \\
+  &= e^{-\lambda t},
+  \end{align*}
+  \item Therefore $T$ is exponentially distributed with parameter $\lambda$.
+  }
+  \end{itemize}
+  
+\end{frame}
+
+\subsubsection{The Gamma Density}
+
+\begin{frame}[allowframebreaks]{The Gamma Density}
+  \begin{itemize}
+    \item The \alert{gamma} density function depends on two parameters $\alpha > 0$ and $\lambda > 0$.
+    $$
+    g(t) = \frac{\lambda^\alpha}{\Gamma(\alpha)}t^{\alpha - 1}e^{-\lambda t}, \quad t \geq 0.
+    $$
+    \item For $t < 0$, we define $g(t) = 0$.
+    \item The \alert{gamma function}, is defined as:
+    $$
+    \Gamma(x) = \int_{0}^\infty u^{x - 1}e^{-u}du, \quad x > 0.
+    $$
+    \end{itemize}
+    
+  \framebreak 
+    
+    Some properties of the Gamma function $\Gamma(x)$ include:
+  
+  \begin{itemize}
+    \item $\Gamma(1) = 1$.
+    \item $\Gamma(x + 1) = x\Gamma(x)$. A special instance arises when $x$ is a positive integer
+    \item $\Gamma(n+1) = n\Gamma(n) = n(n-1)\Gamma(n-1) = \ldots = n!$ It is considered an extension of the factorial function
+    \item Some values worth mention:
+    $$
+    \Gamma\big(\frac{1}{2}\big) = \sqrt{\pi}, \quad \Gamma\big(\frac{3}{2}\big) = \frac{\sqrt{\pi}}{2}
+    $$
+    \item $\Gamma(x) \neq 0$ for all $x$, so we can always use $1 / \Gamma(x)$. We mostly will use it with $x > 0$, in which case $\Gamma(x)$ always exists.
+  \end{itemize}
+  
+  \framebreak
+  
+    $$
+    g(t) = \frac{\lambda^\alpha}{\Gamma(\alpha)}t^{\alpha - 1}e^{-\lambda t}, \quad t \geq 0.
+    $$
+  
+  \begin{itemize}
+    \item Note that if $\alpha = 1$, then the gamma density coincides with the exponential density. 
+    \item The parameter $\alpha > 0$ in this formulation is called the \alert{shape} parameter.
+    \item The parameter $\lambda > 0$ is called the \alert{scale} parameter.
+    \item As the names suggest, $\alpha$ changes the \emph{shape} of the density function, whereas $\lambda$ changes the scale of the density (i.e., can be used to change from inches to feet).
+  \end{itemize}
+  
+  % \end{frame}
+
+  \framebreak
+
+  % \begin{frame}{Gamma Density Figure}
+  
+  \begin{figure}[ht]
+<<fig:gamma, fig.align='center', fig.height=4, warning=FALSE, message=FALSE, echo=FALSE, dev='cairo_pdf'>>=
+library(tidyverse)
+library(latex2exp)
+
+# Parameters
+alphas <- c(0.5, 1, 2, 5, 7)   # Choose several alpha (shape) values
+lambda <- 1                     # Fixed scale parameter
+
+# Define an x range that covers most of the density
+x <- seq(1e-10, 12, length.out = 1000)
+
+data.frame(
+  x = x, 
+  alpha_05 = dgamma(x, shape = alphas[1], scale = lambda),
+  alpha_1  = dgamma(x, shape = alphas[2], scale = lambda),
+  alpha_2  = dgamma(x, shape = alphas[3], scale = lambda),
+  alpha_5  = dgamma(x, shape = alphas[4], scale = lambda),
+  alpha_7  = dgamma(x, shape = alphas[5], scale = lambda)
+) %>% 
+  pivot_longer(
+    cols = -x,
+    names_to = "alpha",
+    values_to = "value",
+    names_prefix = "alpha_"
+  ) %>% 
+  mutate(
+    alpha = case_when(
+      alpha == "05" ~ "0.5", 
+      TRUE ~ alpha
+    )
+  ) %>% 
+  ggplot(aes(x = x, y = value, col = alpha, group = alpha)) + 
+  geom_line() + 
+  scale_y_continuous(limits = c(0, 1.25)) + 
+  theme_bw() + 
+  theme(legend.title = element_blank(), 
+        legend.position = 'inside', 
+        legend.position.inside = c(0.9,0.75),
+        plot.title = element_text(hjust = 1),
+        axis.title = element_blank()) + 
+  scale_color_manual(
+    values = c(
+      '0.5' = "#c7e9b4",
+      '1' = "#7fcdbb",
+      '2' = "#41b6c4",
+      '5' = "#2c7fb8",
+      '7' = "#253494" 
+    ),
+    labels = c(
+      '0.5' = TeX("$\\alpha = 0.5$"),
+      '1' = TeX("$\\alpha = 1$"),
+      '2' = TeX("$\\alpha = 2$"),
+      '5' = TeX("$\\alpha = 5$"),
+      '7' = TeX("$\\alpha = 7$")
+    )
+  ) + 
+  ggtitle(TeX("$\\lambda = 1$ for all curves"))
+@
+  \caption{\label{fig:gamma}A few Gamma pdf functions for various levels of $\alpha$.}
+  \end{figure}
+  
+  \end{frame}
+  
+\subsubsection{The Normal Distribution}
+  
+  \begin{frame}[allowframebreaks]{The Normal Density}
+  
+    \begin{itemize}
+      \item The normal distribution plays a central role in both probability and statistics.
+      \item It is also called \alert{the Gaussian} distribution, after Carl Friedrich Gauss, who used it as a model for modeling measurement errors. 
+      \item One reason it is so important is the \alert{Central Limit Theorem} (CLT, Chapter 6), which suggests that the normal distribution is useful in a large number of settings.
+      \item Roughly speaking, the CLT states that large(ish) sums (or averages) of independent random variables will be approximately normally distributed.
+    \end{itemize}
+  
+  \framebreak 
+  
+  The density function for the normal distribution depends on two parameters:
+  \begin{itemize}
+    \item $\mu$: the mean of the distribution.
+    \item $\sigma$: the standard deviation of the distribution. 
+  \end{itemize}
+  
+  \begin{block}{The Normal Density}
+    Let $X$ be a random variable that is normally distributed with mean $\mu$ and standard deviation $\sigma$. The corresponding probability density function is
+    $$
+    f(x) = \frac{1}{\sigma\sqrt{2\pi}}e^{-(x - \mu)^2/2\sigma^2}, \quad -\infty < x < \infty
+    $$
+  \end{block}
+  
+  \framebreak
+  
+  A few notes about this density / distribution:
+  
+  \begin{itemize}
+    \item You'll often see the shorthand $X \sim N(\mu, \sigma^2)$ to mean ``X follows a normal distribution with parameters $\mu$ and $\sigma$". 
+    \item The density is symmetric about $\mu$, meaning $f(\mu - x) = f(\mu + x)$; $x = \mu$ is also the maximum value of the density (mode). The ``spread" of the distribution is determined by $\sigma$. 
+    \item When the mean $\mu = 0$ and standard deviation $\sigma = 1$, we call this the \alert{standard normal distribution}.
+    \item There is no closed form expression for the cdf of the normal distribution. The cdf of the standard normal is usually denoted $\Phi(\cdot)$, and the pdf $\phi(\cdot)$.
+  \end{itemize}
+  
+  \end{frame}
+
+\subsubsection{The Beta Distribution}
+
+\begin{frame}[allowframebreaks]{The Beta Density}
+  \begin{itemize}
+    \item The \alert{beta} distribution is useful for modeling random variables that are restricted to the interval $[0, 1]$:
+    \item The density function depends on two parameters, $\alpha, \beta > 0$.
+    \begin{align*}
+    f(x) &= \frac{\Gamma(\alpha + \beta)}{\Gamma(\alpha)\Gamma(\beta)}x^{\alpha - 1}(1 - x)^{\beta - 1}, \quad 0 \leq x \leq 1. \\
+         &= \frac{1}{B(\alpha, \beta)}x^{\alpha - 1}(1 - x)^{\beta - 1}, \quad 0 \leq x \leq 1.
+    \end{align*}
+    \item Note that if $\alpha = \beta = 1$, the distribution becomes uniformly distributed.
+    \item Both $\alpha$ and $\beta$ are shape parameters, and the distribution is quite flexible. 
+  \end{itemize}
+  
+  \framebreak
+  
+    \begin{figure}[ht]
+<<fig:beta, fig.align='center', fig.height=4, warning=FALSE, message=FALSE, echo=FALSE, dev='cairo_pdf'>>=
+library(tidyverse)
+library(latex2exp)
+
+pars <- matrix(
+  c(
+    2, 6, 6, .5,  4, # alpha
+    2, 2, 6,  4, .5  # beta
+  ), ncol = 2
+)
+
+# Define an x range that covers most of the density
+x <- seq(1e-12, 1-1e-12, length.out = 1000)
+
+data.frame(
+  x = x, 
+  beta1 = dbeta(x, shape1 = pars[1, 1], shape2 = pars[1, 2]),
+  beta2 = dbeta(x, shape1 = pars[2, 1], shape2 = pars[2, 2]),
+  beta3 = dbeta(x, shape1 = pars[3, 1], shape2 = pars[3, 2]),
+  beta4 = dbeta(x, shape1 = pars[4, 1], shape2 = pars[4, 2]),
+  beta5 = dbeta(x, shape1 = pars[5, 1], shape2 = pars[5, 2])
+) %>% 
+  pivot_longer(
+    cols = -x,
+    names_to = "beta",
+    values_to = "value",
+    names_prefix = "beta"
+  ) %>% 
+  # mutate(
+  #   alpha = case_when(
+  #     alpha == "05" ~ "0.5", 
+  #     TRUE ~ alpha
+  #   )
+  # ) %>% 
+  ggplot(aes(x = x, y = value, col = beta, group = beta)) + 
+  geom_line() + 
+  scale_y_continuous(limits = c(0, 5)) +
+  theme_bw() + 
+  theme(legend.title = element_blank(), 
+        # legend.position = 'bottom',
+        # legend.position.inside = c(0.9,0.75),
+        plot.title = element_text(hjust = 1),
+        axis.title = element_blank()) + 
+  scale_color_discrete(
+    # values = c(
+    #   '0.5' = "#c7e9b4",
+    #   '1' = "#7fcdbb",
+    #   '2' = "#41b6c4",
+    #   '5' = "#2c7fb8",
+    #   '7' = "#253494"
+    # ),
+    labels = c(
+      '1' = TeX("$\\alpha = 2, \\beta = 2$"),
+      '2' = TeX("$\\alpha = 6, \\beta = 2$"),
+      '3' = TeX("$\\alpha = 6, \\beta = 6$"),
+      '4' = TeX("$\\alpha = 0.5, \\beta = 4$"),
+      '5' = TeX("$\\alpha = 4, \\beta = 0.5$")
+    )
+  )
+@
+  \caption{\label{fig:beta}A few Beta pdf functions for various levels of $\alpha$ and $\beta$.}
+  \end{figure}
+  
+\end{frame}
+
+\begin{frame}{Comments on density functions}
+  \begin{itemize}
+    \item So far, we have been using $f$ and $F$ to denote the pdf and cdf of a random variable, respectively. If there is more than one random variable, say $X$ and $Y$, we may want to distinguish between the functions, and we do so like: $f_X(x)$, or $F_Y(y)$. 
+    \item There exist alternative \alert{parameterizations} of the common pmf / pdf functions we have discussed.
+    \item For example, we introduced the negative binomial distribution with parameters $p$ and $r$. This is known as the size-probability parameterization, but there also exists and alternative with parameters $\mu$ and $k$, known as the mean-dispersion parameterization (commonly used in Ecology). 
+  \end{itemize}
+\end{frame}
+
+\section{Functions of a random variable}
+
+\begin{frame}[allowframebreaks]{Variable transformations}
+  \begin{itemize}
+    \item Often we will be interested in functions of a random variable.
+    \item Let $X$ be a random variable, and $g$ an arbitrary function.
+    \item Our goal is to find the distribution of the random variable $Y = g(X)$.
+  \end{itemize}
+  
+  \begin{exampleblock}{Kinetic energy}
+    Let $X$ denote a random variable representing the velocity of a particle of mass $m$; we might be interested in the distribution of $Y = \frac{1}{2}mX^2$, the particle's kinetic energy.
+  \end{exampleblock}
+  
+  \framebreak
+  
+  \begin{itemize}
+    \item We will eventually provide a rule for a general transformation, $g: \R \rightarrow \R$, but we will first build some intuition using simple transformations.
+  \end{itemize}
+  
+  \begin{exampleblock}{Example: Linear Transformations (Part I)}
+    Let $X$ be a random variable with pdf and cdf $f_X$ and $F_X$, respectively.
+    Find the density of $Y = aX + b$, where $a > 0$, and $b \in \R$.
+  \end{exampleblock}
+  
+  \mode<article>{
+  We will use what I like to call ``the cdf method". It's a simple idea that uses the connection between the cdf and pdf of a random variable, and the definition of the cdf. 
+  \begin{align*}
+    F_Y(y) &= P(Y \leq y) \\
+    &= P(aX + b \leq y) \\
+    &= P\big(X \leq \frac{y - b}{a}\big) \\ 
+    &= F_X\big(\frac{y-b}{a}\big).
+  \end{align*}
+  On the left, we have the cdf of $Y$, and we have equated this to the cdf of $X$. Now we can differentiate the equation with respect to $y$:
+  \begin{align*}
+    f_Y(y) &= \frac{d}{dy}F_X\big(\frac{y - b}{a}\big) \\
+    &= \frac{1}{a} f_X\big(\frac{y-b}{a}\big).
+  \end{align*}
+  }
+  
+  \framebreak
+  
+  \begin{itemize}
+    \item This same idea is how we will build a general formula for finding the pdf of a transformed random variable.
+    \item Now let's change it slightly, and see some potential pitfalls.
+  \end{itemize}
+  
+  \begin{exampleblock}{Example: Linear Transformations (Part II)}
+    Let $X$ be a random variable with pdf and cdf $f_X$ and $F_X$, respectively.
+    Find the density of $Y = aX + b$, where $a < 0$, and $b \in \R$.
+  \end{exampleblock}
+  
+  \mode<article>{
+  \begin{align*}
+    F_Y(y) &= P(Y \leq y) \\
+    &= P(aX + b \leq y) \\
+    &= P\big(X \geq \frac{y - b}{a}\big) \\ 
+    &= 1 - F_X\big(\frac{y-b}{a}\big).
+  \end{align*}
+  On the left, we have the cdf of $Y$, and we have equated this to the cdf of $X$. Now we can differentiate the equation with respect to $y$:
+  \begin{align*}
+    f_Y(y) &= 0 - \frac{d}{dy}F_X\big(\frac{y - b}{a}\big) \\
+    &= -\frac{1}{a} f_X\big(\frac{y-b}{a}\big).
+  \end{align*}
+  \begin{itemize}
+    \item Note that all pdf functions have to be positive. In this example, we have $a < 0$, and therefore the negative sign in the final result helps us ensure that $f_Y(y)$ is positive.
+    \item We can also see that $\big|\frac{1}{a}\big| = -\frac{1}{a}$, so we can write:
+    $$
+    f_Y(y) = f_{X}\Big(\frac{y - b}{a}\Big)\Big|\frac{1}{a}\Big|.
+    $$
+  \end{itemize}
+  }
+ 
+ \framebreak
+  
+  \begin{itemize}
+    \item More generally, suppose that $X$ is a random variable, and $Y = g(X)$ is a new random variable.
+    \item Since $Y$ is a function of $X$, we can describe the probabilistic behavior of $Y$ in terms of that of $X$. 
+    \item For any set $A \subset \R$, we have
+    $$
+    P(Y \in A) = P\big(g(X) \in A\big),
+    $$
+    showing that the distribution of $Y$ depends on the functions $F_X$ and $g$.
+  \end{itemize}
+  
+  \framebreak
+  
+  \begin{itemize}
+    \item Suppose $X$ takes values in $\mathcal{X}$, then $Y$ takes values in $\mathcal{Y}$, where
+    $$
+    g: \mathcal{X} \rightarrow \mathcal{Y}.
+    $$
+    \item We will define $g^{-1}(A)$ to be the set of values in $\mathcal{X}$ that get mapped to $A$:
+    $$
+    g^{-1}(A) = \{x \in \mathcal{X}: g(x) \in A\}.
+    $$
+    \item For ease of communicating, we'll call $g^{-1}(A)$ the \alert{pre-image} of $A$.
+    \item The mapping $g^{-1}$ takes sets into sets.
+    
+    \framebreak 
+    
+    \item For point sets like $\{y\}$, we often write $g^{-1}(y)$ rather than $g^{-1}(\{y\})$.
+    \item The quantity $g^{-1}(y)$, can still be a set, if more than one $x$ gets mapped to $y$.
+    \item If $g^{-1}(y)$ is the point set $\{x\}$, we will write $g^{-1}(y) = x$.
+    \item Returning to probabilities, we have
+    \begin{align*}
+      P(Y \in A) &= P\big(g(X) \in A\big) \\
+                 &= P\big(\{x \in \mathcal{X}: \, g(x) \in A\}\big) \\
+                 &= P\big(X \in g^{-1}(A)\big).
+    \end{align*}
+    \item This gives a formal definition for the probability distribution of $Y$, and one can show this satisfies the probability axioms.
+  \end{itemize}
+  
+  \framebreak
+  
+  \begin{itemize}
+    \item If $X$ is a discrete random variable, then $\mathcal{X}$ is countable.
+    \item We immediately see that $\mathcal{Y} = \{y: y = g(x), x \in \mathcal{X}\}$ is also a countable set, and therefore a discrete random variable.
+    \item The pmf of $Y$ is found by:
+    \begin{align*}
+      p_Y(y) &= P(Y = y) \\
+      &= P\big(g(X) = y\big) \\
+      &= P\big(X \in g^{-1}(y)\big) \\
+      &= \sum_{x \in g^{-1}(y)}P(X = x) = \sum_{x \in g^{-1}(y)}p_X(x).
+    \end{align*}
+    \item That is, finding the pmf of $Y$ involves identifying $g^{-1}(y)$ for all $y \in \mathcal{Y}$ and summing the appropriate probabilities. 
+  \end{itemize}
+  
+  \framebreak
+  
+  \begin{exampleblock}{Example: Binomial Transformation}
+    Let $X$ have a binomial distribution, so that
+    $$
+    p_X(x) = \binom{n}{x}p^x(1- p)^{n-x},\quad x = 0, 1, \ldots, n.
+    $$
+    Find the pmf of $Y = n-X$.
+    \mode<article>{
+    \emph{Solution.} Here, $g(x) = n-x$, and $\mathcal{X} = \{0, 1, \ldots, n\}$ and $\mathcal{Y} = \{0, 1, \ldots, n\}$. For any $y \in \mathcal{Y}$, we have $n - x = y$ if and only if $x = n - y$. Therefore for all $y$, $g^{-1}(y)$ is just the single point $n - y$. Therefore
+    \begin{align*}
+      p_Y(y) &= \sum_{x \in g^{-1}(y)} p_X(x) \\
+      &= p_X(n - y) \\
+      &= \binom{n}{n-y}p^{n-y}(1-p)^{n - (n - y)} \\
+      &= \binom{n}{y}(1 - p)^{y}p^{n-y}.
+    \end{align*}
+    This result shows that $Y$ is also a binomial distribution, with the probability is now $1-p$. 
+    }
+  \end{exampleblock}
+  
+  \framebreak
+  
+  \begin{itemize}
+    \item If $X$ is a continuous random variable, there are several transformation where the basic definition of $Y = g(X)$ can be used directly to find the cdf / pdf of $Y$, like the linear transformations we considered.
+    \item More generally, we have:
+    \begin{align*}
+      F_Y(y) &= P(Y \leq y) \\
+             &= P\big(g(X) \leq y\big) \\ 
+             &= P\big(\{x \in \mathcal{X}: \, g(x) \leq y\}\big) \\
+             &= \int_{\{x \in \mathcal{X}: \, g(x) \leq y\}} f_X(x)dx.
+    \end{align*}
+    \item Thus, the key is finding the set $\{x \in \mathcal{X}: g(X) \leq y\}$ and integrating over this set, which can sometimes be difficult.
+  \end{itemize}
+  
+  \framebreak
+  
+  \begin{exampleblock}{Example: $g(x) = \sin^2(x)$}
+    Suppose $X$ is uniformly distributed on $(0, 2\pi)$, so that
+    $$
+    f_X(x) = \begin{cases} 1/2\pi & 0 \leq x \leq 2\pi \\ 0 & \text{otherwise}.\end{cases}
+    $$
+    If $Y = \sin^2(X)$, find $P(Y \leq y)$.
+    \mode<article>{
+    \emph{Solution}. 
+      \begin{itemize}
+        \item For a fixed $y$, we need to find the set of $X$ such that $g(x) \leq y$.
+        \item The function $g(x) = \sin^2(x)$ takes values in $[0, 1]$, so we will focus on $y$ in this set.
+        \item To find the following information, it's helpful to plot the function: \url{https://www.desmos.com/calculator/vvm6cm8fd3}. 
+        \item for any $y \in (0, 1)$, there are four points of intersection, where $g(x) = y$.
+        \item For $Y \leq y$, we must have $X \in (0, x_1] \cup [x_2, x_3] \cup [x_4, 2\pi)$, where $x_1, \ldots, x_4$ are the found solutions to $g(x) = y$.
+        \item Thus, 
+        $$
+        P(Y \leq y) = P(X \leq x_1) + P(x_2 \leq X \leq x_3) + P(X \geq x_4). 
+        $$
+        \item Because $X$ is uniform and because of the symmetry of $g(x)$, we can simplify this further if we want: 
+        $$
+        P(Y \leq y) = 2P(X \leq x_1) + 2P(x_2 \leq X \leq \pi),
+        $$
+        where $x_1$ and $x_2$ are the two solutions to $\sin^2(x) = y$, with $0 < x < \pi$.
+      \end{itemize} 
+    }
+  \end{exampleblock}
+  
+  \framebreak 
+  
+  \begin{itemize}
+    \item As we can see from the previous example, even simple transformations can result in expressions that are not very simple. 
+    \item One of the easiest places to make a mistake is keeping track of the sample space of each of the random variables.
+    \item To simplify things as much as possible, it helps to make $\mathcal{X}$ to be the set of values of $x$ that have positive pdf, and the let $\mathcal{Y}$ as the possible values of $Y$ given the set $\mathcal{X}$: 
+    $$
+    \mathcal{X} = \{x:\, f_X(x) > 0\}, \quad \mathcal{Y} = \{y: y = g(x) \text{ for some } x \in \mathcal{X}\}.
+    $$
+    \item As defined above, the set $\mathcal{X}$ is called the \alert{support} of $X$
+  \end{itemize}
+  
+  \framebreak
+  
+  \begin{itemize}
+    \item The easiest type of transformation are functions $g$ that are \alert{monotone}.
+    \item $g$ is a monotone, increasing function if
+    $$
+    u > v \implies g(u) \geq g(v).
+    $$
+    \item $g$ is a monotone, decreasing function, if
+    $$
+    u < v \implies g(u) \geq g(v).
+    $$
+    \item We say that a function is strictly monotonic if the inequalities above are strict. 
+    
+    \framebreak
+    
+    \item For strictly monotonic functions, then $g$ is a one-to-one and onto function, meaning that each $x \in \mathcal{X}$ is mapped to one and only one $y \in \mathcal{Y}$, and each $y \in \mathcal{Y}$ comes from one and only one $x\in \mathcal{X}$.
+    \item In other words, $g$ uniquely pairs each $x$ and $y$ together, and we can find an inverse function such that $g^{-1}(y) = x$ if and only if $g(x) = y$.
+    \item If $g$ is strictly monotone and \alert{increasing}, then the set of all points $x$ such that $g(x) \leq y$ is given by the set of all points $x$ smaller than $g^{-1}(y)$:
+    \begin{align*}
+    \{x \in \mathcal{X}: \, g(x) \leq y\} &= \big\{x \in \mathcal{X}: g^{-1}\big((g(x)\big) \leq g^{-1}(y) \big\} \\
+    &= \{x \in \mathcal{X}:\, x \leq g^{-1}(y)\}.
+    \end{align*}
+    
+    \framebreak
+    
+    \item The exact opposite is true if $g$ is a strictly monotone \alert{decreasing} function.
+    \item For the set of $x$ such that $g(x) \leq y$ is the same as the set of $x$ such that $x \geq g^{-1}(y)$:
+    \begin{align*}
+    \{x \in \mathcal{X}: \, g(x) \leq y\} &= \big\{x \in \mathcal{X}: g^{-1}\big((g(x)\big) \geq g^{-1}(y) \big\} \\
+                                          &= \{x \in \mathcal{X}:\, x \geq g^{-1}(y)\}.
+    \end{align*}
+    \item These results will lead us to our next theorem
+  \end{itemize}
+  
+  \framebreak
+  
+  \begin{block}{Theorem~\CHAPTER.3: cdf of monotone transformations}
+    Let $X$ have a cdf of $F_X(x)$, and let $Y = g(X)$. Then 
+    \begin{itemize}
+      \item If $g$ is a strictly monotone increasing function on $\mathcal{X}$, then
+      $$
+      F_Y(y) = F_X\big(g^{-1}(y)\big), \quad \text{for } y \in \mathcal{Y}.
+      $$
+      \item If $g$ is a strictly monotone decreasing function on $\mathcal{Y}$, then
+      $$
+      F_Y(y) = 1 - F_X\big(g^{-1}(y)\big), \quad \text{for } y \in \mathcal{Y}.
+      $$
+    \end{itemize}
+    \mode<article>{
+    \begin{proof}
+      \begin{itemize}
+        \item We will show this for the case that $g$ is decreasing; the proof when $g$ is increasing is similar. 
+        \begin{align*}
+          F_Y(y) &= P(Y \leq y) \\
+          &= P\big(g(X) \leq y\big) \\
+          &= P\big(\{x \in \mathcal{X}: \, g(x) \leq y\}\big) \\
+          &= P\big(\{x \in \mathcal{X}: \, x \geq g^{-1}(y)\}\big) \\ 
+          &= \int_{g^{-1}(y)}^\infty f_X(x)\, dx = 1 - F_X\big(g^{-1}(x)\big).
+        \end{align*}
+      \end{itemize}
+    \end{proof}
+    }
+  \end{block}
+  
+  \framebreak
+  
+  \begin{itemize}
+    \item This theorem gives the immediate consequence for random variables that have pdfs.
+  \end{itemize}
+  
+  \begin{block}{Theorem~\CHAPTER.4: pdf of monotonic transformations}
+    Let $X$ be a random variable with continuous pdf $f_X(x)$ on $\mathcal{X}$, and let $Y=g(X)$. If $g$ is a strictly monotonic transformation such that $g^{-1}$ has a continuous derivative on $\mathcal{Y}$, then the pdf of $Y$ is given by
+    $$
+    f_Y(y) = \begin{cases}
+      f_X\big(g^{-1}(y)\big)\Big|\frac{d}{dy} g^{-1}(y)\Big| & y \in \mathcal{Y} \\
+      0 & \text{otherwise}.
+    \end{cases}
+    $$
+    \mode<article>{
+    \begin{proof}
+      The proof is a direct consequence of the previous theorem and the chain rule. Specifically,
+      $$
+      f_Y(y) = \frac{d}{dy}F_Y(y) = \begin{cases}f_X\big(g^{-1}(y)\big)\frac{d}{dy}g^{-1}(y) & \text{if } g \text{ is increasing.} \\-f_X\big(g^{-1}(y)\big)\frac{d}{dy}g^{-1}(y) & \text{if } g \text{ is decreasing.} \end{cases}
+      $$
+      Because the derivative of a decreasing function is always negative, we can concisely express both cases by using the absolute value.
+    \end{proof}
+    }
+  \end{block}
+  
+  \framebreak
+  
+  \begin{exampleblock}{Example: Inverted Gamma Distribution}
+    Let $X$ be a gamma$(\lambda, \alpha)$ distributed random variable, which has pdf
+    $$
+    f(x) = \frac{\lambda^\alpha}{\Gamma(\alpha)}x^{\alpha - 1}e^{-\lambda x}, \quad x \geq 0
+    $$
+    Find the pdf of $Y = g(X) = 1/X$. 
+    \mode<article>{
+    \begin{itemize}
+      \item First, we will find the support sets $\mathcal{X}$, $\mathcal{Y}$.
+      \item $f(x)$ is positive on the interval $(0, \infty)$, (we will avoid dividing by zero, which doesn't change the distribution because it's only a single point), giving $\mathcal{X} = (0, \infty)$.
+      \item Over this set, the support of $Y$ is also $\mathcal{Y} = (0, \infty)$.
+      \item On these sets, $g$ is monotone, and if $g(x) = y$, then $g^{-1}(y) = x = 1/y$.
+      \item Over the set $\mathcal{Y}$, we can evaluate the derivative as
+      $$
+      \frac{d}{dy}g^{-1}(y) = -\frac{1}{y^2}.
+      $$
+      \item Applying the change of variable theorem,
+      \begin{align*}
+        f_Y(y) &= f_X\big(g^{-1}(y)\big)\Big|\frac{d}{dy} g^{-1}(y)\Big| \\
+               &= \frac{\lambda^\alpha}{\Gamma(\alpha)}\big(1/y\big)^{\alpha-1}e^{-\lambda / y}\frac{1}{y^2} \\
+               &= \frac{\lambda^\alpha}{\Gamma(\alpha)}\big(1/y\big)^{\alpha + 1}e^{-\lambda / y}.
+      \end{align*}
+      \item This pdf is a special case of the inverted gamma pdf.
+    \end{itemize}
+    }
+  \end{exampleblock}
+  
+  \framebreak
+  
+  % \begin{itemize}
+  %   \item Now, more generally, assume that $g$ is a strictly monotonically increasing function. Then: $P\big(g(X) \leq y\big) = P\big(X \leq g^{-1}(y)\big)$.
+  %   \item If $g$ is a strictly monotonically decreasing function, then $P\big(g(X) \leq y\big) = P\big(X \geq g^{-1}(y)\big).$
+  %   \item These two examples can be combined to give us a new proposition
+  % \end{itemize}
+  
+  % \framebreak
+  
+  % \begin{block}{Proposition 2.1: monotonic transformations}
+  %   Let $X$ be a continuous random variable with density $f_X$, and let $Y = g(X)$, where $g$ is differentiable, and strictly monotonic on an interval $I$. Then $Y$ has the density function
+  %   $$
+  %   f_Y(y) = f_X\big(g^{-1}(y)\big)\Big|\frac{d}{dy}g^{-1}(y)\Big|.
+  %   $$
+  %   for $y$ such that $y = g(x)$, and $f_Y(y) = 0$ if $y \neq g(x)$ for any $x \in I$.
+  % \end{block}
+  
+  % \emph{proof}
+  
+  % \mode<article>{
+  % 
+  % \vspace{2mm}
+  % Suppose that $g$ is increasing. Then 
+  % \begin{align*}
+  %  F_Y(y) &= P(Y \leq y) \\
+  %   &= P\big(g(X) \leq y\big) \\
+  %   &= P\big(X \leq g^{-1}(y)\big) \\ 
+  %   &= F_X\big(g^{-1}(y)\big).
+  % \end{align*}
+  % Taking the derivative, 
+  % $$
+  % f_Y(y) = f_X\big(g^{-1}(y)\big)\frac{d}{dy}g^{-1}(y) = f_X\big(g^{-1}(y)\big)\Big|\frac{d}{dy}g^{-1}(y)\Big|,
+  % $$
+  % where the last equality is a result of the fact that if $g$ is increasing, the derivative is always positive, and hence equal to it's absolute value. 
+  % 
+  % \vspace{2mm}
+  % 
+  % Now suppose that $g$ is decreasing. Then
+  %   \begin{align*}
+  %  F_Y(y) &= P(Y \leq y) \\
+  %   &= P\big(g(X) \leq y\big) \\
+  %   &= P\big(X \geq g^{-1}(y)\big) \\ 
+  %   &= 1 - F_X\big(g^{-1}(y)\big).
+  % \end{align*}
+  % Taking the derivative, 
+  % $$
+  % f_Y(y) = -f_X\big(g^{-1}(y)\big)\frac{d}{dy}g^{-1}(y) = f_X\big(g^{-1}(y)\big)\Big|\frac{d}{dy}g^{-1}(y)\Big|,
+  % $$
+  % where the last equality is a result of the fact that if $g$ is decreasing, the derivative is always negative, and hence equal to it's absolute value when multiplied by negative one. 
+  % }
+  
+  \framebreak
+  
+  \begin{itemize}
+    \item Theorem~\CHAPTER.4 is useful to have / know, but it's often easier to just work from scratch (we'll see a few examples of this).
+  \end{itemize}
+  
+  \begin{exampleblock}{Example: Square Transformation}
+    Suppose $X$ is a continuous random variable with support $\mathcal{X} = \R$, and let $Y = X^2$. Find the pdf of $Y$.
+    \mode<article>{
+    \begin{itemize}
+      \item In this case, the function $g(x) = x^2$ is \emph{not} monotonic on the support $\mathcal{X}$, and we can't apply the theorem.
+      \item However, it's relatively easy to work from first-principles in this case.
+      \item First, we can readily see that $\mathcal{Y} = [0, \infty)$.
+      \item Consider the interval $A_y = (-\infty, y]$, for some $y \in \mathcal{Y}$. Then $Y \in A_y$ if and only if $X^2 < y$, or $-\sqrt{y} \leq X \leq \sqrt{y}$, so
+      $$
+      g^{-1}(A_y) = \{x \in \mathcal{X}:\, -\sqrt{y} \leq x \leq \sqrt{y}\}. 
+      $$
+      \item Thus, we're looking for the probability that $X$ lies in the interval $(-\sqrt{y}, \sqrt{y})$.
+      \item We want to express this in terms of the pdf of $X$ (which we assume exists), in which case we want to express this first in terms of the cdf of $X$ and then take a derivative.
+      \item We can short-hand this calculation as:
+      \begin{align*}
+        P(Y \in A_y) &= P(Y \leq y) \big(= F_Y(y)\big) \\
+        &= P(X^2 \leq y) \\
+        &= P(\sqrt{y} \leq X \leq \sqrt{y}) \\
+        &= P(X \leq \sqrt{y}) - P(X \leq -\sqrt{y}) \\
+        &= F_X(\sqrt{y}) - F_X(-\sqrt{y}).
+      \end{align*}
+      \item Now taking derivatives, we have
+      \begin{align*}
+      f_Y(y) &= \frac{d}{dy}\big(F_X(\sqrt{y}) - F_X(-\sqrt{y})\big) \\
+             &= \frac{1}{2\sqrt{y}}f_X(\sqrt{y}) + \frac{1}{2\sqrt{y}}f_X(-\sqrt{y}) \\
+             &= \frac{1}{2\sqrt{y}}\big[f_X(\sqrt{y}) + f_X(-\sqrt{y})\big] \\
+      \end{align*}
+    \end{itemize}
+    }
+  \end{exampleblock}
+  
+  \framebreak
+    
+  \begin{itemize}
+    \item Notice in the pdf of $Y = X^2$, we have expressed the pdf as the sum of two pieces. These two pieces represent the two different sets where $g(x)$ is monotone (decreasing on $(-\infty, 0)$, and increasing on $[0, \infty)$).
+    \item This principle can be used to extend Theorem~\CHAPTER.4 to general, non-monotonic functions $g$. The idea is that you break $g: \mathcal{X} \rightarrow \mathcal{Y}$ into a series of functions $g_i: \mathcal{X}_i \rightarrow \mathcal{Y}$ where $\mathcal{X}_i \subset \mathcal{X}$ is a set such that $g_i$ is monotonic. Then, the final density $f_Y$ can be found by summing these functions:
+    $$
+    f_Y(y) = \sum_{i} f_X\big(g^{-1}_i(y)\big)\Big|\frac{d}{dy}g_i^{-1}(y)\Big|.
+    $$
+    See \citet[][Theorem~2.1.8]{casella24} for more details.
+  \end{itemize}
+  
+  \framebreak
+  
+  \begin{itemize}
+    \item Here are some common RV transformations that really come in handy.
+  \end{itemize}
+  
+  \begin{exampleblock}{Example: Normal Distribution I}
+    Let $X \sim N(\mu, \sigma^2)$. Then if $Y = aX + b$, $Y\sim N(a \mu + b, a^2\sigma^2)$.
+    
+    \emph{proof}: direct consequence of Linear Transformation examples (parts I and II)
+  \end{exampleblock}
+  
+  \begin{block}{Proposition 2.2: Uniform CDF}
+    Let $X$ be a random variable with cdf $F$. Then $Z = F(X)$ has a uniform distribution on $[0, 1]$. 
+    
+    \mode<article>{
+    \begin{proof}
+    $P(Z \leq z) = P\big(F(X) \leq x\big) = P\big(X \leq F^{-1}(z)\big) = F\big(F^{-1}(z)\big) = z$
+    \end{proof}
+    }
+  \end{block}
+  
+    \framebreak
+  
+    \begin{block}{Proposition 2.3: Inverse Uniform CDF}
+    Let $U$ be uniform on $[0, 1]$, and let $X = F^{-1}(U)$. Then the cdf of $X$ is $F$.
+    
+    \mode<article>{
+    \begin{proof}
+     $P(X \leq x) = P\big(F^{-1}(U) \leq x\big) = P\big(U \leq F(x)\big) = F(x)$
+    \end{proof}
+    }
+  \end{block}
+  
+  \framebreak
+  
+  \begin{itemize}
+    \item This last proposition is very useful. We can use it to \alert{generate random numbers} (pseudorandom).
+    \item Many computer packages have ways of generating numbers uniformly on $U[0, 1]$; the proposition implies that to generate from any arbitrary distribution with cdf $F$, all we need to do is apply $F^{-1}$ to uniform $[0, 1]$ random numbers. 
+  \end{itemize}
+  
+\end{frame}
+
+\begin{frame}[allowframebreaks]{Chi-square distribution}
+  \begin{itemize}
+    \item If $Z \sim N(0, 1)$, find the density of $X = Z^2$.
+  \end{itemize}
+  
+  \mode<article>{
+  \begin{align*}
+    F_X(x) &= P(X \leq x) \\
+    &= P(-\sqrt{x} \leq Z \leq \sqrt{x})\\
+    &= \Phi(\sqrt{x}) - \Phi(\sqrt{x}).
+  \end{align*}
+  \begin{itemize}
+    \item We now find the density by differentiation the cdf with respect to $x$.
+  \end{itemize}
+  \begin{align*}
+    f_X(x) &= \frac{1}{2}x^{-1/2}\phi(\sqrt{x}) + \frac{1}{2}x^{-1/2}\phi(-\sqrt{x}) \\
+    &= x^{-1/2}\phi(\sqrt{x}) \quad \text{since } \phi \text{ is symmetric} \\
+    &= \frac{x^{-1/2}}{\sqrt{2\pi}}e^{-x/2}, \quad x \geq 0. 
+  \end{align*}
+  \begin{itemize}
+    \item If you recall that $\Gamma(1/2) = \sqrt{\pi}$, you may recognize that this is a particular instance of the gamma density, with $\alpha = \lambda = 1/2$.
+    \item We call this density the \alert{chi-square density} with 1 degree of freedom.
+  \end{itemize}
+  }
+
+\end{frame}
+
+\section{Miscellaneous}
+
+\begin{frame}[allowframebreaks]{Percentiles}
+  \begin{itemize}
+    \item You're probably familiar with the term \alert{median}.
+  For any given sample, the median defines the ``mid-point", meaning that half of the values are larger, half are smaller.
+  
+  \item This same concept applies to distribution functions.
+  
+  \item That is, the median of a distribution $F$ is defined to be that value $x_{.5}$ such that $P(X < x_{.5}) = 0.5$.
+  
+  \item Formally, the sample median is the same as the definition above, using the \emph{empirical} distribution function \citep{wiki:edf}.
+  \end{itemize}
+  
+  It is important to note that, as defined, the median value may not be unique!
+
+  \framebreak
+  
+  \begin{block}{Definition: Percentile}
+    Let $F$ be the cdf of a continuous random variable. The $p$th quantile of the distribution $F$ is defined to be any value $x_p$ such that $F(x_p) = P(X \leq x_p) = p$. If $F$ is strictly increasing, then $x_p$ is unique and we say that $F^{-1}(p) = x_p$.
+    
+    If $F$ is not strictly increasing, then $x_p$ may not be unique; in this case, all such values are considered percentiles.
+    If an inverse function is needed in this case, we will define $F^{-1}(p) = \inf \{x \in \R: F(x) \geq p\}$.
+  \end{block}
+  
+  \begin{itemize}
+    \item The last bit of the definition is just some important book keeping to ensure the inverse function exists in odd examples, though I don't think it comes up in this course.
+  \end{itemize}
+  
+  \framebreak
+  
+  Some important percentiles have their own names, including: 
+  \begin{itemize}
+    \item Median: $p = 1/2$.
+    \item Quartiles (lower and upper): $p = 1/4$, and $p = 3/4$, resp.
+    \item Min: $p = 0$.
+    \item Max: $p = 1$.
+  \end{itemize}
+  
+  Note that the inverse cdf is sometimes called the \alert{quantile function}.
+  
+  \framebreak
+  
+  \begin{exampleblock}{Calculating the inverse cdf}
+    Suppose that 
+    $$
+    F(x) = \begin{cases} 0 & x < 0 \\ x^2 & 0 < x < 1 \\ 1 & x > 1 \end{cases}
+    $$ 
+    for $0 \leq x \leq 1$. Find the inverse distribution function $F^{-1}$.
+  \end{exampleblock}
+  
+  \emph{Solution:}
+  
+  \mode<article>{
+  \vspace{2mm}
+  First, let's check that this is a valid distribution function. First, $\lim_{x \rightarrow -\infty}F(x) = 0$, and $\lim_{x \rightarrow \infty} F(x) = 1$.
+ 
+  \vspace{2mm}
+  Now we note that it is trivially monotonically increasing from $(-\infty, 0)$ and $[1, \infty)$. Now on $[0, 1)$, $x^2$ is also increasing, and hence we have $F(x)$ is a monotonically increasing function. 
+  
+  \vspace{2mm}
+  Finally, we need to check that it is right-continuous. In this case it is trivial, because the only points of potential discontinuity are $x = 0$ and $x = 1$, but the limit clearly exists and equals the function value at both of these points. 
+  
+  \vspace{2mm}
+  Now to find the inverse function, we will focus on the more interesting part of the function, and solve $y = F(x) = x^2$ for $x$, obtaining $x = F^{-1}(y) = \sqrt{y}$. This provides the inverse function for all points in $(0, 1)$, but what about the endpoints? These are not unique, so we take:
+  $$
+  F^{-1}(0) = \inf \{x \in \R: F(x) \geq 0\} = \inf_x [0, \infty) = 0,
+  $$
+  and 
+  $$
+  F^{-1}(1) = \inf \{x \in \R: F(x) \geq 1\} = \inf_x [1, \infty) = 1.
+  $$
+  Fortunately, these points already match what we found in the mid-point with the square-root function: $\sqrt{0}=0$ and $\sqrt{1}=1$ (you could have guessed this would happen since the function is always continuous), so we get
+  $$
+  F^{-1}(p) = \sqrt{p}.
+  $$
+  Thus, the inverse function defined on the interval $[0, 1]$ is
+  }
+  
+  
+\end{frame}
+
+\begin{frame}[allowframebreaks]{Final remarks}
+  \begin{itemize}
+    \item From Theorem~\CHAPTER.2, we have the equivalency between cdf's and distributions. Naturally, we want to extend this to pdf's as well, but there is a subtle distinction that must be made.
+    \item Namely, if two pdf's are the same, then the random variables have the same distribution. However, two random variables can have the same distribution but different pdf's, but the difference can only occur on sets with probability $0$.
+    \item This is a consequence of the definition of a pdf, which implies that a pdf may not be unique. 
+    
+    \framebreak
+    
+    \item We have introduce some concepts of random variables, but a full rigorous discussion about random variables requires background in measure theory. If you are interested in learning more, a good textbook for a statistics student is \citet{resnick19}; this is considered a graduate level text, and some background in analysis will be beneficial.
+    \item We have discussed only discrete and continuous random variables. In practice, we often run into random variables that have both a discrete and continuous component. For instance, consider a zero-inflated continuous random variable $X$, where $X = 0$ with probability $p$ (discrete component), but $X \sim N(0, 1)$ with probability $1-p$ (continuous component). 
+  \end{itemize}
+\end{frame}
+
+\newcommand\acknowledgments{
+\begin{itemize}
+\item   Compiled on {\today} using \Rlanguage version \Sexpr{getRversion()}.
+\item   \parbox[t]{0.75\textwidth}{Licensed under the \link{http://creativecommons.org/licenses/by-nc/4.0/}{Creative Commons Attribution-NonCommercial license}.
+    Please share and remix non-commercially, mentioning its origin.}
+    \parbox[c]{1.5cm}{\includegraphics[height=12pt]{../cc-by-nc}}
+\item We acknowledge \link{https://jeswheel.github.io/4450_f25/acknowledge.html}{students and instructors for previous versions of this course / slides}.
+\end{itemize}
+}
+
+\mode<presentation>{
+\begin{frame}[allowframebreaks=0.9]{References and Acknowledgements}
+
+\acknowledgments
+
+\framebreak
+
+\bibliography{../bib4450}
+
+\end{frame}
+}
+
+\mode<article>{
+
+\newpage
+
+{\bf \Large \noindent Acknowledgments}
+
+\acknowledgments
+
+\newpage
+
+\bibliography{../bib4450}
+
+}
+
+
+
+\end{document}
+
+
+
+
+
+
+
