@@ -24,10 +24,12 @@ PREREQ: MATH 3326 and MATH 3352. Offered Even Years in the Spring Semester.
 
 #### Optional topics
 
+- Survey Sampling (Chapter~7)
 - Empirical Bayes
 - Introduction to Monte Carlo
 - EM Algorithm / Gaussian Mixture Models
 - Topics in Bayesian statistics (Metropolis-Hastings, Gibbs samplers, MCMC, etc.)
+- Nonlinear regression
 - Introduction to Time Series
 
 ### Additional Course Information:
