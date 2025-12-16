@@ -14,10 +14,23 @@ The second of a two-part sequence on:
 Probability, random variables, discrete and continuous distributions, order statistics, limit theorems, point and interval estimation, uniformly most powerful tests, likelihood ratio tests, chi-square and F tests, nonparametric tests. 
 PREREQ: MATH 3326 and MATH 3352. Offered Even Years in the Spring Semester.
 
-Chapters 1--6 of the third edition of "Mathematical Statistics and Data Analysis", by John A. Rice, were covered in [the previous semester](https://jeswheel.github.io/4450_f25).
-This is a well-known textbook to use as an introduction to mathematical statistics at the advanced undergraduate level.
+### Planned topics (Spring 2026)
 
-Tentatively, we will plan on covering the material in Chapters 1-6 in Math 4450, and Chapters 7-10 in Math 4451.
+- Parameter Estimation Basics
+- Parameter Uncertainty (confidence intervals / regions)
+- Hypothesis testing
+- Bootstrap
+
+
+#### Optional topics
+
+- Empirical Bayes
+- Introduction to Monte Carlo
+- EM Algorithm / Gaussian Mixture Models
+- Topics in Bayesian statistics (Metropolis-Hastings, Gibbs samplers, MCMC, etc.)
+- Introduction to Time Series
+
+### Additional Course Information:
 
 - [Course Syllabus](syllabus.pdf)
 - [About the Instructor](Introduction.pdf)
