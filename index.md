@@ -16,26 +16,56 @@ PREREQ: MATH 3326 and MATH 3352. Offered Even Years in the Spring Semester.
 
 ### Planned topics (Spring 2026)
 
-- Parameter Estimation Basics
-- Parameter Uncertainty (confidence intervals / regions)
-- Hypothesis testing
-- Bootstrap
+The course description and objectives provide very little direction for this course.
+A tentative list of course topics is provided below.
+In paranthesis is provided some supplementary reference chapters from relevant textbooks.
+
+- Parameter estimation
+   - Method of moments estimators (Rice, 8.4)
+   - Maximum likelihood estimation (Rice, 8.5)
+   - Bayesian estimation (Rice, 8.6)
+   - Sufficiency, minimal sufficiency, and the invariance principle (Rice 8.8, Pawitan 3.1--3.2, Pawitan 2.8--2.9)
+- Parameter uncertainty
+   - Exact Intervals (e.g., Rice 8.5.3)
+   - Revisiting Bayesian posteriors (Rice, 8.6)
+   - Frequentist intervals 
+      - The Score function and Fisher's Information / Observed Information (Pawitan 2.5)
+      - Asymptotic properties of the MLE (Rice 8.5.2--8.5.3)
+      - Wald intervals (Rice 8.5.2--8.5.3, Pawitan 3.3)
+    
+   - Likelihood based intervals (Pawitan 2.6)
+      - Likelihood ratios
+      - Invariance / minimal sufficiency of likelihood (Pawitan 2.9)
+      - Profile likelihooods (Pawitan 3.4)
+    
+    - Cram\'er-Rao Lower Bound (Rice 8.7)
+    - Bias and variance of point estimates (Pawitan 5)
+       - Reducing bias via Taylor series, jacknife, or bootstrap methods.
+- Hypothesis testing (Rice 9.1--9.5, Casella and Berger 8.3)
+    - Neyman-Pearson vs Fisher
+    - Uniformly most powerful tests
+    - Duality of confidence intervals and hypothesis tests.
+    - Non-parametric tests
+    - Chi-square tests
+    - Criticisms of confidence intervals (Pawitan 5.10)
+
 
 
 #### Optional topics
 
-- Survey Sampling (Chapter~7)
-- Empirical Bayes
-- Introduction to Monte Carlo
-- EM Algorithm / Gaussian Mixture Models
-- Topics in Bayesian statistics (Metropolis-Hastings, Gibbs samplers, MCMC, etc.)
+- Empirical Bayes, Hierarchical Bayes
+- Computational Statistics
+   - Visualization, advanced R topics, command line computing, etc.
+   - Numeric optimization
+   - Monte Carlo methods
+   - Advanced Bayesian methods (Metropolis-Hastings, MCMC, Gibbs-sampling)
+- Introduction to time-series
 - Nonlinear regression
-- Introduction to Time Series
+- Gaussian Mixture Models + the EM algorithm
 
 ### Additional Course Information:
 
 - [Course Syllabus](syllabus.pdf)
-- [About the Instructor](Introduction.pdf)
 
 --------------
 
