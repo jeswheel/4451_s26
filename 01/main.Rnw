@@ -152,6 +152,91 @@ ggsave("ebola.png", width = 8, height = 2.65, units = 'in')
   \end{itemize}
 \end{frame}
 
+\begin{frame}[allowframebreaks]{Statistics and Uncertainty}
+  \begin{itemize}
+    \item Regardless of the type of ``statistical activity" we are doing, a recurring theme in statistics in \alert{uncertainty}.
+    \item Loosely speaking, we can characterize two distinct forms of uncertainty:
+    \begin{itemize}
+      \item \emph{Stocahstic uncertainty}: uncertainty due to inherent randomness in data used to make inference, resulting in different models and estimates. For example, what if we picked different weeks to observe traffic patterns at the intersection? We would likely get different data, resulting in different parameter estimates.
+      \item \emph{Inductive uncertainty}: uncertainty due to the inductive nature of our estimates. This is a result of having incomplete information (e.g., due traffic accidents at the intersection truly follow a Poisson-process?) We generally can't control this type of uncertainty, or even quantify it.
+    \end{itemize}
+    \item The first type can be thought of as the uncertainty present, conditioned on a specific model. The second is related to uncertainty involved in the model selection itself.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]{Traffic Deaths}
+  \begin{exampleblock}{Traffic Deaths and Cell-Phone usage}
+    Suppose instead of measuring total accidents at an intersection, what if we model the total number of deaths? We might be interested in estimating how cell-phone usage might be correlated with number of traffic deaths.
+  \end{exampleblock}
+  
+  \begin{itemize}
+    \item Ideally, we would like to do a randomized experiment, placing drivers into a control (no cell-phone), or treatment group (cell-phone). \textit{Recall from Math 3350, this is the best way to control for confounding.}
+    \item This isn't possible, so instead we rely on what is called a \alert{natural experiment}. The ``control" group will be the population of drivers the year before the invention of cell-phones, and the ``treatment" group is the population of drivers the year cell-phones were invented.
+    \item Thought experiment: What if the number of deaths increase from 170 in one year, to 190 the next? Is this enough to claim cell-phones increase accidents? What about 170 to 300? 170 to 174? What's the cutoff?
+    \framebreak
+    
+    \mode<article>{
+    \begin{itemize}
+      \item The question above is related to changes in observed data, not the model. That is, fixed on a model, we can make statements about what is considered a ``large enough" change in order to consider cell-phones having an impact.
+    \end{itemize}
+    }
+    
+    \item Now suppose the deaths increased from 170 to 300, but in the second year, a few major accident involved many cars, in which over 50 people died. 
+    Alternatively, what if the second year had a much longer winter, or there were more teen drivers? What other factors might change how we think about this?
+    
+    \mode<article>{
+    \begin{itemize}
+      \item This time, uncertainty arises because of model choice. We can increase model detail by splitting by age, month, etc., but the data then fall into smaller and smaller groups, increasing the stochastic uncertainty. We have to stop adding detail at some point, but where?
+    \end{itemize}
+    }
+  \end{itemize}
+  
+\end{frame}
+
+\begin{frame}[allowframebreaks]{Frequentist vs Bayesian}
+  \begin{itemize}
+    \item When we finally settle down on a model, we can deal with the inherent stochastic uncertainty in the data in a rigorous way.
+    \item Typically, this is done using probability.
+    \item Probability is a surprisingly abstract topic, however, and how to connect real-world outcomes to probability is non-trivial.
+    \item An at times frustrating (and possibly unique) feature of Statistics as a discipline is that experts cannot agree on the fundamental nature of their subject.
+    \item There are two groups of thought: \alert{Bayesian} and \alert{Frequentist} perspective. We will discuss approaches from both in this class.
+  \end{itemize}
+  
+  \framebreak
+  
+  In the extremes, interpretation of probability falls into two main categories:
+  
+  \begin{itemize}
+    \item \alert{Bayesian} perspective: probabilities correspond to a (subjective) degree of belief about an event.
+    \item \alert{Frequentist} perspective: probabilities are interpreted only in long-run frequency of events.
+  \end{itemize}
+  
+  \begin{itemize}
+    \item Note in the Bayesian perspective admits both perspectives, and many modern Bayesian approaches often consider the frequentist properties of their methods.
+    \item In \textit{my experience}, most statisticians actually fall somewhere in the middle.
+  \end{itemize}
+  
+  \framebreak
+  
+  \begin{exampleblock}{Tossing a coin}
+    Consider tossing a fair coin. We have some sense of uncertainty about the outcome of this experiment, and say that the probability of heads is $0.5$.
+  \end{exampleblock}
+  
+  \begin{itemize}
+    \item In the extreme frequentist paradigm, this is interpreted to mean that the long-run proportion of heads (many coin flips) is $0.5$. However, interpreting the uncertainty of the next \emph{specific} toss is difficult (something like: the next toss belongs to an infinite sequence of tosses of the same coin, which have a limiting frequency of $0.5$.)
+    
+    \item In the extreme Bayesian paradigm, a $0.5$ probability corresponds to a \emph{belief} about the behavior of the coin; this belief can be entirely subjective. Saying a probability of $0.5$ means that even in the next specific coin toss, our sense of uncertainty is $0.5$.
+  \end{itemize}
+  
+  \begin{itemize}
+    \item \alert{Important}! Both approaches have their strengths and weaknesses, and some of the smartest scientists / mathematicians in the world can be found in either extreme.
+    Though most statisticians will claim to think one-way versus the other, most fall somewhere in the middle (frequentists' will often be founding making subjective probability statements, whereas Bayesians' often admit to caring about frequentist properties of their methods).
+    \item We will cover both approaches, and discuss strengths and weaknesses of each when relevant. However, the focus will be on frequentist statistics, as the vast majority of statistical methods in use in the 20th and 21st centuries are based on frequentism.
+    \item There's also a ``third way", sometimes called \alert{Fisherian}, or \alert{likelihoodist}. To some degree this is a compromise between the two more popular approaches, as it rejects the use of prior distributions, but still interprets likelihood as a way to measure belief about a parameter estimate \citep{pawitan01}.
+  \end{itemize}
+  
+\end{frame}
+
 \newcommand\acknowledgments{
 \begin{itemize}
 \item   Compiled on {\today} using \Rlanguage version \Sexpr{getRversion()}.
