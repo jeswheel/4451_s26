@@ -37,37 +37,120 @@ Chapter \CHAPTER: Probability}
 
 \mode<article>{\tableofcontents}
 
-\mode<presentation>{
-  \begin{frame}{Outline}
-    \tableofcontents
-  \end{frame}
-}
+% \mode<presentation>{
+%   \begin{frame}{Outline}
+%     \tableofcontents
+%   \end{frame}
+% }
 
-\begin{frame}{Course Overview}
+\begin{frame}[allowframebreaks]{Course Overview}
   \begin{itemize}
-  \item This course is the first part of a two semester introductory course on Mathematical Statistics.
-  \item Our goal is to cover Chapters 1-10 of ``Mathematical Statistics and Data Analysis", by John A. Rice \citep{rice07}.
-  \item Topics include: Probability, Random Variables, Discrete and Continuous distributions, Order Statistics, Limit Theorems, Point and Interval Estimation, Uniformly most powerful tests, likelihood ratio tests, chi-square and F tests, and nonparameteric tests.
-  \item Roughly speaking, 4450 and 4451 can be broken into two parts: 
-  \begin{itemize}
-    \item Math 4450: Probability (mathematics of randomness)
-    \item Math 4451: Statistics (procedures for analyzing data)
-  \end{itemize}
+    \item The larger focus of last semester (Math 4450) was probability.
+    \item Though we continue where we left off, this semester (Math 4451) will have a much stronger focus on statistics.
+    \item Both probability and statistics are, fundamentally, the study of with randomness... what's the difference? \mode<article>{\textbf{Depends on who you ask!}}
+    
+    \framebreak
+    
+    \mode<presentation>{
+      \vspace{2cm}
+    }
+    
+    \begin{quote}
+      ``The science of collecting, displaying, and analysing data." -- \citet{OxfordStat}
+    \end{quote}
+    
+    \mode<presentation>{
+      \vfill
+    }
+    
+    \begin{quote}
+      ``The discipline that concerns the collection, organization, analysis, interpretation, and presentation of data." -- \citet{statsWiki}
+    \end{quote}
+    
+    \mode<presentation>{
+      \vfill
+    }
+    
+    \begin{quote}
+    Something like: ``The study of extracting useful information from data in a rigorous way." -- Me (it's hard to define an entire discipline).
+    \end{quote}
+    
   \end{itemize}
 \end{frame}
 
-\subsection{Logistics}
+\begin{frame}[allowframebreaks]{Probability vs Statistics}
 
-\begin{frame}{Course Logistics}
-  \begin{itemize}
-    \item \link{https://jeswheel.github.io/4451\_s26/Introduction.pdf}{About Me}
-    \item Course Website: \link{https://jeswheel.github.io/4451\_s26/}{https://jeswheel.github.io/4451\_f25/}. 
-    \item Canvas: Canvas will be used to submit assignments, view grades, and for course announcements.
-    \item \link{https://jeswheel.github.io/4451\_s26/syllabus.pdf}{Course Syllabus}
-    \item \link{https://jeswheel.github.io/4451\_s26/rubric\_homework.html}{Homework grading rubric}.
-  \end{itemize}
+\begin{itemize}
+  \item Any of the above definitions (accurately) suggests that probability is a key part of statistics. So where do we draw the line? Does it matter?
+  \item \citet{pawitan01} dichotomizes the difference in terms of \emph{deductive} vs \emph{inductive} reasoning.
+  \item Roughly speaking, \emph{deductive} arguments moves from general principles (assumptions) to make specific conclusions.
+  In \emph{inductive} reasoning, we use specific observations (data) to make broader generalizations.
+\end{itemize}
+
+\framebreak
+
+\begin{exampleblock}{Traffic Accidents}
+  Suppose we are interested in the random quantity $X_i$, the number of accidents during week $i$ at a particular intersection.
+  From last semester, a common model for this situation is a Poisson-process.
+\end{exampleblock}
+
+\begin{itemize}
+  \item \emph{Probability (deductive)}: If $X_i$ follows a Poisson$(\lambda)$ distribution (general principle), then what is the expected number of accidents per week (specific conclusion)? What is the probability that we observe more than $10$ accidents?
+  
+  \item \emph{Statistics (inductive)}: Suppose we count the number of accidents over a 6 week period, observing: $3, 4, 2, 7, 3, 3$ accidents (specific observations).
+  What value $\lambda$ might describe the Poisson-process that generated the data (broader generalization)? Is the Poisson assumption reasonable given the data?
+\end{itemize}
+
+\begin{itemize}
+  \item From the example above, we can see both ideas used in conjunction for making informed decisions.
+  \item Many statistics problems rely on deductive reasoning in probability, geometry, topology, analysis, etc. to build theory for ways of performing inductive reasoning with specific observations (data).
+  \item Another example related to my own research in population modeling...
+\end{itemize}
+
+<<echo=FALSE,include=FALSE,cache=TRUE>>=
+library(tidyverse)
+
+mylabs <- c("GIN"='Guinea', "LBR"="Liberia", "SLE"="Sierra Leone")
+
+pomp::ebolaWA2014 %>%
+  filter(date <= as.Date("2015-04-30")) %>% 
+  ggplot(aes(x = date, y = cases)) + 
+  geom_line() + 
+  facet_wrap(~country, labeller = as_labeller(mylabs)) + 
+  theme_bw() + 
+  ylab("Ebola Cases") + 
+  scale_x_date(date_labels = "%b-%y'") + 
+  theme(axis.title.x = element_blank())
+
+ggsave("ebola.png", width = 8, height = 2.65, units = 'in')
+@
+
+\begin{figure}[ht]
+\includegraphics[width=\textwidth]{ebola.png}
+\end{figure}
+
+\begin{itemize}
+  \item {\small (Statistics) Given the data (specific example), what can we learn about the dynamic system / generative process (generalization)?}
+  \item {\small (Probability) Under our assumed process / model (general principle), what is our prediction for the Ebola burden over the next year (specific conclusion)?}
+\end{itemize}
+
 \end{frame}
 
+\begin{frame}[allowframebreaks]{Statistics and Math 4451}
+
+  \begin{itemize}
+  \item \citet{pawitan01} further categorizes statistics in terms of five key `statistical activities' in the preface of his book:
+    \begin{itemize}
+      \item \emph{Planning}: making decisions about the study design or sampling protocol, what measurements to take, stratification, sample size, etc.
+      \item \emph{Describing}: summarizing the bulk of data in few quantities, finding or revealing meaningful patterns or trends, etc. 
+      \item \emph{Modeling}: developing mathematical models with few parameters to represent the patterns, or to explain the variability in terms of relationship between variables.
+      \item \emph{Inference}: assessing whether we are seeing a real or spurious pattern or relationship, which typically involves an evaluation of the uncertainty in the parameter estimates.
+      \item \emph{Model Checking}: assessing whether the model is sensible for the data.
+    \end{itemize}
+  \item A lot of early statistics were focused on the first two activities: \emph{planning} and \emph{describing}.
+  We will not spend much time this semester discussing methods related to these two activities.
+  \end{itemize}
+\end{frame}
 
 \newcommand\acknowledgments{
 \begin{itemize}
