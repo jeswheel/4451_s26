@@ -14,6 +14,16 @@ The second of a two-part sequence on:
 Probability, random variables, discrete and continuous distributions, order statistics, limit theorems, point and interval estimation, uniformly most powerful tests, likelihood ratio tests, chi-square and F tests, nonparametric tests. 
 PREREQ: MATH 3326 and MATH 3352. Offered Even Years in the Spring Semester.
 
+See [Section on planned topics](#planned-topics-spring-2026) for more details
+
+------
+
+## Class notes
+
+1. [Introduction: Philosophy of Statistics](01/index.html)
+
+------
+
 ### Planned topics (Spring 2026)
 
 The course description and objectives provide very little direction for this course.
@@ -69,25 +79,21 @@ In paranthesis is provided some supplementary reference chapters from relevant t
 
 --------------
 
-## Class notes
 
 
-### Math 4450 Notes (Fall 2025)
+## Math 4450 Notes (Fall 2025)
 
-1. [Chapter 1: Probability](01/index.html)
+1. [Chapter 1: Probability](https://jeswheel.github.io/4450_f25/01/index.html)
 
-2. [Chapter 2: Random Variables](02/index.html)
+2. [Chapter 2: Random Variables](https://jeswheel.github.io/4450_f25/02/index.html)
 
-3. [Chapter 3: Joint Distributions](03/index.html)
+3. [Chapter 3: Joint Distributions](https://jeswheel.github.io/4450_f25/03/index.html)
 
-4. [Chapter 4: Expected Values](04/index.html)
+4. [Chapter 4: Expected Values](https://jeswheel.github.io/4450_f25/04/index.html)
 
-5. [Chapter 5: Limit Theorems](05/index.html)
+5. [Chapter 5: Limit Theorems](https://jeswheel.github.io/4450_f25/05/index.html)
 
-6. [Chapter 6: Distributions Derived from the Normal Distribution](06/index.html)
-
-
-### Current Course Notes
+6. [Chapter 6: Distributions Derived from the Normal Distribution](https://jeswheel.github.io/4450_f25/06/index.html)
 
 <!--
 
