@@ -22,7 +22,7 @@
  \newcommand\answer[2]{#1} % to show blank space
 
 \title{\vspace{2mm} \link{https://jeswheel.github.io/4451_f25/}{Mathematical Statistics II}\\ \vspace{2mm}
-Chapter \CHAPTER: Probability}
+An Introduction}
 \author{Jesse Wheeler}
 \date{}
 
@@ -43,11 +43,30 @@ Chapter \CHAPTER: Probability}
 %   \end{frame}
 % }
 
+\section{Course Introduction}
+
 \begin{frame}[allowframebreaks]{Course Overview}
   \begin{itemize}
     \item The larger focus of last semester (Math 4450) was probability.
     \item Though we continue where we left off, this semester (Math 4451) will have a much stronger focus on statistics.
-    \item Both probability and statistics are, fundamentally, the study of with randomness... what's the difference? \mode<article>{\textbf{Depends on who you ask!}}
+    \item Both probability and statistics are, fundamentally, the study of with randomness... so, what's the difference? \mode<article>{\textbf{Depends on who you ask!}}
+    
+    \mode<presentation>{\vspace{1cm}}
+    
+    \begin{quote}
+      Statistical science was the peculiar aspect of human progress which gave to the twentieth century its special character... it is to the statistician that the present age turns for what is most essential in all its more important activities. -- \citet{fisher54}
+    \end{quote}
+    \end{itemize}
+\end{frame}
+
+\section{Probability and Statistics}
+
+\begin{frame}[allowframebreaks]{What is ``Statistics"?}
+
+  \begin{itemize}
+    \item First, what is statistics? 
+    
+
     
     \framebreak
     
@@ -120,6 +139,8 @@ Chapter \CHAPTER: Probability}
 
 \end{frame}
 
+\section{Statistics of Math 4451}
+
 \begin{frame}[allowframebreaks]{Statistics and Math 4451}
 
   \begin{itemize}
@@ -177,6 +198,8 @@ Chapter \CHAPTER: Probability}
   
 \end{frame}
 
+\section{Bayesian vs Frequentist Statistics}
+
 \begin{frame}[allowframebreaks]{Frequentist vs Bayesian}
   \begin{itemize}
     \item When we finally settle down on a model, we can deal with the inherent stochastic uncertainty in the data in a rigorous way.
@@ -207,19 +230,186 @@ Chapter \CHAPTER: Probability}
   \end{exampleblock}
   
   \begin{itemize}
-    \item In the extreme frequentist paradigm, this is interpreted to mean that the long-run proportion of heads (many coin flips) is $0.5$. However, interpreting the uncertainty of the next \emph{specific} toss is difficult (something like: the next toss belongs to an infinite sequence of tosses of the same coin, which have a limiting frequency of $0.5$.)
+    \item What does this mean in the purely frequentist sense? What about the unvertainty related to the \emph{next specific} coin toss?
     
-    \item In the extreme Bayesian paradigm, a $0.5$ probability corresponds to a \emph{belief} about the behavior of the coin; this belief can be entirely subjective. Saying a probability of $0.5$ means that even in the next specific coin toss, our sense of uncertainty is $0.5$.
+    \mode<article>{
+      \textbf{Answer:} In the extreme frequentist paradigm, this is interpreted to mean that the long-run proportion of heads (many coin flips) is $0.5$. However, interpreting the uncertainty of the next \emph{specific} toss is difficult (something like: the next toss belongs to an infinite sequence of tosses of the same coin, which have a limiting frequency of $0.5$.)
+    }
+    
+    \item What does this mean in the purely Bayesian paradigm? 
+    
+    \mode<article>{
+      \textbf{Answer:} In the extreme Bayesian paradigm, a $0.5$ probability corresponds to a \emph{belief} about the behavior of the coin; this belief can be entirely subjective. Saying a probability of $0.5$ means that even in the next specific coin toss, our sense of uncertainty is $0.5$.
+      
+      \item \alert{Important}! Both approaches have their strengths and weaknesses, and some of the smartest scientists / mathematicians in the world can be found in either extreme.
+    Though most statisticians will claim to think one-way versus the other, most fall somewhere in the middle (frequentists' will often be founding making subjective probability statements, whereas Bayesians' often admit to caring about frequentist properties of their methods).
+    }
   \end{itemize}
   
   \begin{itemize}
-    \item \alert{Important}! Both approaches have their strengths and weaknesses, and some of the smartest scientists / mathematicians in the world can be found in either extreme.
-    Though most statisticians will claim to think one-way versus the other, most fall somewhere in the middle (frequentists' will often be founding making subjective probability statements, whereas Bayesians' often admit to caring about frequentist properties of their methods).
+
+  \framebreak
+
     \item We will cover both approaches, and discuss strengths and weaknesses of each when relevant. However, the focus will be on frequentist statistics, as the vast majority of statistical methods in use in the 20th and 21st centuries are based on frequentism.
     \item There's also a ``third way", sometimes called \alert{Fisherian}, or \alert{likelihoodist}. To some degree this is a compromise between the two more popular approaches, as it rejects the use of prior distributions, but still interprets likelihood as a way to measure belief about a parameter estimate \citep{pawitan01}.
   \end{itemize}
   
+  \framebreak
+  
+  \begin{exampleblock}{Probability of events}
+    Try to use both Bayesian and frequentist interpretations of probability to describe what is intended by the following statements.
+  \end{exampleblock}
+  
+  \begin{itemize}
+    \item My weather app states that there is a $40\%$ of rain tomorrow.
+    \item In a sporting event, ESPN says that the probability that team $A$ will win is $57\%$.
+    \item A particular blood test given by a doctor is said to have a $5\%$ probability of a false-positive result, and you just received a positive result.
+  \end{itemize}
+  
 \end{frame}
+
+\begin{frame}[allowframebreaks]{Introduction to Estimation}
+
+\begin{itemize}
+  \item The primary focus of this class will be \alert{parameter estimation}. That is, we collect data, pick a model to describe the data generating process, and use the data to ``fit" the model to data. 
+  \item Models can be complex: machine learning frameworks like random forest, neural networks, gradient boosting machines, etc. These are very good at prediction, but are often referred to as a \emph{black-box}.
+  \item In this class, we focus more on general principles of data analysis, which is most easily demonstrated using simple models.
+\end{itemize}
+
+\begin{exampleblock}{Flipping coins}
+  A friend gives you a coin from another country. You want to estimate the probability of heads for this particular coin, flip the coin $N$ times, observe $0 \leq n \leq N$ number of heads.
+\end{exampleblock}
+
+\mode<presentation>{
+\emph{Frequentist Solution:} 
+
+\framebreak
+
+\emph{Bayesian Solution:}
+
+}
+
+\mode<article>{
+\begin{itemize}
+  \item In this case, the model for the data is obvious and simple. We will use it for both the frequentist and Bayesian solutions. Assuming coin flips are independent and identically distributed, the data will come from a binomial distribution with $N$ total trials, probability of success $p$. We suppose each flip of a coin is independent, identically distributed. Let $X_i$ be the random variable that is one with probability $p$, and zero with probability $1-p$.
+  \item \emph{Frequentist Solution}:
+  \begin{itemize}
+    \item The probability of heads only has meaning as a long-run frequency of the number of heads (from the purely frequentist perspective, that's what probability means).
+    \item Thus, we'll estimate the probability $p$ by using the observed frequency of heads: $n / N$. That is, our estimate $\hat{p} = n / N = \sum_i X_i / N$.
+    \item We recognize that there is uncertainty in this estimate. This time, we flipped the coin $N$ times and saw $n$ heads, but what if we saw $n-1$, $n+3$, or some other number of heads? This is entirely possible! Probabilities are long-run frequencies, and we only have a finite sample, so what is the uncertainty associated with our estimate?
+    \item One approach is to use the CLT. Notably, the estimate $\hat{p}$ is just the average of the $X_i$, and therefore according to the CLT:
+    $$
+    \hat{p} \approx N\big(p, p(1/p)/N\big).
+    $$
+    \item With enough observations, our estimate is centered at the ``truth" $p$, and the variance of our estimate shrinks at a rate of $1/N$.
+    \item The biggest issue remaining is that the variance term relies on $p$, which is unknown. Since $\hat{p} \overset{a.s.}{\rightarrow} p$ (by the strong law of large numbers), we'll replace $p$ in the variance term to get the variance of the estimate to be approximately $\hat{p}(1 - \hat{p}) / N$.
+    \item Finally, because we know that $95\%$ of the area of a normal distribution lies within $1.96$ standard deviations of the mean, we can create an interval that describes some level of uncertainty:
+    $$
+    I_p := \hat{p} \pm 1.96 \times \sqrt{\hat{p}(1 - \hat{p}) / N}.
+    $$
+    \item We will call the interval above an approximate $95\%$ confidence interval for $p$. Approximate because we used the CLT, and approximated the variance of the estimate.
+    \item We'll talk more about confidence intervals later in the course, but while we are focusing on frequentist probability interpretation, let's talk about the interval.
+    \item We DO NOT say that there is an approximate $95\%$ probability that $p$ is in the interval $I_p$. Probability only exist in terms of long-term frequencies, and once the interval is built, the parameter is or is not in the interval; there are no long-term frequencies involved at this point, so we make no probability statement.
+    \item However, the interval $I_p$ itself is random! If we observed different data, we would have made a different random interval.
+    \item Thus, an approximate $95\%$ confidence interval is best interpreted as: ``Under the same data generating scenario, if we built a random interval in the same way that we just did, we would expect an approximate long-run frequency of 95\% of these intervals to contain the true parameter, $p$."
+    \item Example: Suppose we toss the coin 10 times, observe 8 heads. Then $\hat{p} = 8/10$, and then $\sqrt{\hat{p}(1 - \hat{p}) / N} = 0.126$, and our point estimate is $0.8$, with a confidence interval of $0.8\pm 1.96 \times 0.126 = (0.55, 1.05)$. Do we see a problem? 
+  \end{itemize}
+  \item \emph{Bayesian Solution}:
+  
+  \begin{itemize}
+    \item The Bayesian solution comes as a direct result of Bayes-Theorem, allowing us to account for our belief about the coin as a probability distribution.
+    \item The Bayesian approach is actually considered the first modern method to assimilate observed data for quantitative inductive reasoning \citep[Chapter~1.4,][]{pawitan01}.
+    \item Recall Bayes Theorem for two random events, $A$ and $B$:
+    $$
+    P(A|B) = \frac{P(A \cap B)}{P(B)} = \frac{P(B | A)P(A)}{P(B|A)P(A) + P(B | A^c)P(A^c)}.
+    $$
+    \item Now, assuming that probabilities represent beliefs about particular outcomes, we can represent our own belief about $p$ (the probability of observing a heads) using a probability distribution, $f_P(p)$. We can now think of events $B$ and $A$ being the event of observing $n$ heads in $N$ trials, and the event that $P = p$, respectively, and substitute this into Bayes theorem: 
+    $$
+    f_{P|x = n}(p|n) = \frac{f_{X|P}(n|p)f_P(p)}{\int f_{X|P}(n|p)f_P(p)\, dp},
+    $$
+    Where $X = \sum_i X$, and we are now able to get a posterior belief about the parameter $P$ after conditioning on the data.
+    \item A key question now is what is our prior belief about the problem? How do we specify $f_P(p)$, which is called the prior distribution?
+    \item A common approach is we say we don't know! We have no prior information, so we believe that any $P$ is equally likely. Thus, we will use a \emph{uniform-prior} over the support of $p$, which is the interval $[0, 1]$. Thus:
+    $$
+    f_P(p) = 1[0 \leq p \leq 1].
+    $$
+    \item Then, the function $f_{X|P}(n|p)$ is uniquely determined by our model. In this case, it corresponds to the binomial probability of observing $X = n$:
+    \begin{align*}
+      f_{P|x = n}(p|n) &= \frac{f_{X|P}(n|p)f_P(p)}{\int f_{X|P}(n|p)f_P(p)\, dp} \\
+      &= \frac{\binom{N}{n}p^n(1-p)^{N-n}}{\int^1_0 \binom{N}{n}p^n(1-p)^{N-n} \, dp} 1[0\leq p \leq 1] \\
+      &= \frac{p^n(1-p)^{N-n}}{\int^1_0 p^n(1-p)^{N-n} \, dp} 1[0\leq p \leq 1].
+    \end{align*}
+    \item It can be tricky to continue simplifying the density above. We'll look at some tricks later in the semester, but for now we will just recall the definition of the Beta-integral:
+    $$
+    B(z_1, z_2) = \frac{\Gamma(z_1)\Gamma(z_2)}{\Gamma(z_1 + z_2)} = \int_0^1 p^{z_1 - 1}(1 - p)^{z_2 - 1}\, dp,
+    $$
+    using this we simply the conditional density $P | X = n$ as:
+    $$
+    f_{P|x = n}(p|n) = \frac{\Gamma(N + 2)}{\Gamma(n+1)\Gamma(N-n+1)}p^n(1-p)^{N-n} 1[0\leq p\leq 1].
+    $$
+    \item You may recognize the distribution above to be a special case of the Beta-distribution, hence:
+    $$
+    P | X = n \sim \text{Beta}(n + 1, N - n + 1).
+    $$
+    \item To get a point estimate, we might consider taking the mean of the posterior distribution. The mean of a Beta$(\alpha, \beta)$ distribution is $\alpha / (\alpha + \beta)$, so our point estimate might be:
+    $$
+    \hat{p} = E[P | X = n] = \frac{n + 1}{N+2}.
+    $$
+    \item Note the similarity of this estimate to the frequentist estimate of $n/N$. Noticeably, the Bayesian estimate is ``shrunk towards 1/2".
+    \item To quantity uncertainty, we might want to find the lower $0.025$ percentile, and $0.975$ percentile, so that we have an interval where $95\%$ of the area is in-between these two numbers. We call this the \emph{credible interval}. There's no analytic way to do this, but it's easy to calculate in a statistical software environment.
+    \item Example: Suppose we observe $10$ flips, and $8$ are heads. Then our point estimate (posterior mean) is $\frac{8+1}{10+2} = \frac{9}{12} = 0.75$. We can calculate a 95\% credible in R.
+    \item Are there any issues with this approach? Is a uniform prior really appropriate measure of uncertainty you ``feel" about flipping a coin?
+    \item Do you recognize any relationship between the Bayesian point estimate and the approach taught in 3350 for small sample sizes? (If you didn't take Math 3350, consider looking up the ``plus-two" method)
+  \end{itemize}
+\end{itemize}
+}
+
+\end{frame}
+
+\begin{frame}[fragile]{R code}
+
+\mode<presentation>{
+\begin{itemize}
+  \item The R code for finding a credible interval:
+\end{itemize}
+}
+
+
+\begin{knitrout}\small
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hldef{n} \hlkwb{<-} \hlnum{8}
+\hldef{N} \hlkwb{<-} \hlnum{10}
+\hldef{lower_bound} \hlkwb{<-} \hlkwd{qbeta}\hldef{(}\hlnum{0.025}\hldef{, n}\hlopt{+}\hlnum{1}\hldef{, N}\hlopt{-}\hldef{n}\hlopt{+}\hlnum{1}\hldef{)}  \hlcom{# lower bound}
+\hldef{upper_bound} \hlkwb{<-} \hlkwd{qbeta}\hldef{(}\hlnum{0.975}\hldef{, n}\hlopt{+}\hlnum{1}\hldef{, N}\hlopt{-}\hldef{n}\hlopt{+}\hlnum{1}\hldef{)}  \hlcom{# upper bound}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+
+\begin{knitrout}\small
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{verbatim}
+95% Credible Interval for p: (0.48, 0.94)
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+\mode<article>{
+Some Helpful R tips: 
+\begin{itemize}
+  \item All common distributions in R follow a similar pattern: A single letter of the thing you want, followed by the name of the distribution.
+  \begin{itemize}
+    \item \texttt{r<dist>}: Get random sample from \texttt{<dist>}. Example: \texttt{rnorm(10, mean = 5, sd = 8)} will generate 10 random samples from a $N(5, 8^2)$ distribution. 
+    \item \texttt{d<dist>}: evaluate the density of a distribution at a particular point. Example: If $\phi(x)$ is the density of a standard normal, then $\phi(2) = $ \texttt{dnorm(2, mean = 0, sd = 1)} =  0.05.
+    \item\texttt{p<dist>}: Calculates the distribution function (CDF) of the distribution at a particular point. Example: If $\Phi(x)$ is the CDF of the standard normal, then $\Phi(1.95) = P(Z\leq 1.96) = $\texttt{pnorm(1.96, mean = 0, sd = 1)} = 0.975.
+    \item\texttt{q<norm>}: The quantile function of the desired distribution, which is the inverse of the CDF. Example: \texttt{qnorm(0.025, mean = 0, sd = 1)} = $-1.96$.
+  \end{itemize}
+  \item Available distributions include: \texttt{gamma}, \texttt{beta}, \texttt{unif}, \texttt{t}, \texttt{pois}, \texttt{exp}, \texttt{binom}, \texttt{nbinom}, \texttt{geom}, \texttt{hyper}, and several more.
+\end{itemize}
+}
+
+\end{frame}
+
 
 \newcommand\acknowledgments{
 \begin{itemize}
