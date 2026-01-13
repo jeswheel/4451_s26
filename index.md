@@ -21,6 +21,7 @@ See [Section on planned topics](#planned-topics-spring-2026) for more details
 ## Class notes
 
 1. [Introduction: Philosophy of Statistics](01/index.html)
+2. [Introduction to point estimation](02/index.html)
 
 ------
 
