@@ -230,7 +230,7 @@ An Introduction}
   \end{exampleblock}
   
   \begin{itemize}
-    \item What does this mean in the purely frequentist sense? What about the unvertainty related to the \emph{next specific} coin toss?
+    \item What does this mean in the purely frequentist sense? What about the uncertainty related to the \emph{next specific} coin toss?
     
     \mode<article>{
       \textbf{Answer:} In the extreme frequentist paradigm, this is interpreted to mean that the long-run proportion of heads (many coin flips) is $0.5$. However, interpreting the uncertainty of the next \emph{specific} toss is difficult (something like: the next toss belongs to an infinite sequence of tosses of the same coin, which have a limiting frequency of $0.5$.)
@@ -299,7 +299,7 @@ An Introduction}
     \item We recognize that there is uncertainty in this estimate. This time, we flipped the coin $N$ times and saw $n$ heads, but what if we saw $n-1$, $n+3$, or some other number of heads? This is entirely possible! Probabilities are long-run frequencies, and we only have a finite sample, so what is the uncertainty associated with our estimate?
     \item One approach is to use the CLT. Notably, the estimate $\hat{p}$ is just the average of the $X_i$, and therefore according to the CLT:
     $$
-    \hat{p} \approx N\big(p, p(1/p)/N\big).
+    \hat{p} \approx N\big(p, p(1-p)/N\big).
     $$
     \item With enough observations, our estimate is centered at the ``truth" $p$, and the variance of our estimate shrinks at a rate of $1/N$.
     \item The biggest issue remaining is that the variance term relies on $p$, which is unknown. Since $\hat{p} \overset{a.s.}{\rightarrow} p$ (by the strong law of large numbers), we'll replace $p$ in the variance term to get the variance of the estimate to be approximately $\hat{p}(1 - \hat{p}) / N$.
