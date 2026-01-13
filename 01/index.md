@@ -12,10 +12,11 @@ The material is largely based on the preface and introduction to the textbook: "
 While the approach of not continuing exactly from where we left off is a bit unconventional, I first wanted to ground this semester's material in the context of Statistics as a discipline, and providing room for us to discuss additional topics outside of the John Rice textbook, as this is likely the last statistics course many of the students in the course will take.
 
 
-| &nbsp;          | &nbsp;                          |
+| &nbsp;           | &nbsp;                          |
 |:-----------------------|:------------------------:|
-| Lecture slides  | [pdf](slides.pdf) |
-| Lecture notes   | [pdf](notes.pdf) |
+| Lecture slides   | [pdf](slides.pdf) |
+| Lecture notes    | [pdf](notes.pdf) |
+| Annotated Slides | [pdf](annotatedSlides.pdf) |
 <!-- | Discussion Problems | [pdf](discussionProbs.pdf) | -->
 ----------------------
 
