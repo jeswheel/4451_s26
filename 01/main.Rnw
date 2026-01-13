@@ -48,7 +48,7 @@ An Introduction}
 \begin{frame}[allowframebreaks]{Course Overview}
   \begin{itemize}
     \item The larger focus of last semester (Math 4450) was probability.
-    \item Though we continue where we left off, this semester (Math 4451) will have a much stronger focus on statistics.
+    \item Though we continue where we left off, this semester (Math 4451) will have a much stronger focus on statistics. A complete description of planned course topics can be found at the course website: \url{https://jeswheel.github.io/4451\_s26/\#planned-topics-spring-2026}.
     \item Both probability and statistics are, fundamentally, the study of with randomness... so, what's the difference? \mode<article>{\textbf{Depends on who you ask!}}
     
     \mode<presentation>{\vspace{1cm}}
@@ -420,6 +420,44 @@ Some Helpful R tips:
 
 \end{frame}
 
+\begin{frame}[allowframebreaks]{Final Thoughts}
+
+\begin{itemize}
+  \item The differences between Bayesian vs Frequentist thinking matters, and some get very passionate about the debate.
+  \item In my opinion, most people fall somewhere in the middle.
+  \item Often practitioners choose a Bayes vs Frequentist methodologies not because of their personal interpretation of probability, but for convenience, existing standards, or it is the only way to solve a given problem.
+  \item ``All models are wrong but some are useful"  -- \citet{box79}, a famous 20th century statistician.
+  
+  \framebreak
+  
+  \item One example is the following Bayesian approach to image restoration for images with static noise introduced \citep[Chapter~15.6][]{keener10}, adapted from the seminal paper by \citet{geman84}.
+  
+  \mode<article>{
+    \item Let $X_{i, j}$ denote the value of the $(i, j)$th pixel in a digital image.
+    \item We will pick a simple (obviously incorrect) model that is very useful for performing image restoration. In particular, assume that, conditioned on a particular mean $\Theta_{(i, j)} = \theta_{(i, j)}$, each pixel has distribution:
+    $$
+    X_{i, j} \sim N(\theta_{i, j}, \sigma^2).
+    $$
+    \item In real images, pixels that are close together tend to be highly correlated. Thus, using a Bayesian set-up, we want to pick a prior for $\Theta_{(i, j)}$ that has this feature. 
+    It is a bit too technical to describe in detail here, but we can define a multi-variate normal prior for each $\Theta_{(i, j)}$, where adjacent pixels are correlated to each other, and far-away pixels are not. Assuming this structure is captured in the covariance matrix $\Sigma_\theta$, the prior for the matrix of pixels may be denoted:
+    $$
+    \Theta \sim N_{n\times m}\big(\mu_\theta, \Sigma_\theta\big),
+    $$
+    meaning an $n\times m$ dimensional 
+    \item The posterior distribution of $\Theta | X = x$ will also be normally distributed (normal model with normal priors = normal posterior). Direct computation of the mean and covariance of the posterior is possible, but Gibbs-sampling can instead be used to compute reliable approximations in faster time.
+    \item In this example, I don't think most would believe the model that was used is ``correct", nor do we necessarily have to accept the Bayesian interpretation of probability; instead, the method based on Bayesian theory allows us to ``smooth out" the image 
+  }
+  
+\end{itemize}
+
+\framebreak
+
+\begin{figure}[!ht]
+  \includegraphics[width=0.8\textwidth]{gibbsExample.png}
+  \caption{Bayesian image restoration, credit \citet{geman84}}
+\end{figure}
+
+\end{frame}
 
 \newcommand\acknowledgments{
 \begin{itemize}
