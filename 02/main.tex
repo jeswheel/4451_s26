@@ -67,15 +67,15 @@ Introduction to Point Estimation}
 
   \item We will first start with some notation, and motivating examples.
   \item Term \emph{model} in this class will generally refer to a probability model, and can be based on a discrete or continuous probability measure.
-  
+
   \begin{exampleblock}{Normal Model}
     The Normal (or Gaussian) family of distributions arises often in the real world. Examples include human heights (conditioned on gender), rainfall amounts, and many biological measurements are approximately normal (or log-normal).
-    
+
     Given a set of observations $x_1, x_2, \ldots, x_n$, we may \emph{model} these as iid normal $X_i \sim N(\mu, \sigma^2)$, and our goal being using the data to estimate the values of $\mu$ or $\sigma$.
   \end{exampleblock}
-  
+
   \framebreak
-  
+
   \begin{exampleblock}{Regression}
     Sometimes the probability model is \emph{implicit}, but present. Consider the regression model:
     $$
@@ -85,7 +85,7 @@ Introduction to Point Estimation}
   \end{exampleblock}
 
   \framebreak
-  
+
   \begin{exampleblock}{Poisson Process}
     Another common example is a Poisson Process model. Many real-world phenomena are well-approximated by a Poisson process, over space or time. Examples include arrival times at a gas station, number of meteors landing in a geographic area, radioactive decay, etc. Here, there is only one parameter we want to estimate using data, namely the rate $\lambda$.
   \end{exampleblock}
@@ -102,12 +102,12 @@ Introduction to Point Estimation}
     \mode<article>{
     \begin{itemize}
       \item If the family is Gaussian, the model is determined by $\mu$ and $\sigma^2$.
-      \item If the family is Poisson, the model is determined by $\lambda$. 
-      \item If the family is linear-Gaussian regression, the model is determined by $\beta_0, \beta_1$, and $\sigma^2$. 
+      \item If the family is Poisson, the model is determined by $\lambda$.
+      \item If the family is linear-Gaussian regression, the model is determined by $\beta_0, \beta_1$, and $\sigma^2$.
     \end{itemize}
     }
   \end{itemize}
-  
+
 \end{frame}
 
 \begin{frame}[allowframebreaks]{Example: Gamma-Rainfall}
@@ -119,9 +119,9 @@ Introduction to Point Estimation}
     \item The Gamma distribution is quite flexible, and works as a useful model for various situations.
     \item One example is modeling rainfall amounts per-storm under two conditions, cloud seeding vs not cloud seeding (simulated data, couldn't find original data).
     \item A Gamma distribution fits both samples well, but we get different parameters $\alpha$ and $\lambda$ for the two different samples
-    \item Differences in the respective distributions are reflected in differences in the parameters $\alpha$ and $\lambda$. 
+    \item Differences in the respective distributions are reflected in differences in the parameters $\alpha$ and $\lambda$.
   \end{itemize}
-  
+
 \end{frame}
 
 \begin{frame}[fragile]{Two-sample Rainfall}
@@ -132,7 +132,7 @@ Introduction to Point Estimation}
   \includegraphics[width=\textwidth]{rainfall.png}
   \caption{Data and model fit to two different Gamma distributions.}
 \end{figure}
-  
+
 \end{frame}
 
 % \begin{frame}[allowframebreaks]{Example: Radio-active decay}
@@ -143,35 +143,35 @@ Introduction to Point Estimation}
 %     \item Data are collected by the National Buereau of Standards.
 %     \item The data are counts of alpha particles emitted by americium 241 measured over 10-second intervals.
 %   \end{itemize}
-%   
+%
 %   \framebreak
-%   
+%
 %   \begin{table}[ht]
 %   \centering
 %   \begin{tabular}{rr}\hline
 %     n & Observed
 %   \end{tabular}
 %   \end{table}
-%   
+%
 % \end{frame}
 
 \begin{frame}[allowframebreaks]{Notation and generalizations}
   \begin{itemize}
     \item We will generalize by using the following ideas and notations.
     \item We will denote the \emph{observed data} as $x^*_1, x_2^*, \ldots, x_N^*$, and use the shorthands $x_{1:N}^{*}$ if we emphasize the entire collection, and $x^*$ if the emphasis is not needed.
-    \item We assume that the data are realizations of random variables $X_1, X_2, \ldots, X_N$, again using the notation $X_{1:N}$ for the collection of $N$ random variables, or $X$ if this is not needed. 
+    \item We assume that the data are realizations of random variables $X_1, X_2, \ldots, X_N$, again using the notation $X_{1:N}$ for the collection of $N$ random variables, or $X$ if this is not needed.
     \item In general, the data $x_i^*$ and random variables $X_i$ can be multivariate, but focus primarily on the univariate case.
     \item We will be interested in fitting a probabilistic model $f_{X_{1:N}}(x_{1:N};\theta)$ using the data. The model may correspond to a discrete probability, or a continuous probability. In these cases, $f$ is usually a pmf of pdf, respectively.
     \item Subscripts will be dropped occasionally if it is not necessary. For instance, $f(x;\theta)$ is taken to mean the model of all data $x = x_{1:N}$, and would formally be expressed as $f_{X_{1:N}}(x_{1:N}; \theta)$.
     \item This approach is sometimes called ``function overload"; it's not my favorite approach, but it is convenient. The meaning of the function is primarily understood by the arguments and context.
     \item The function $f(x;\theta)$ belongs to a particular \alert{family} of models, indexed by $\theta$, which is generally multivariate.
   \end{itemize}
-  
-  \framebreak
-  
 
-  
-  
+  \framebreak
+
+
+
+
   \begin{exampleblock}{Normal model example}
     Suppose we observe the following data: 3.49, 2, 3.38, 1.62, 2.18, and we would like to fit a normal model to the data, assuming the data are iid. Then $x_1^* = 3.49$, $x_2^* = 2$, and so forth, and the model family depends on $\theta = (\mu, \sigma^2)$, and the model can be expressed as:
     \begin{align*}
@@ -181,29 +181,249 @@ Introduction to Point Estimation}
     \end{align*}
     Our goal is to estimate $\mu$, $\sigma^2$ using the observed data $x^*_{1:5}$.
   \end{exampleblock}
-  
+
   \end{frame}
-  
+
   \begin{frame}{Notation and Generalization (continued)}
-  
+
   \begin{itemize}
     \item Our goal now is to develop general procedures for estimating $\theta$, using observed data $x^*$, and a proposed family of models $f(x;\theta)$.
     \item We will develop three main approaches: (1) Method of Moments (2) Maximum Likelihood Estimation, and (3) Bayesian estimation.
     \item In this section, we will focus only on method of moments estimators.
-    \item Once point estimation techniques are developed, we will provide theory about these estimates and their uncertainty; discussing bias, variance, an optimality of estimates.
+    \item Once point estimation techniques are developed, we will provide theory about these estimates and their uncertainty; discussing bias, variance, and optimality of estimates.
   \end{itemize}
-  
+
 \end{frame}
 
-\section{Empirical distribution}
+\section{Method of Moments}
 
-\begin{frame}[allowframebreaks]{The empirical distribution funciton}
+\begin{frame}[allowframebreaks]{Motivation}
+  \begin{itemize}
+    \item The Method of Moments (MoM) estimation technique is a simple idea.
+    \item Pick a family of models $f(x;\theta)$, and observed data $x^*$.
+    \item The family of models will have theoretical moments, i.e., $\text{E}[X^k]$.
+    \item Generally, these moments can be expressed in terms of the model parameters, $\theta$.
+    \item Thus, we will estimate $\hat{\theta}$ so that the \alert{data moments} match the theoretical moments.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]{The empirical distribution}
+  \begin{itemize}
+    \item One justification of this approach considers the \alert{empirical distribution} of observed data.
+    \item Let $X_1, X_2, \ldots, X_N$ be random variables, representing a possible data sample.
+    \item We will assume that $X_i$ are iid, from some distribution $F_\theta$ ($F_\theta$ is the cdf here).
+    \item We will define the empirical distribution function as:
+    $$
+    F_n(t) = \frac{1}{N} \sum_{i = 1}^N I[X_i \leq t].
+    $$
+    \item When we observe a specific dataset $x^*$, we can plug in these numbers to get a specific distribution that is not random.
+    % $$
+    % \hat{F}_n(t) = \frac{1}{N} \sum_{i = 1}^N I[x^*_i \leq t].
+    % $$
+    \item A few things to note is that $F_n(t)$ is a proper CDF.
+    \item By the law of large numbers, $F_n(t) \overset{a.s.}{\longrightarrow} F_\theta(t)$ for every point $t$.
+    \item The Glivenko–Cantelli theorem also strengthens this statement by saying that the convergence is uniform, in the sense that $\sup_t |F_n(t) - F_\theta(t)|$ converges to zero.
+    \item It can be shown that the $k$th moment of the empirical distribution is
+    $$
+    \hat{\mu}_k = \frac{1}{N}\sum_{i = 1}^N X_i^k.
+    $$
+    \item Method of Moments idea:
+  \begin{itemize}
+    \item For many commonly used parametric families (e.g., Gaussian, Poisson), the distribution is completely specified by a small set of parameters.
+    \item These parameters are typically explicit functions of the moments of the distribution (e.g., mean and variance for the Gaussian).
+    \item Although the moment generating function (MGF) uniquely determines the entire distribution, in many model families, the relevant parameters are uniquely determined by just the first few moments.
+    \item Therefore, as the empirical moments computed from data converge to the true moments (by the Law of Large Numbers), it is natural to estimate model parameters by equating empirical and theoretical moments—leading to the method of moments estimators.
+  \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]{Method of Moments: generalized version}
+  \begin{itemize}
+    \item To summarize mathematically, let $\mu_k = E[X^k]$ be the theoretical $k$th moment.
+    \item Let $\hat{\mu}_k = \frac{1}{N}\sum_{i = 1}^N X_i^k$ be the $k$th sample moment.
+    \item $\hat{\mu}_k$ is an estimate of $\mu_k$; however, we don't want an estimate of $\mu$, we want an estimate of $\theta$!
+    \item For models with finite parameters, $\theta = (\theta_1, \ldots, \theta_k)$, we can often express $\theta_i$ as a function of $(\mu_1, \ldots, \mu_k)$:
+    $$
+    \theta_i = g_i(\mu_1, \ldots, \mu_k)
+    $$.
+    \item Thus, our estimate of $\theta_i$ would be found by plugging in the empirical moments:
+    $$
+    \hat{\theta}_i = g_i(\hat{\mu}_1, \ldots, \hat{\mu}_k).
+    $$
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks,fragile]{Examples}
+  \begin{exampleblock}{Poisson Distribution}
+    Suppose we observe data $x_{1:N}^*$, and want to fit a Poisson model. Since the Poisson distribution only has one parameter ($\lambda$), our goal is to use $x^*$ to estimate $\lambda$.
+
+      \mode<article>{
+        The first moment of the Poisson distribution is $\mu_1 = E[X_i] = \lambda$. Thus, the function $g_1(\mu_1) = \mu_1 = \lambda$, and our estimate should be
+        $$
+        g_1(\hat{\mu}_1) = \frac{1}{N}\sum_{i = 1}^N X_i = \hat{\lambda}.
+        $$
+
+        TODO: Add sample distribution example.
+      }
+
+  \end{exampleblock}
+
+\end{frame}
+
+\begin{frame}[allowframebreaks,fragile]{Real-data example}
+
+\begin{itemize}
+  \item Before we start looking at real-data examples, let's introduce some basic R coding principles that will help us calculate moments from the data.
+  \item R is a programming language, but for the sake of this class, we'll just treat it as a statistics calculator.
+  \item For now, we will only focus on the most simple data types and operations: creating objects, vectors, and computing summary statistics.
+\end{itemize}
+
+  \framebreak
+
+\begin{itemize}
+  \item First, saving objects in R. We can use \texttt{=} (like most languages), or the assignment operator: \texttt{<-}
+\end{itemize}
+
+\begin{knitrout}\small
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hldef{x} \hlkwb{<-} \hlnum{2}
+\hldef{x} \hlopt{+} \hlnum{2}
+\end{alltt}
+\begin{verbatim}
+[1] 4
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+\framebreak
+
+\begin{itemize}
+  \item A vector in R is a collection of objects of the same data type. In this class, we will only need to use numeric data types
+\end{itemize}
+
+\begin{knitrout}\small
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hldef{x} \hlkwb{<-} \hlkwd{c}\hldef{(}\hlnum{1}\hldef{,} \hlnum{2}\hldef{,} \hlnum{3}\hldef{,} \hlnum{4}\hldef{,} \hlnum{5}\hldef{)}
+\hlkwd{class}\hldef{(x)}
+\end{alltt}
+\begin{verbatim}
+[1] "numeric"
+\end{verbatim}
+\begin{alltt}
+\hlkwd{mean}\hldef{(x)}
+\end{alltt}
+\begin{verbatim}
+[1] 3
+\end{verbatim}
+\begin{alltt}
+\hlkwd{sum}\hldef{(x)}
+\end{alltt}
+\begin{verbatim}
+[1] 15
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+  \framebreak
+
+\begin{itemize}
+  \item Some fast ways of building vectors include:
+\end{itemize}
+
+\begin{knitrout}\small
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlnum{1}\hlopt{:}\hlnum{5}  \hlcom{# this gives 1, 2, 3, 4, 5}
+\end{alltt}
+\begin{verbatim}
+[1] 1 2 3 4 5
+\end{verbatim}
+\begin{alltt}
+\hlkwd{seq}\hldef{(}\hlnum{1}\hldef{,} \hlnum{10}\hldef{,} \hlkwc{by} \hldef{=} \hlnum{2}\hldef{)}  \hlcom{# Gives 1, 3, 5, 7, 9}
+\end{alltt}
+\begin{verbatim}
+[1] 1 3 5 7 9
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+\framebreak
+
+\begin{itemize}
+  \item For generating random numbers, we can use the syntax: \texttt{rdist}.
+\end{itemize}
+
+\begin{knitrout}\small
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{rnorm}\hldef{(}\hlkwc{n} \hldef{=} \hlnum{10}\hldef{,} \hlkwc{mean} \hldef{=} \hlnum{2}\hldef{,} \hlkwc{sd} \hldef{=} \hlnum{1}\hldef{)}
+\end{alltt}
+\begin{verbatim}
+ [1] 1.7531041 0.7844391 3.5614051 2.4273102 0.7989765 3.0524585
+ [7] 0.6949364 1.3073924 2.6026489 1.8022469
+\end{verbatim}
+\begin{alltt}
+\hlkwd{rpois}\hldef{(}\hlkwc{n} \hldef{=} \hlnum{7}\hldef{,} \hlkwc{lambda} \hldef{=} \hlnum{5}\hldef{)}
+\end{alltt}
+\begin{verbatim}
+[1] 2 6 1 5 5 9 6
+\end{verbatim}
+\begin{alltt}
+\hlkwd{rbeta}\hldef{(}\hlkwc{n} \hldef{=} \hlnum{3}\hldef{,} \hlkwc{shape1} \hldef{=} \hlnum{0.8}\hldef{,} \hlkwc{shape2} \hldef{=} \hlnum{1.3}\hldef{)}
+\end{alltt}
+\begin{verbatim}
+[1] 0.51652672 0.10386537 0.05986089
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+\framebreak
+
+\begin{itemize}
+  \item Lastly (and maybe most important), function documentation and help is readily available by appending a question mark: \texttt{?rnorm}
+\end{itemize}
+
+\begin{knitrout}\small
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlopt{?}\hldef{mean}
+\hlopt{?}\hldef{rnorm}
+\hlopt{?}\hldef{sd}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+
+\framebreak
+
+  \begin{exampleblock}{Poisson distribution with real data}
+    The National Institute of Science and Technology collected data about asbestos fibers on filters. Asbestos dissolved in water was spread on a filter, and the number of fibers in each of 23 grid squares were counted:
+
+\begin{knitrout}\small
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{verbatim}
+ [1] 31 29 19 18 31 28 34 27 34 30 16 18 26 27 27 18 24 22
+[19] 28 24 21 17 24
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+TODO: Sampling Distribution and Bootstrap.
+
+  \end{exampleblock}
+
+\framebreak
+
+\begin{exampleblock}{Normal Distribution}
+ TODO: Finish.
+\end{exampleblock}
 
 \end{frame}
 
 \newcommand\acknowledgments{
 \begin{itemize}
-\item   Compiled on {\today} using \Rlanguage version 4.5.2.
+\item   Compiled on {\today} using \Rlanguage version 4.5.1.
 \item   \parbox[t]{0.75\textwidth}{Licensed under the \link{http://creativecommons.org/licenses/by-nc/4.0/}{Creative Commons Attribution-NonCommercial license}.
     Please share and remix non-commercially, mentioning its origin.}
     \parbox[c]{1.5cm}{\includegraphics[height=12pt]{../cc-by-nc}}
@@ -213,7 +433,7 @@ Introduction to Point Estimation}
 
 \mode<presentation>{
 \begin{frame}[allowframebreaks=0.8]{References and Acknowledgements}
-  
+
 \bibliography{../bib4451}
 
 \vspace{3mm}
