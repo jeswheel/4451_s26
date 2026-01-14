@@ -208,7 +208,7 @@ x <- round(rnorm(5, mean = 2), 2)
   
   
   \begin{exampleblock}{Normal model example}
-    Suppose we observe the following data: \Sexpr{cat(x, sep = ', ')}, and we would like to fit a normal model to the data, assuming the data are iid. Then $x_1^* = \Sexpr{x[1]}$, $x_2^* = \Sexpr{x[2]}$, and so forth, and the model family depends on $\theta = (\mu, \sigma^2)$, and the model can be expressed as:
+    Suppose we observe the following data: \Sexpr{x}, and we would like to fit a normal model to the data, assuming the data are iid. Then $x_1^* = \Sexpr{x[1]}$, $x_2^* = \Sexpr{x[2]}$, and so forth, and the model family depends on $\theta = (\mu, \sigma^2)$, and the model can be expressed as:
     \begin{align*}
     f(x; \theta) &= f_{X_{1:5}}(x_{1:5}; \mu, \sigma^2) \\
     & = \prod_{i = 1}^5 f_{X_i}(x_i; \mu, \sigma^2) \\
@@ -217,21 +217,35 @@ x <- round(rnorm(5, mean = 2), 2)
     Our goal is to estimate $\mu$, $\sigma^2$ using the observed data $x^*_{1:5}$.
   \end{exampleblock}
   
-  \framebreak
+  \end{frame}
+  
+  \begin{frame}{Notation and Generalization (continued)}
   
   \begin{itemize}
     \item Our goal now is to develop general procedures for estimating $\theta$, using observed data $x^*$, and a proposed family of models $f(x;\theta)$.
     \item We will develop three main approaches: (1) Method of Moments (2) Maximum Likelihood Estimation, and (3) Bayesian estimation.
     \item In this section, we will focus only on method of moments estimators.
-    \item Once point estimation techniques are developed, we will provide theory about these estimates and their uncertainty; discussing bias, variance, an optimality of estimates.
+    \item Once point estimation techniques are developed, we will provide theory about these estimates and their uncertainty; discussing bias, variance, and optimality of estimates.
   \end{itemize}
   
 \end{frame}
 
 \section{Empirical distribution}
 
-\begin{frame}[allowframebreaks]{The empirical distribution funciton}
+\begin{frame}[allowframebreaks]{Motivation}
+  \begin{itemize}
+    \item The Method of Moments (MoM) estimation technique is a simple idea.
+    \item Pick a family of models $f(x;\theta)$, and observed data $x^*$.
+    \item The family of models will have theoretical moments, i.e., $\text{E}[X^k]$.
+    \item Generally, these moments can be expressed in terms of the model parameters, $\theta$.
+    \item Thus, we will estimate $\hat{\theta}$ so that the \alert{data moments} match the theoretical moments.
+  \end{itemize}
+\end{frame}
 
+\begin{frame}[allowframebreaks]{The empirical distribution}
+  \begin{itemize}
+    \item One justification of this approach considers the \alert{empirical distribution} of observed data.
+  \end{itemize}
 \end{frame}
 
 \newcommand\acknowledgments{

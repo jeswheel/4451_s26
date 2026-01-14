@@ -173,7 +173,7 @@ Introduction to Point Estimation}
   
   
   \begin{exampleblock}{Normal model example}
-    Suppose we observe the following data: , and we would like to fit a normal model to the data, assuming the data are iid. Then $x_1^* = 3.49$, $x_2^* = 2$, and so forth, and the model family depends on $\theta = (\mu, \sigma^2)$, and the model can be expressed as:
+    Suppose we observe the following data: 3.49, 2, 3.38, 1.62, 2.18, and we would like to fit a normal model to the data, assuming the data are iid. Then $x_1^* = 3.49$, $x_2^* = 2$, and so forth, and the model family depends on $\theta = (\mu, \sigma^2)$, and the model can be expressed as:
     \begin{align*}
     f(x; \theta) &= f_{X_{1:5}}(x_{1:5}; \mu, \sigma^2) \\
     & = \prod_{i = 1}^5 f_{X_i}(x_i; \mu, \sigma^2) \\
@@ -182,7 +182,9 @@ Introduction to Point Estimation}
     Our goal is to estimate $\mu$, $\sigma^2$ using the observed data $x^*_{1:5}$.
   \end{exampleblock}
   
-  \framebreak
+  \end{frame}
+  
+  \begin{frame}{Notation and Generalization (continued)}
   
   \begin{itemize}
     \item Our goal now is to develop general procedures for estimating $\theta$, using observed data $x^*$, and a proposed family of models $f(x;\theta)$.
