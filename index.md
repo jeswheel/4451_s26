@@ -64,6 +64,7 @@ In paranthesis is provided some supplementary reference chapters from relevant t
 
 #### Optional topics
 
+- Survey Sampling (Rice Chapter 7)
 - Empirical Bayes, Hierarchical Bayes
 - Computational Statistics
    - Visualization, advanced R topics, command line computing, etc.
@@ -71,7 +72,7 @@ In paranthesis is provided some supplementary reference chapters from relevant t
    - Monte Carlo methods
    - Advanced Bayesian methods (Metropolis-Hastings, MCMC, Gibbs-sampling)
 - Introduction to time-series
-- Nonlinear regression
+- Regression Theory + Nonlinear regression (Rice Chapter 14)
 - Gaussian Mixture Models + the EM algorithm
 
 ### Additional Course Information:
