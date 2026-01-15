@@ -411,9 +411,56 @@ Introduction to Point Estimation}
 
 TODO: Sampling Distribution and Bootstrap.
 
+\mode<article>{
+\begin{itemize}
+  \item From our previous work, we know that the method of moments estimator for the Poisson Distribution is just
+  $$\hat{\lambda} = \frac{1}{N}\sum_{i = 1}^N X_i$$.
+  \item For this specific dataset, we can calculate that in \texttt{R} using the \texttt{mean} function.
+  \item I have the data saved in a vector \texttt{x}, already, so I get the result: \texttt{mean(x) = } 24.91.
+\end{itemize}
+}
   \end{exampleblock}
 
 \framebreak
+
+The mean can be calculated as:
+
+\begin{knitrout}\small
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{mean}\hldef{(x)}
+\end{alltt}
+\begin{verbatim}
+[1] 24.91304
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+
+\end{frame}
+
+\begin{frame}[allowframebreaks,fragile]{Sampling Distribution}
+  \begin{itemize}
+    \item As always, we are interested in the the uncertainty related to our estimates.
+    \item In most cases, we cannot directly calculate uncertainty of estimates, and we will have to rely on more advance theory, discussed later.
+    \item Sometimes, however, we can calculate some form of uncertainty based on the form of the estimator, and model assumptions.
+    \item The last (and next) models are such cases.
+  \end{itemize}
+
+  \framebreak
+
+  \begin{block}{Sampling Distribution}
+    Most estimates $\hat{\theta}$ of $\theta$ are functions of the random variables $X_1, X_2, \ldots, X_N$. Thus, $\hat{\theta}$ is also a random variable. The distribution of $\hat{\theta}$ is called the \alert{sampling distribution}.
+  \end{block}
+
+  \begin{itemize}
+    \item In most cases, the exact distribution of $\hat{\theta}$ is unknowable.
+    \item Instead, we often get approximations to this distribution, and in particular, the variance of the distribution, in order to quantify uncertainty of the estimator.
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}[allowframebreaks,fragile]{Example: Normal Distribution}
 
 \begin{exampleblock}{Normal Distribution}
  TODO: Finish.
