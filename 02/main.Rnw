@@ -230,82 +230,9 @@ x <- round(rnorm(5, mean = 2), 2)
 
 \end{frame}
 
-\section{Method of Moments}
+\section{Brief Introduction to R}
 
-\begin{frame}[allowframebreaks]{Motivation}
-  \begin{itemize}
-    \item The Method of Moments (MoM) estimation technique is a simple idea.
-    \item Pick a family of models $f(x;\theta)$, and observed data $x^*$.
-    \item The family of models will have theoretical moments, i.e., $\text{E}[X^k]$.
-    \item Generally, these moments can be expressed in terms of the model parameters, $\theta$.
-    \item Thus, we will estimate $\hat{\theta}$ so that the \alert{data moments} match the theoretical moments.
-  \end{itemize}
-\end{frame}
-
-\begin{frame}[allowframebreaks]{The empirical distribution}
-  \begin{itemize}
-    \item One justification of this approach considers the \alert{empirical distribution} of observed data.
-    \item Let $X_1, X_2, \ldots, X_N$ be random variables, representing a possible data sample.
-    \item We will assume that $X_i$ are iid, from some distribution $F_\theta$ ($F_\theta$ is the cdf here).
-    \item We will define the empirical distribution function as:
-    $$
-    F_n(t) = \frac{1}{N} \sum_{i = 1}^N I[X_i \leq t].
-    $$
-    \item When we observe a specific dataset $x^*$, we can plug in these numbers to get a specific distribution that is not random.
-    % $$
-    % \hat{F}_n(t) = \frac{1}{N} \sum_{i = 1}^N I[x^*_i \leq t].
-    % $$
-    \item A few things to note is that $F_n(t)$ is a proper CDF.
-    \item By the law of large numbers, $F_n(t) \overset{a.s.}{\longrightarrow} F_\theta(t)$ for every point $t$.
-    \item The Glivenko–Cantelli theorem also strengthens this statement by saying that the convergence is uniform, in the sense that $\sup_t |F_n(t) - F_\theta(t)|$ converges to zero.
-    \item It can be shown that the $k$th moment of the empirical distribution is
-    $$
-    \hat{\mu}_k = \frac{1}{N}\sum_{i = 1}^N X_i^k.
-    $$
-    \item Method of Moments idea:
-  \begin{itemize}
-    \item For many commonly used parametric families (e.g., Gaussian, Poisson), the distribution is completely specified by a small set of parameters.
-    \item These parameters are typically explicit functions of the moments of the distribution (e.g., mean and variance for the Gaussian).
-    \item Although the moment generating function (MGF) uniquely determines the entire distribution, in many model families, the relevant parameters are uniquely determined by just the first few moments.
-    \item Therefore, as the empirical moments computed from data converge to the true moments (by the Law of Large Numbers), it is natural to estimate model parameters by equating empirical and theoretical moments—leading to the method of moments estimators.
-  \end{itemize}
-  \end{itemize}
-\end{frame}
-
-\begin{frame}[allowframebreaks]{Method of Moments: generalized version}
-  \begin{itemize}
-    \item To summarize mathematically, let $\mu_k = E[X^k]$ be the theoretical $k$th moment.
-    \item Let $\hat{\mu}_k = \frac{1}{N}\sum_{i = 1}^N X_i^k$ be the $k$th sample moment.
-    \item $\hat{\mu}_k$ is an estimate of $\mu_k$; however, we don't want an estimate of $\mu$, we want an estimate of $\theta$!
-    \item For models with finite parameters, $\theta = (\theta_1, \ldots, \theta_k)$, we can often express $\theta_i$ as a function of $(\mu_1, \ldots, \mu_k)$:
-    $$
-    \theta_i = g_i(\mu_1, \ldots, \mu_k)
-    $$.
-    \item Thus, our estimate of $\theta_i$ would be found by plugging in the empirical moments:
-    $$
-    \hat{\theta}_i = g_i(\hat{\mu}_1, \ldots, \hat{\mu}_k).
-    $$
-  \end{itemize}
-\end{frame}
-
-\begin{frame}[allowframebreaks,fragile]{Examples}
-  \begin{exampleblock}{Poisson Distribution}
-    Suppose we observe data $x_{1:N}^*$, and want to fit a Poisson model. Since the Poisson distribution only has one parameter ($\lambda$), our goal is to use $x^*$ to estimate $\lambda$.
-
-      \mode<article>{
-        The first moment of the Poisson distribution is $\mu_1 = E[X_i] = \lambda$. Thus, the function $g_1(\mu_1) = \mu_1 = \lambda$, and our estimate should be
-        $$
-        g_1(\hat{\mu}_1) = \frac{1}{N}\sum_{i = 1}^N X_i = \hat{\lambda}.
-        $$
-
-        TODO: Add sample distribution example.
-      }
-
-  \end{exampleblock}
-
-\end{frame}
-
-\begin{frame}[allowframebreaks,fragile]{Real-data example}
+\begin{frame}[allowframebreaks,fragile]{R introduction}
 
 \begin{itemize}
   \item Before we start looking at real-data examples, let's introduce some basic R coding principles that will help us calculate moments from the data.
@@ -373,7 +300,104 @@ rbeta(n = 3, shape1 = 0.8, shape2 = 1.3)
 ?sd
 @
 
-\framebreak
+\end{frame}
+
+\section{Method of Moments}
+
+\begin{frame}[allowframebreaks]{Motivation}
+  \begin{itemize}
+    \item The Method of Moments (MoM) estimation technique is a simple idea.
+    \item Pick a family of models $f(x;\theta)$, and observed data $x^*$.
+    \item The family of models will have theoretical moments, i.e., $\text{E}[X^k]$.
+    \item Generally, these moments can be expressed in terms of the model parameters, $\theta$.
+    \item Thus, we will estimate $\hat{\theta}$ so that the \alert{data moments} match the theoretical moments.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks,fragile]{The empirical distribution}
+  \begin{itemize}
+    \item One justification of this approach considers the \alert{empirical distribution} of observed data.
+    \item Let $X_1, X_2, \ldots, X_N$ be random variables, representing a possible data sample.
+    \item We will assume that $X_i$ are iid, from some distribution $F_\theta$ ($F_\theta$ is the cdf here).
+    \item We will define the empirical distribution function as:
+    $$
+    F_n(t) = \frac{1}{N} \sum_{i = 1}^N I[X_i \leq t].
+    $$
+    \item When we observe a specific dataset $x^*$, we can plug in these numbers to get a specific distribution that is not random.
+    % $$
+    % \hat{F}_n(t) = \frac{1}{N} \sum_{i = 1}^N I[x^*_i \leq t].
+    % $$
+    \item A few things to note is that $F_n(t)$ is a proper CDF.
+    \item By the law of large numbers, $F_n(t) \overset{a.s.}{\longrightarrow} F_\theta(t)$ for every point $t$.
+    \item The Glivenko–Cantelli theorem also strengthens this statement by saying that the convergence is uniform, in the sense that $\sup_t |F_n(t) - F_\theta(t)|$ converges to zero.
+    
+    \end{itemize}
+    
+    \framebreak
+    
+    Example: empirical distribution function for Poisson Data:
+    
+<<echo = TRUE, fig.height=3.5, fig.width=4.5>>=
+set.seed(123)  # Reproducible results
+x <- rpois(n = 25, lambda = 6)
+plot(ecdf(x))
+lines(
+  x = seq(1e-16, 15, length.out = 1000), 
+  y = ppois(seq(1e-16, 15, length.out = 1000), 6),
+  col = 'red'
+)
+@
+    
+    \end{frame}
+
+\begin{frame}[allowframebreaks]{Method of Moments Estimation}
+  \begin{itemize}
+    \item It can be shown that the $k$th moment of the empirical distribution is
+    $$
+    \hat{\mu}_k = \frac{1}{N}\sum_{i = 1}^N X_i^k.
+    $$
+    \item Method of Moments idea:
+  \begin{itemize}
+    \item For many commonly used parametric families (e.g., Gaussian, Poisson), the distribution is completely specified by a small set of parameters.
+    \item These parameters are typically explicit functions of the moments of the distribution (e.g., mean and variance for the Gaussian).
+    \item Although the moment generating function (MGF) uniquely determines the entire distribution, in many model families, the relevant parameters are uniquely determined by just the first few moments.
+    \item Therefore, as the empirical moments computed from data converge to the true moments (by the Law of Large Numbers), it is natural to estimate model parameters by equating empirical and theoretical moments—leading to the method of moments estimators.
+  \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]{Method of Moments: generalized version}
+  \begin{itemize}
+    \item To summarize mathematically, let $\mu_k = E[X^k]$ be the theoretical $k$th moment.
+    \item Let $\hat{\mu}_k = \frac{1}{N}\sum_{i = 1}^N X_i^k$ be the $k$th sample moment.
+    \item $\hat{\mu}_k$ is an estimate of $\mu_k$; however, we don't want an estimate of $\mu$, we want an estimate of $\theta$!
+    \item For models with finite parameters, $\theta = (\theta_1, \ldots, \theta_k)$, we can often express $\theta_i$ as a function of $(\mu_1, \ldots, \mu_k)$:
+    $$
+    \theta_i = g_i(\mu_1, \ldots, \mu_k)
+    $$.
+    \item Thus, our estimate of $\theta_i$ would be found by plugging in the empirical moments:
+    $$
+    \hat{\theta}_i = g_i(\hat{\mu}_1, \ldots, \hat{\mu}_k).
+    $$
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks,fragile]{Examples}
+  \begin{exampleblock}{Poisson Distribution}
+    Suppose we observe data $x_{1:N}^*$, and want to fit a Poisson model. Since the Poisson distribution only has one parameter ($\lambda$), our goal is to use $x^*$ to estimate $\lambda$.
+
+      \mode<article>{
+        The first moment of the Poisson distribution is $\mu_1 = E[X_i] = \lambda$. Thus, the function $g_1(\mu_1) = \mu_1 = \lambda$, and our estimate should be
+        $$
+        g_1(\hat{\mu}_1) = \frac{1}{N}\sum_{i = 1}^N X_i = \hat{\lambda}.
+        $$
+      }
+
+  \end{exampleblock}
+
+\end{frame}
+
+\begin{frame}[allowframebreaks,fragile]{Real-data example}
 
   \begin{exampleblock}{Poisson distribution with real data}
     The National Institute of Science and Technology collected data about asbestos fibers on filters. Asbestos dissolved in water was spread on a filter, and the number of fibers in each of 23 grid squares were counted:
@@ -384,12 +408,11 @@ x <- c(31, 29, 19, 18, 31, 28, 34, 27, 34, 30, 16, 18, 26, 27, 27, 18, 24, 22, 2
 x
 @
 
-TODO: Sampling Distribution and Bootstrap.
 
 \mode<article>{
 \begin{itemize}
   \item From our previous work, we know that the method of moments estimator for the Poisson Distribution is just
-  $$\hat{\lambda} = \frac{1}{N}\sum_{i = 1}^N X_i$$.
+  $$\hat{\lambda} = \frac{1}{N}\sum_{i = 1}^N X_i = \bar{X}_N$$.
   \item For this specific dataset, we can calculate that in \texttt{R} using the \texttt{mean} function.
   \item I have the data saved in a vector \texttt{x}, already, so I get the result: \texttt{mean(x) = } \Sexpr{round(mean(x), 2)}.
 \end{itemize}
@@ -404,6 +427,9 @@ The mean can be calculated as:
 mean(x)
 @
 
+\begin{itemize}
+  \item What about the error associated with this estimate?
+\end{itemize}
 
 \end{frame}
 
@@ -424,14 +450,262 @@ mean(x)
   \begin{itemize}
     \item In most cases, the exact distribution of $\hat{\theta}$ is unknowable.
     \item Instead, we often get approximations to this distribution, and in particular, the variance of the distribution, in order to quantify uncertainty of the estimator.
+    \item For the Poisson model and the method of moments estimator, however, we can calculate this exactly.
   \end{itemize}
+
+  \framebreak
+
+  \begin{exampleblock}{Sampling distribution of Poisson MoM estimator}
+    Let $X_1, \ldots, X_N$ be modeled as iid from a Poisson($\lambda$) distribution. If $\hat{\lambda}$ is the method of moments estimator of $\lambda$, what is its sampling distribution?
+    
+    \mode<article>{
+      \begin{itemize}
+        \item From our previous work, we found the estimate to be:
+        $$
+        \hat{\lambda} = \frac{1}{N}\sum_{i = 1}^N X_i,
+        $$
+        or the sample average.
+        \item Last semester, you proved that the sum of $n$ independent Poisson$(\beta)$ random is Poisson$(n\beta)$. Using this information, and assuming $X_i$ is Poisson$(\lambda)$, we have: 
+        $$
+        S = \sum_{i = 1}^N X_i \sim \text{Poisson}(\lambda n).
+        $$
+        \item Thus, the estimator $\hat{\lambda} = S/n$ is a transformed Poisson random variable, such that:
+        \begin{align*}
+        P(\hat{\lambda} = k) &= P(S = Nk) \\
+        &= \frac{(N\lambda)^{Nk}e^{-N\lambda}}{(Nk)!},
+        \end{align*}
+        for all non-negative integers $k$. This defines the \emph{sampling distribution} of the MoM estimator $\hat{\lambda}$. 
+        \item We can also calculated the expected value and variance of $\hat{\lambda}$, using the fact that $S$ is Poisson:
+        $$
+        E(\hat{\lambda}) = \frac{1}{N}E(S) = \lambda, \quad\quad \Var(\hat{\lambda}) = \frac{1}{N^2}\Var(S) = \frac{\lambda}{N}.
+        $$
+        \item A few things to note:
+        \begin{itemize}
+          \item The estimate is unbiased: $E[\hat{\lambda}] = \lambda$.
+          \item The variance shrinks at a rate of $1/N$.
+          \item The CLT says that $\hat{\lambda}$ (which is a sample mean), is approximately normally distributed.
+          \item The standard deviation of a sampling distribution is called the \emph{standard error} of the estimator.
+        \end{itemize}
+        \item We can't know the exact sampling distribution, because it depends on the true value $\lambda$. 
+        \item However, we can approximate the sampling distribution by substituting $\hat{\lambda}$ for $\lambda$.
+        \item This is unbiased, and the mean-square-error is then the sum of squared bias, and variance. The variance also decreases linearly is $N$, so it should be a good approximation even for moderate $N$.
+      \end{itemize}
+    }
+  \end{exampleblock}
+
+\framebreak
+
+For our specific dataset, we can approximate the standard error as:
+
+<<>>=
+sqrt(mean(x) / length(x)) |> round(2)
+@
+
+The ``pipe" operator in R \code{|>} takes the output of one function, and inputs it as the first argument into the next function. 
+
+\end{frame}
+
+\begin{frame}[allowframebreaks,fragile]{Example: Model Checking}
+
+  \begin{itemize}
+    \item In addition to estimating the stochastic uncertainty due to sampling distribution, we might want to assess inductive uncertainty due to model selection.
+    \item This is a large topic, one we will revisit in much more detail later.
+    \item For now, I want to present a simple idea that can be done with what we already know.
+    \item This will be based on a \alert{parametric bootstrap}, a technique we will discuss in detail later in the course.
+    
+    \framebreak
+    
+    \item The idea: we claim that the data come from a Poisson$(\lambda)$, and we estimated $\lambda$.
+    \item If the data really are Poisson$(\lambda)$, then our estimate $\hat{\lambda} \approx \lambda$.
+    \item We can simulate many different data from Poisson$(\hat{\lambda})$, and compare this to our real data.
+    \item If the model is reasonable, then our data shouldn't look too different from the simulations.
+    \item We can compare the empirical distribution functions from the real data, and simulations.
+    
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{ECDF: R code}
+
+<<eval=FALSE,echo=TRUE>>=
+library(tidyverse)
+lambda <- mean(x)
+results <- replicate(10, rpois(length(x), lambda = lambda)) |> 
+  as.data.frame()
+colnames(results) <- paste0("sample_", 1:10)
+results |> 
+  pivot_longer(
+    cols = everything(), names_to = "replicate",
+    names_prefix = "sample_", values_to = "val"
+  ) %>% 
+  ggplot(aes(val, group = replicate)) + 
+  stat_ecdf(geom = "step", col = 'grey30') +
+  stat_ecdf(
+    data = data.frame(val = x, replicate = '0'), 
+    geom = 'step', col = 'red', linewidth = 1.2
+  ) + theme_bw()
+@
+
+\end{frame}
+
+\begin{frame}[fragile]{Plot output}
+
+<<fig.height=3.25,fig.width=4.25,echo=FALSE>>=
+library(tidyverse)
+set.seed(123)
+lambda <- mean(x)
+results <- replicate(10, rpois(length(x), lambda = lambda)) |> 
+  as.data.frame()
+colnames(results) <- paste0("sample_", 1:10)
+results |> 
+  pivot_longer(
+    cols = everything(), names_to = "replicate",
+    names_prefix = "sample_", values_to = "val"
+  ) %>% 
+  ggplot(aes(val, group = replicate)) + 
+  stat_ecdf(geom = "step", col = 'grey30') +
+  stat_ecdf(
+    data = data.frame(val = x, replicate = '0'), 
+    geom = 'step', col = 'red', linewidth = 1.2
+  ) + theme_bw()
+@
 
 \end{frame}
 
 \begin{frame}[allowframebreaks,fragile]{Example: Normal Distribution}
 
 \begin{exampleblock}{Normal Distribution}
- TODO: Finish.
+ Suppose we observe $N$ observations, and we want to model them as iid $N(\mu, \sigma^2)$. Find the method of moments estimator $\theta = (\mu, \sigma^2)$.
+ 
+ \mode<article>{
+  \begin{itemize}
+    \item In this case, the $\theta$ that indexes the model is two-dimensional.
+    \item Under the assumption that the data $X_i$ are iid normal, we have the following theoretical moments:
+    \begin{align*}
+      \mu_1 &= E[X] = \mu \\
+      \mu_2 &= E[X^2] = \mu^2 + \sigma^2
+    \end{align*}
+    \item In this case, we need to find functions $g_1$ and $g_2$ such that:
+    \begin{align*}
+      \theta_1 &:= \mu = g_1(\mu_1 = \mu, \mu_2 = \mu^2 + \sigma^2) \\
+      \theta_2 &:= \sigma^2 = g_2(\mu_1 = \mu, \mu_2 = \mu^2 + \sigma^2)
+    \end{align*}
+    \item Here, the functions are obvious (indeed, you can basically skip the step above, but I wanted to show how the method fits with the more general notation / approach).
+    \item Specifically, we have:
+    \begin{align*}
+      \mu &= \mu_1 \\
+      \sigma^2 &= \mu_2 - \mu^2_1.
+    \end{align*}
+    \item Replacing this with sample moments $\hat{\mu_1} = \frac{1}{n}\sum_i X_i$, and $\hat{\mu_2} = \frac{1}{n}\sum_i X_i^2$, we have:
+    $$
+    \hat{\mu} = \frac{1}{N}\sum_{i = 1}^N X_i = \bar{X}_N,
+    $$
+    and
+    $$
+    \hat{\sigma}^2 = \frac{1}{N}\sum_i X_i^2 - \big(\frac{1}{N}\sum_{i = 1}^N X_i\big)^2.
+    $$
+    A little algebra shows that the second equation can be written as:
+    $$
+    \hat{\sigma}^2 = \frac{1}{N} \sum_{i = 1}^N\big(X_i - \bar{X}_N\big)^2.
+    $$
+    \item Note that this is another case where we can get the sampling distribution of the estimators.
+    \item Specifically, 
+    $$\hat{\mu} = \bar{X}_N \sim N(\mu, \sigma^2/N),$$
+    and 
+    $$
+    n\hat{\sigma}^2/\sigma^2 \sim \chi^2_{n-1}.
+    $$
+    \item Furthermore, $\hat{\mu}$ and $\hat{\sigma^2}$ are independent.
+  \end{itemize}
+ }
+ 
+\end{exampleblock}
+
+\end{frame}
+
+\begin{frame}[allowframebreaks]{Example: Gamma Distribution}
+
+\begin{exampleblock}{MoM estimator for Gamma distribution}
+  Consider modeling the data $X_1, \ldots, X_N$ as iid Gamma$(\alpha, \lambda)$.
+  Find the method of moments estimator for these data.
+  
+  \mode<article>{
+    \begin{itemize}
+      \item The first step is to find the first few moments of a Gamma distribution.
+      \item Last semester, we derived the moment generating function for this distribution; this can be used to calculate the first few moments: $\mu_1 = E[X_i]$, $\mu_2 = E[X_i^2]$. 
+      \begin{align*}
+        \mu_1 &= \frac{\alpha}{\lambda} \\
+        \mu_2 &= \frac{\alpha(\alpha + 1)}{\lambda^2}.
+      \end{align*}
+      \item To apply the method of moments estimation approach, we need to express the parameters $\alpha$ and $\lambda$ in terms of these moments. Using a substitution method, we can find:
+      $$
+      \mu_2 = \frac{\alpha(\alpha + 1)}{\lambda^2} = \frac{\alpha^2}{\lambda^2} + \frac{\alpha}{\lambda^2}.
+      $$
+      Plugging in the expression for $\mu_1$:
+      $$
+      \mu_2 = \mu_1^2 + \frac{\mu_1}{\lambda}.
+      $$
+      Now we want to solve for $\alpha$ and $\lambda$, so first solving for $\lambda$:
+      $$
+      \lambda = \frac{\mu_1}{\mu_2 - \mu_1^2}.
+      $$
+      Now solving for $\alpha$, we can use the first moment equation to get:
+      $$
+      \alpha = \lambda \mu_1 = \frac{\mu_1^2}{\mu_2 - \mu_1^2}.
+      $$
+      \item Now we just need to replace the theoretical moments with the sample moments!
+      $$
+      \hat{\lambda} = \frac{\hat{\mu}_1}{\hat{\mu}_2 - \hat{\mu}_1^2}, \quad\quad \hat{\alpha} = \frac{\hat{\mu}_1^2}{\hat{\mu}_2 - \hat{\mu}_1^2}.
+      $$
+      \item Now we can simplify a bit. The first data moment $\hat{\mu}_1$ is always just the sample mean, $\bar{X}_N$. As we saw in the last example, we also have:
+      $$
+      \hat{\mu}_2 - \hat{\mu}_1^2 = \frac{1}{N}\sum_{i = 1}^N X_i^2 - \big(\bar{X}_N\big)^2 = \frac{1}{N}\sum_{i = 1}^N\big(X_i - \bar{X}\big)^2,
+      $$
+      which is the (biased) sample variance. For convenience, we'll denote:
+      $$\hat{\sigma}^2 := \hat{\mu}_2 - \hat{\mu}_1^2.$$
+      Thus, the estimates can be expressed as:
+      $$
+      \hat{\lambda} = \frac{\bar{X}_N}{\hat{\sigma}^2}, \quad\quad \hat{\alpha} = \frac{\bar{X}_N^2}{\hat{\sigma}^2}.
+      $$
+      \item Unlike the previous examples, it's not immediately clear how to estimate the sampling distributions in this case. We will discuss approaches to this later in the semester.
+    \end{itemize}
+  }
+  
+\end{exampleblock}
+
+\end{frame}
+
+\begin{frame}[allowframebreaks]{Example: Muon Decay}
+
+\begin{exampleblock}{MoM estimator for Muon Decay}
+  In \emph{statistical physics}, the angle $\phi$ at which electrons are emitted in muon decay is modeled using the following density:
+  $$
+  f(x;\, \alpha) = \frac{1 + \alpha x}{2}, \quad -1\leq x \leq 1,
+  $$
+  and where the parameter $\alpha$ satisfies $-1\leq \alpha \leq 1$, and $x = \cos \phi$.
+  Supposing we observe data $X_1, X_2, \ldots, X_N$, what is the method of moments estimator for $\alpha$?
+  
+  \mode<article>{
+  \begin{itemize}
+    \item As always, we will first need to find the theoretical moments of this distribution, and relate them to the parameters of interest.
+    \item The first moment, denoted $\mu_1 = E[X_i]$ is found via integration:
+    $$
+    \mu_1 = \int_{-1}^1 x\frac{1 + \alpha x}{2}dx.
+    $$
+    Some basic calculus gives:
+    $$
+    \mu_1 = \alpha/3.
+    $$
+    \item Thus, the parameter of interests is described as a function of the theoretical moments via the equation:
+    $$
+    \alpha = 3\mu_1.
+    $$
+    \item Replacing theoretical moments with sample moments provides our estimate: 
+    $$
+    \hat{\alpha} = 3\hat{\mu}_1 = 3\bar{X}_N.
+    $$
+  \end{itemize}
+  }
+  
 \end{exampleblock}
 
 \end{frame}
