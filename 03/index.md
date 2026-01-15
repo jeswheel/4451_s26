@@ -1,13 +1,13 @@
 ---
-title: "Mathematical Statistics II<br>Math 4451.<br>Introduction to Point Estimation"
+title: "Mathematical Statistics II<br>Math 4451.<br>Maximum Likelihood Estimation"
 author: "Jesse Wheeler"
 output: html_document
 ---
 
 ----------------------
 
-This section introduces the idea of point estimation, introduces some common notation and goals.
-Following the introduction, we will present the method of moments estimation procedure, after introducing the concept of the empirical distribution.
+This section continues the topic on point estimation, building from where we left-off with the method of moments approach.
+We first will formally define the term likelihood, re-visiting the probability (deductive reasoning) vs inference (inductive reasoning) problem.
 
 | &nbsp;           | &nbsp;                          |
 |:-----------------------|:------------------------:|
@@ -23,7 +23,7 @@ Following the introduction, we will present the method of moments estimation pro
 
 [Back to course homepage](../index.html)  
 [Acknowledgements](../acknowledge.html)  
-[Source code for these notes](http://github.com/jeswheel/4451_f25/tree/main/02/)
+[Source code for these notes](http://github.com/jeswheel/4451_f25/tree/main/03/)
 
 
 ----------------------

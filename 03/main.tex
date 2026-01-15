@@ -1,0 +1,113 @@
+\input{../header}
+
+% \mode<beamer>{\usetheme{AnnArbor}}
+\mode<beamer>{\usetheme{metropolis}}
+\mode<beamer>{\metroset{block=fill}}
+% \mode<beamer>{\usecolortheme{wolverine}}
+
+\mode<beamer>{\setbeamertemplate{section in toc}[sections numbered]}
+\mode<beamer>{\setbeamertemplate{subsection in toc}[subsections numbered indented]}
+
+% \mode<beamer>{\usefonttheme{serif}}
+\mode<beamer>{\setbeamertemplate{footline}}
+\mode<beamer>{\setbeamertemplate{footline}[frame number]}
+\mode<beamer>{\setbeamertemplate{frametitle continuation}[from second][\insertcontinuationcountroman]}
+\mode<beamer>{\setbeamertemplate{navigation symbols}{}}
+
+\mode<handout>{\pgfpagesuselayout{2 on 1}[letterpaper,border shrink=5mm]}
+
+\newcommand\CHAPTER{2}
+% \newcommand\answer[2]{\textcolor{blue}{#2}} % to show answers
+% \newcommand\answer[2]{\textcolor{red}{#2}} % to show answers
+ \newcommand\answer[2]{#1} % to show blank space
+
+\title{\vspace{2mm} \link{https://jeswheel.github.io/4451_f25/}{Mathematical Statistics II}\\ \vspace{2mm}
+Maximum Likelihood Estimation}
+\author{Jesse Wheeler}
+\date{}
+
+\setbeamertemplate{footline}[frame number]
+
+
+
+
+\begin{document}
+
+\maketitle
+
+\mode<article>{\tableofcontents}
+
+% \mode<presentation>{
+%   \begin{frame}{Outline}
+%     \tableofcontents
+%   \end{frame}
+% }
+
+\section{Introduction}
+
+\begin{frame}[allowframebreaks]{Overview}
+  \begin{itemize}
+    \item The next approach we will discuss is Maximum Likelihood Estimation (MLE).
+    \item As we will see, the MLE has several desirable properties, and as a result is often favored over approaches like the method of moments.
+    \item The material for this section largely comes from Chapter~8.5 of \citet{rice07}, and various sections in \citet{pawitan01}.
+    \end{itemize}
+\end{frame}
+
+\section{Likelihood: an introduciton}
+
+\begin{frame}[allowframebreaks]{What is likelihood?}
+
+\begin{itemize}
+  \item The term ``likelihood" is often used colloquially to mean something analogous to probability. E.g., ``What is the likelihood that it rains tomorrow?"
+  \item When we use this term in statistics / mathematics, we mean something specific that isn't the same thing as probability. 
+  \item The use of the term ``likelihood" was first made by R. A. Fisher, who was the architect and primary proponent of ``likelihood-based-inference".
+  \item We will start with the treatment of likelihood in the text ``In all Likelihood" \citep{pawitan01}, which is a fantastic resource on the subject. (This will lead to some review...)
+\end{itemize}
+\end{frame}
+
+\newcommand\acknowledgments{
+\begin{itemize}
+\item   Compiled on {\today} using \Rlanguage version 4.5.2.
+\item   \parbox[t]{0.75\textwidth}{Licensed under the \link{http://creativecommons.org/licenses/by-nc/4.0/}{Creative Commons Attribution-NonCommercial license}.
+    Please share and remix non-commercially, mentioning its origin.}
+    \parbox[c]{1.5cm}{\includegraphics[height=12pt]{../cc-by-nc}}
+\item We acknowledge \link{https://jeswheel.github.io/4451_s26/acknowledge.html}{students and instructors for previous versions of this course / slides}.
+\end{itemize}
+}
+
+\mode<presentation>{
+\begin{frame}[allowframebreaks=0.8]{References and Acknowledgements}
+
+\bibliography{../bib4451}
+
+\vspace{3mm}
+
+\acknowledgments
+
+\end{frame}
+}
+
+\mode<article>{
+
+\newpage
+
+{\bf \Large \noindent Acknowledgments}
+
+\acknowledgments
+
+\newpage
+
+\bibliography{../bib4451}
+
+}
+
+
+
+\end{document}
+
+
+
+
+
+
+
