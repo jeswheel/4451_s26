@@ -55,7 +55,7 @@ Maximum Likelihood Estimation}
 
 \section{Likelihood: an introduciton}
 
-\begin{frame}[allowframebreaks]{What is likelihood?}
+\begin{frame}[allowframebreaks,fragile]{What is likelihood?}
 
 \begin{itemize}
   \item The term ``likelihood" is often used colloquially to mean something analogous to probability. E.g., ``What is the likelihood that it rains tomorrow?"
@@ -63,6 +63,220 @@ Maximum Likelihood Estimation}
   \item The use of the term ``likelihood" was first made by R. A. Fisher, who was the architect and primary proponent of ``likelihood-based-inference".
   \item We will start with the treatment of likelihood in the text ``In all Likelihood" \citep{pawitan01}, which is a fantastic resource on the subject. (This will lead to some review...)
 \end{itemize}
+
+\framebreak
+
+\begin{exampleblock}{Coin Flips}
+  We will revisit this example, as it is a great starting point to connect with existing understanding.
+  
+  Consider flipping a coin $N = 10$ times.
+  
+  \mode<article>{
+  \begin{itemize}
+    \item In a probability class, we might assume the probability of heads $\theta = p$ is some number, say $p = 0.4$.
+    \item If $X$ is the number of heads, then $P_\theta(X = 8) = 0.011$ is something we can calculate exactly. In any interpretation of probability, this means that if we repeat the experiment 10,000 time, we expect around 110 times, the experiment will have 8 heads.
+    \item Now what if, in a single experiment, we observe $X = 8$? \textbf{Based on this information alone}, what can we say about the parameter $p$? Information we have about $p$ is \emph{incomplete}(we've already done a pure frequentist interpretation of this, as well as a Bayesian interpretation. The MoM estimate is also easy to compute).
+    \item However, we can conclude that $p$ \textbf{cannot be zero or one}. This fact is available \emph{deductively}, since if $p$ were zero or one, then $X = 0$ or $X = 10$.
+    \item Similarly, we are fairly certain that $p$ is not close to zero, since observing $X = 10$ would be extremely unlikely in this case. For instance, the probability of observing $X=8$ if $p = 0.10$ is only \ensuremath{3.6\times 10^{-7}}, meaning we would only expect about 1 out of 3 million replicates to give $X=8$ (or similar for observing $X \in \{8, 9, 10\}$).
+    \item In contrast, $\theta = 0.6$ or $\theta = 0.7$ are \emph{likely}, since $P_\theta(X = 8)$ would be 0.12, 0.23, respectively.
+    \item Thus, we have found a \emph{deductive} way of comparing different values of $p$, based on the observed data: Compare the probability of observed data under different values of $p$.
+    \item Concretely, we take the probability model $P_\theta(X = 8)$, and treat it as a function of $\theta$. 
+    \item Note this is opposite of what we did last semester, where we treat the pmf for a fixed $\theta$ as a function of $x$ (the possible output).
+    \item This is how we define the likelihood function (for this model, and more generally, for any pmf):
+    $$
+    L(\theta) = P_\theta(X = 8) = f(x^*; \theta).
+    $$
+  \end{itemize}
+  }
+\end{exampleblock}
+
+\framebreak
+
+\begin{itemize}
+  \item For our specific coin-flipping example with $N=10$, $X = 8$, the likelihood function is
+  $$
+  L(\theta) = P_\theta(X = 8).
+  $$
+  \item This is plotted in the following way:
+\end{itemize}
+
+\begin{knitrout}\small
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hldef{x} \hlkwb{<-} \hlkwd{seq}\hldef{(}\hlnum{1e-8}\hldef{,} \hlnum{1}\hlopt{-}\hlnum{1e-8}\hldef{,} \hlkwc{length.out} \hldef{=} \hlnum{1000}\hldef{)}
+\hldef{y} \hlkwb{<-} \hlkwd{dbinom}\hldef{(}\hlnum{8}\hldef{,} \hlnum{10}\hldef{, x)}
+\hlkwd{plot}\hldef{(}\hlkwc{x} \hldef{= x,} \hlkwc{y} \hldef{= y,} \hlkwc{type} \hldef{=} \hlsng{'l'}\hldef{)}
+\end{alltt}
+\end{kframe}
+
+{\centering \includegraphics[width=\maxwidth]{tmp/figure/unnamed-chunk-1-1} 
+
+}
+
+
+\end{knitrout}
+  
+\begin{itemize}
+  \item From the figure, we see that $p$ is unlikely to be less than $0.5$,or greater than $0.95$.
+  \item Given the data alone (no prior), we should prefer a value somewhere in the middle of these values.
+  \item We still have some uncertainty about the value of $p$, but the likelihood gives us a numerical way to compare values of $\theta$. Stochastic uncertainty as a result of sampling is captured in the likelihood function $L(\theta)$.
+  \item \alert{The likelihood is not a probability}. Though it came from a probability, the likelihood function (a function of $\theta$) does not satisfy the requirements to be a probability. In our previous example, we have:
+  $$
+  \int_0^1 L(\theta)\, d\theta = 1/11 \neq 1.
+  $$
+  
+  \framebreak
+  
+  \item The idea behind maximum likelihood estimation (MLE) is simple: our estimate is the value of $\theta$ that maximizes the likelihood function $L(\theta)$.
+  \item The MLE is considered a \emph{frequentist} approach. Why? It quantifies a maximum belief about a parameter, which is more Bayesian in nature than Frequentist. 
+  \item As we'll see later, the MLE has nice theoretical Frequentist \emph{properties}, and as a result can be justified via the frequentist paradigm.
+  \item Still, it has close connection to Bayesian estimation and interpretation. In fact, we'll discuss connections between the MLE and Bayesian statistics later.
+
+  \framebreak 
+  
+  \item Often, maximizing the likelihood directly is challenging, so we maximize the log-likelihood instead.
+  \item Other times, the likelihood has to be maximized numerically.
+
+\end{itemize}
+
+\begin{exampleblock}{MLE of coin toss problem}
+  Suppose we have $N = 10$ total tosses, and $n$ total heads. Find the MLE of $p$, the probability of heads.
+  
+  \mode<article>{
+    \begin{itemize}
+      \item First, describing what the likelihood function is. We already did this for this model, but a quick review, reinforcing common notation.
+      \item We'll use a binomial$(N,p)$ model; the parameter of interest is $\theta = p$. 
+      \item Let $X$ be a random variable, denoting the number of heads. Thus, pmf of the model is:
+      $$
+      P(X = x) = f(x;\, \theta) = \binom{N}{x}p^{x}(1-p)^{N-x}.
+      $$
+      \item We assume we observe a specific dataset $x^*$. In this case, we observe $x^* = n$. Fixing the model at the observed data, we can describe the probability of the observed data as a function of $\theta = p$:
+      $$
+      L(\theta) = f(x^*; \, \theta) = \binom{N}{n}p^{n}(1-p)^{N-n},
+      $$
+      and the MLE is:
+      $$
+      \hat{\theta} = \argmax_\theta L(\theta),
+      $$
+      meaning that our estimate $\hat{\theta}$ is the \emph{argument} that \emph{maximizes} the likelihood function $L(\theta)$.
+      \item As often is the case, this will be easiest if we take the natural logarithm, giving the log-likelihood. Note this is a monotonic transformation, so the argument that maximizes the log-likelihood is the same as the argument that maximizes the likelihood.
+      \item Typically, we denote the log-likelihood using $\ell(\theta)$. In latex, this symbol is given by \texttt{\textbackslash ell}.
+      $$
+      \hat{\theta} = \argmax_\theta L(\theta) = \argmax_\theta \log\big(L(\theta)\big) = \argmax_\theta \ell(\theta).
+      $$
+      \item For our specific model, the log-likelihood is:
+      $$
+      \ell(\theta) = \log \binom{N}{n}p^{n}(1-p)^{N-n} = \log\bigg(\binom{N}{n}\bigg) + n\log(p) + (N-n)\log(1-p).
+      $$
+      \item Now we see another recurring theme when finding the MLE: we end up with terms that don't impact the maximization. That is, the binomal term out front does not change the maximum value of $p$, so it can be ignored.
+      \item To maximize, we take the derivative, and set equal to zero:
+      $$
+      \frac{\partial \ell}{\partial \theta} = \frac{n}{p} - \frac{N-n}{1-p} = 0,
+      $$
+      or
+      $$
+      \frac{n}{p} = \frac{N-n}{1-p} \implies n-np = Np - np.
+      $$
+      \item Solving for $p$, we get the MLE:
+      $$
+      p = \frac{n}{N} \implies \hat{p} = \frac{n}{N} = \argmax_\theta L(\theta).
+      $$
+      \item A few notes:
+      \begin{itemize}
+        \item The MLE matches the frequentist-derived estimate. In most models, a first-principle estimate using frequentist interpretation of probability is not available, but the MLE will still match what the estimate \emph{would be} if such an estimate were available.
+        \item Setting a derivative equal to zero and solving only gives a critical point. Why did I assume it was a maximum? First, we plotted like likelihood function, and it is clear any critical point will be a maximum. More importantly, many of the classic probability models are part of what is known as the \emph{exponential family}. In this family, all critical points of $L(\theta)$ will correspond to maximums. Next, theory we will establish later shows that as the number of observations increases, the likelihood function will be concave down around the MLE, suggesting that for even complex models, critical points in the region of high-likelihood will always be maximums.
+      \end{itemize}
+    \end{itemize}
+  }
+  
+\end{exampleblock}
+
+\end{frame}
+
+\begin{frame}[allowframebreaks]{Continuous models}
+
+\begin{itemize}
+  \item The interpretation of the likelihood function as the ``the probability of the observed data $x^*$, considered as a function of $\theta$" makes perfect sense in the discrete model case.
+  \item For continuous models, the technical issue arises that the probability of any point value $x$ is zero.
+  \item We resolve the problem similar to what was done in Math 4450 and the John Rice text: approximate the probability by discretizing into small, discrete intervals:
+  $$
+  x^* \in (x^* - \epsilon/2, x^* + \epsilon/2),
+  $$
+  thus, the probability of observing something $\epsilon$-close to the data is:
+  \begin{align*}
+  L(\theta) &= P_\theta\big(X \in (x^* - \epsilon/2, x^* + \epsilon/2)\big) \\
+  &= \int_{x^* - \epsilon/2}^{x^* + \epsilon/2} f(x; \theta)\, d\theta \approx \epsilon f(x^*;\theta).
+  \end{align*}
+  \item Then, since the likelihood is only meaningful up to a constant (we will discuss likelihood ratios later), then this has the same behavior as $L(\theta) = f(x^*;\theta)$.
+  \item There are more advanced approaches to this problem, but this simple argument justifies the use of the pdf of a continuous random variable as the likelihood $L(\theta)$.
+  \item \textbf{Going forward:} we once again will generalize a model $f(x;\theta)$ to mean either the pmf or pdf of a random variable. I will often say ``density" as a blanket term, even if this corresponds to a pmf, not a density.
+  \item Further, when we ``integrate" a density, this means either:
+  $$
+  \int f(x;\theta)\,dx, \quad \text{If continuous}
+  $$
+  or
+  $$
+  \sum_x f(x;\theta),\quad \text{If discrete.}
+  $$
+\end{itemize}
+
+\end{frame}
+
+% \begin{frame}[allowframebreaks,fragile]{Example: partial information}
+%   \begin{itemize}
+%     \item Using likelihood as a mechanism for parameter estimation can be useful, even in scenarios we only have partial information.
+%   \end{itemize}
+%   
+%   \begin{exampleblock}{Extending the binomial example: Seed germination}
+%     Suppose $100$ seeds were planted and it is only known that $x\leq 10$ germinated, the exact number unknown. 
+%     Estimate the probability of seed germination.
+%     
+%     \mode<article>{
+%     \begin{itemize}
+%       \item This is really an extension of the coin-flipping example, and one reason why the binomial model is important to study: in many cases, we are interested in studying independent trials of ``success" vs ``failure".
+%       \item As before, let $X$ denote the random variable of the number of seed germinations. Assuming independence, a natural model is:
+%       $$
+%       X \sim \text{Binom}(100, p), 
+%       $$
+%       since there were 100 seeds to start.
+%       \item The likelihood is determined by the probability of what is known, as a function of $\theta = p$:
+%       $$
+%       L(p) = P_{p}(X \leq 10) = \sum_{x = 0}^{10} \binom{100}{x} p^{x}(1-p)^{100-x}
+%       $$
+%     \end{itemize}
+%     }
+%     
+%   \end{exampleblock}
+%   
+% \end{frame}
+
+\section{Joint Probabilities}
+
+\begin{frame}[allowframebreaks]{Likelihood with multiple observations}
+
+\begin{itemize}
+  \item Often the data we observe is multi-dimensional, rather than summarized as a single observation.
+  
+  \item In this case, the likelihood $\theta$ is still determined via the joint model: 
+  $$
+  L(\theta) = f(x^*;\theta) = f_{X_{1:N}}(x_1^*, x_2^*, \ldots, x_N^*;\theta).
+  $$
+  \item We are mostly focused in this class in the case were the observations are independent, meaning the likelihood factors:
+  $$
+  L(\theta) = \prod_{i = 1}^N f_{X_i}(x_i^*;\theta).
+  $$
+  
+  \item We often further simplify this by assuming the data are identically distributed:
+  $$
+  L(\theta) = \prod_{i = 1}^N f_{X_1}(x_i^*;\theta).
+  $$
+  
+  \item As we've seen, it's generally easier to maximize the log-likelihood. In the IID case:
+  $$
+  \ell(\theta) = \log \prod_{i = 1}^N f_{X_1}(x_i^*;\theta) = \sum_{i = 1}^n \log f_{X_1}(x_i^*;\theta).
+  $$
+\end{itemize}
+
 \end{frame}
 
 \newcommand\acknowledgments{
