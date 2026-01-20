@@ -13,7 +13,7 @@ Following the introduction, we will present the method of moments estimation pro
 |:-----------------------|:------------------------:|
 | Lecture slides   | [pdf](slides.pdf) |
 | Lecture notes    | [pdf](notes.pdf) |
-<!-- | Annotated Slides | [pdf](annotatedSlides.pdf) | -->
+| Annotated Slides | [pdf](annotatedSlides.pdf) | 
 <!-- | Discussion Problems | [pdf](discussionProbs.pdf) | -->
 ----------------------
 
