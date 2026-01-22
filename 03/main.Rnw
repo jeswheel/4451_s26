@@ -268,7 +268,11 @@ plot(x = x, y = y, type = 'l')
   $$
 \end{itemize}
 
-\framebreak
+\end{frame}
+
+\section{Examples}
+
+\begin{frame}[allowframebreaks]{Examples of finding the MLE}
 
 \begin{exampleblock}{Traffic data: Poisson Model}
   Returning to a motivating example, suppose we model traffic accidents in a given week as $X_1, X_2, \ldots, X_N$, where the data are iid Poisson$(\lambda)$. Obtain the MLE for $\lambda$.
@@ -361,6 +365,64 @@ plot(x = x, y = y, type = 'l')
   }
   
 \end{exampleblock}
+
+\end{frame}
+
+\section{Numeric Optimization}
+
+\begin{frame}[allowframebreaks]{Numeric Optimization}
+  \begin{itemize}
+    \item In the previous examples, the MLE was available \emph{analytically}.
+    \item In many cases, however, there is no closed-form solution for the MLE, and it must be computed numerically.
+    \item The next example demonstrates this, and then we will discuss optimization strategies.
+  \end{itemize}
+  
+  \framebreak
+  
+  \begin{exampleblock}{Example: Gamma likelihood}
+    Suppose we want to model data $X_1, X_2, \ldots, X_n$ as iid Gamma$(\alpha, \lambda)$, which has the density function:
+    $$
+    f(x;\, \alpha, \lambda) = \frac{1}{\Gamma(\alpha)}\lambda^\alpha x^{\alpha - 1}e^{-\lambda x}, \quad 0 \leq x < \infty.
+    $$
+    Find the MLE of $\theta = (\alpha, \lambda)$.
+    
+    \mode<article>{
+      \begin{itemize}
+        \item The joint likelihood under the IID assumption is:
+        $$
+        L(\theta) = \prod_{i = 1}^n \frac{1}{\Gamma(\alpha)}\lambda^\alpha {(x^*_i)}^{\alpha - 1}e^{-\lambda x^*_i}, \quad 0 \leq x^*_i < \infty.
+        $$
+        \item We'll drop the indicator function, since the observations are all bigger than zero (otherwise a Gamma model is a bad choice), so the value is one. 
+        Taking logarithms, we get:
+        \begin{align*}
+        \ell(\alpha, \lambda) &= \sum_{i = 1}^n \big(\alpha \log \lambda + (\alpha - 1)\log x_i^* - \lambda x_i^* - \log\Gamma(\alpha)\big) \\
+        &= n\alpha\log\lambda + (\alpha - 1)\sum_{i = 1}^n \log x_i^* - \lambda \sum_{i = 1}^n x^*_i - n\log \Gamma(\alpha).
+        \end{align*}
+        \item The partial derivatives are:
+        \begin{align*}
+          \frac{\partial \ell}{\partial \alpha} &= n \log \lambda + \sum_{i = 1}^n \log x_i^* - n \frac{\Gamma'(\alpha)}{\Gamma(\alpha)},\\
+          \frac{\partial \ell}{\partial \lambda} &= \frac{n\alpha}{\lambda} - \sum_{i = 1}^n x_i^*.
+        \end{align*}
+        \item The second equation is the easiest to solve. Setting equal to zero, we have:
+        $$
+        \frac{n \alpha}{\lambda} = \sum_{i = 1}^n x_i^* = n\bar{x}^*_n.
+        $$
+        Thus, solving for $\lambda$, we get:
+        $$
+        \lambda = \frac{\alpha}{\bar{x}^*_n}.
+        $$
+        \item The estimate of $\lambda$ depends on the value of $\alpha$. Since we are looking for a maximum of both, it needs to be a critical point, so we can write the estimate of $\lambda$ as:
+        $$
+        \hat{\lambda} = \frac{\hat{\alpha}}{\bar{x}^*_n},
+        $$
+        implying that we need to first maximize the likelihood for $\alpha$. 
+        
+        TODO: Continue. Plug in $\hat{\lambda}$ to get the equation for $\hat{\alpha}$.
+      \end{itemize}
+    }
+    
+  \end{exampleblock}
+  
 \end{frame}
 
 \newcommand\acknowledgments{
