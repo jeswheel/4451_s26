@@ -108,10 +108,11 @@ In parenthesis is provided some supplementary reference chapters from relevant t
 
 Please read the [grading rubric](rubric_homework.html) before submitting homework.
 
-<!--- 
 
-* [Homework 1](hw01/hw01.pdf), due Wed Sep 10, 11:59pm.
+* [Homework 1](hw01/hw01.pdf), due Wed Jan 28, 11:59pm.
 [TeX file](hw01/hw01.tex)
+
+<!--- 
 
 * [Homework 2](hw02/hw02.pdf), due Wed Sep 17, 11:59pm.
 [TeX file](hw02/hw02.tex).
