@@ -114,6 +114,7 @@ plot(x = x, y = y, type = 'l')
   $$
   \int_0^1 L(\theta)\, d\theta = 1/11 \neq 1.
   $$
+  \item For discrete probability, the likelihood was \alert{continuous}. Discrete likelihoods are possible, arising when we want to select from a list $\{\theta_1, \theta_2, \ldots\}$. 
   
   \framebreak
   
@@ -271,8 +272,95 @@ plot(x = x, y = y, type = 'l')
 
 \begin{exampleblock}{Traffic data: Poisson Model}
   Returning to a motivating example, suppose we model traffic accidents in a given week as $X_1, X_2, \ldots, X_N$, where the data are iid Poisson$(\lambda)$. Obtain the MLE for $\lambda$.
+  
+  \mode<article>{
+    \begin{itemize}
+      \item If $X_i$ are iid poisson, then the pmf of a single observation is:
+      $$
+      f(x;\, \theta) = P_\theta(X_i = x) = \frac{\lambda^xe^{-\lambda}}{x!}.
+      $$
+      \item In this case, the parameter set of interest, $\theta$ is a single value: $\theta = \lambda$.
+      \item Due to the IID assumption, the likelihood of each observation is given by: 
+      $$
+      L(\theta) = f_{X_{1:N}}(x^*_{1:N}; \, \theta) = \prod_{i = 1}^N \frac{\lambda^{x^*_i}e^{-\lambda}}{x^*_i!}.
+      $$
+      \item We want to maximize this function with respect to $\lambda$; this is easier done after taking the log:
+      \begin{align*}
+      \ell(\theta) &= \log f_{X_{1:N}}(x^*_{1:N}; \, \theta) \\
+                   &= \sum_{i = 1}^N \log f_{X_1}(x^*_i; \, \theta) \\
+                   &= \sum_{i = 1}^N \big(x^*_i \log \lambda - \lambda - \log (x^*_i!)\big)\\
+                   &= \log \lambda \sum_{i = 1}^N x^*_i - N\lambda - \sum_{i = 1}^N \log (x^*_i!) \\
+                   &= \log \lambda \sum_{i = 1}^N x^*_i - N\lambda - c(x^*).
+      \end{align*}
+      \item In the last step, we replaced the sum of log-factorials with some constant function $c(x^*)$. As a function of $\theta$, the maximum of $\ell(\theta)$ does not change with this constant, so it can be ignored for the purposes of maximization.
+      \item Now to find the maximum, we can take the derivative and set equal to zero:
+      $$
+      \ell'(\theta) = \frac{1}{\lambda}\sum_{i = 1}^N x^*_i - N = 0,
+      $$
+      Thus,
+      $$
+      \hat{\lambda} = \frac{1}{N}\sum_{i = 1}^N x^*_i = \bar{x}^*_N.
+      $$
+      \item We formally need to check if this is indeed a maximum and not just a critical point. The second derivative with respect to $\lambda$ is always negative (since $x_i^*$ is non-negative), implying that it is indeed a maximum.
+      \item We'll see later that as $N \rightarrow \infty$, then the likelihood function is \emph{always} concave-down around the maximum, under fairly week conditions.
+      \item We could also plot the likelihood / log-likelihood, which is informative on it's own right.
+      \item Finally, note that this is the same estimator that was obtained via the MoM approach. This sometimes happens.
+    \end{itemize}
+  }
+  
 \end{exampleblock}
 
+\framebreak
+
+\begin{exampleblock}{Two parameter model: Gaussian model}
+  Suppose we model observations $X_1, \ldots, X_N$ as IID $N(\mu, \sigma^2)$ random variables. Find the MLE of $\theta = (\mu, \sigma^2)$.
+  
+  \mode<article>{
+    \begin{itemize}
+      \item Though we have two parameters, the approach for finding the MLE is similar: find the likelihood function of the entire dataset, take the logarithm, and the compute (partial) derivatives and set equal to zero.
+      \item In the final step, we might end up with a system of equations rather than just a single equation.
+      \item There's also an interesting feature of this example that is applicable elsewhere: should we find the MLE of $\sigma$, or the MLE of $\sigma^2$? Fortunately, you get the same result either way (we'll show this later).
+      \item In this case, either approach is straightforward. As practice, you may want to consider finding the MLE of $\sigma^2$. Here, we will treat $\sigma$ as the parameter of interest, though sometimes it's easier to differentiate with respect to something like: $\theta_2 = \sigma^2$.
+      \item Because of the IID assumption joint-likelihood function is:
+      $$
+      L(\mu, \sigma) = f(x^*;\, \mu, \sigma) = \prod_{i = 1}^N \frac{1}{\sigma\sqrt{2\pi}}\exp\Big(-\frac{1}{2}\big((x^*_i - \mu)/\sigma\big)^2\Big),
+      $$
+      \item The log-likelihood is therefore:
+      \begin{align*}
+      \ell(\mu, \sigma) &= \sum_{i = 1}^N \Big(\log(1) - \log(\sigma\sqrt{2\pi}) - \frac{1}{2}\big((x^*_i - \mu)/\sigma\big)^2\Big) \\
+      &= -n\log(\sigma) - \frac{n}{2}\log 2\pi - \frac{1}{2\sigma^2}\sum_{i = 1}^N (x^*_i - \mu)^2.
+      \end{align*}
+      \item The partial derivatives are given by:
+      \begin{align*}
+        \frac{\partial \ell}{\partial \mu} &= \frac{1}{\sigma^2}\sum_{i = 1}^N (x^*_i - \mu) = 0 \\
+        \frac{\partial \ell}{\partial \sigma} &= -\frac{n}{\sigma} + \sigma^{-3}\sum_{i = 1}^N (x_i^* - \mu)^2.
+      \end{align*}
+      \item Because $\sigma \geq 0$ (and zero if and only if the data are the same value), the first equation will only be zero if $\sum_{i = 1}^N (x^*_i - \mu) = 0$, or if $\mu = \bar{x}^*_N$, which is independent of $\sigma$. Thus, the MLE is:
+      $$
+      \hat{\mu} = \bar{x}^*_N.
+      $$
+      \item For the second equation, the partial derivative is zero if and only if
+      $$
+      \frac{n}{\sigma} = \sigma^{-3}\sum_{i = 1}^N (x_i^* - \mu)^2,
+      $$
+      or if
+      $$
+      \sigma^2 = \frac{1}{n}\sum_{i = 1}^N (x_i^* - \mu)^2.
+      $$
+      Since we are looking for the MLE of $\theta = (\theta, \sigma)$, we can now replace $\mu$ with it's maximizer $\hat{\mu} = \bar{x}^*_N$, giving us:
+      $$
+      \hat{\sigma} = \sqrt{\frac{1}{n}\sum_{i = 1}^N (x_i^* - \hat{\mu})^2} = \sqrt{\frac{1}{n}\sum_{i = 1}^N (x_i^* - \bar{x}^*_N)^2}.
+      $$
+      \item Like the Poisson example, the MLE for the iid normal model has the same estimator as the MoM procedure.
+      \item The sampling distribution for $\theta$ is therefore:
+      $$
+      \hat{\mu} \sim N(\mu, \sigma^2 / N), \quad N\hat{\sigma}^2/\sigma^2 \sim \chi^2_{N-1},
+      $$
+      and the two distributions are independent.
+    \end{itemize}
+  }
+  
+\end{exampleblock}
 \end{frame}
 
 \newcommand\acknowledgments{

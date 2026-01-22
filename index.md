@@ -22,6 +22,7 @@ See [Section on planned topics](#planned-topics-spring-2026) for more details
 
 1. [Introduction: Philosophy of Statistics](01/index.html)
 2. [Introduction to point estimation](02/index.html)
+3. [Maximum Likelihood Estimation](03/index.html)
 
 ------
 
@@ -29,7 +30,7 @@ See [Section on planned topics](#planned-topics-spring-2026) for more details
 
 The course description and objectives provide very little direction for this course.
 A tentative list of course topics is provided below.
-In paranthesis is provided some supplementary reference chapters from relevant textbooks.
+In parenthesis is provided some supplementary reference chapters from relevant textbooks.
 
 - Parameter estimation
    - Method of moments estimators (Rice, 8.4)
