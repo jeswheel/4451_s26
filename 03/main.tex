@@ -378,6 +378,26 @@ Maximum Likelihood Estimation}
 
 \end{frame}
 
+\begin{frame}[allowframebreaks,fragile]{Plotting Normal Likelihood}
+  \begin{itemize}
+    \item The likelihood function (not just to point estimate) will be used to measure uncertainty.
+    \item For models with a single parameter, we often plot the likelihood curve.
+    \item With more than one parameter, however, we have a \alert{likelihood surface}.
+    \item For the iid Normal$(\mu, \sigma^2)$ model, code for plotting this surface is available with course source-code.
+  \end{itemize}
+  
+  \framebreak
+  
+
+
+
+\begin{figure}[ht]
+\includegraphics[width=0.8\textwidth]{bivariateNormal.png}
+\caption{Likelihood surface of data generated from normal distribution.}
+\end{figure}
+
+\end{frame}
+
 \section{Numeric Optimization}
 
 \begin{frame}[allowframebreaks]{Numeric Optimization}
@@ -425,14 +445,125 @@ Maximum Likelihood Estimation}
         $$
         \hat{\lambda} = \frac{\hat{\alpha}}{\bar{x}^*_n},
         $$
-        implying that we need to first maximize the likelihood for $\alpha$. 
-        
-        TODO: Continue. Plug in $\hat{\lambda}$ to get the equation for $\hat{\alpha}$.
+        implying that we need to first maximize the likelihood for $\alpha$.
+        \item Plugging in $\hat{\lambda}$ into the second partial derivative, setting equal to zero, gives:
+        $$
+        n\log \alpha - n \log \bar{x}^*_n + \sum_{i = 1}^n \log x_{i}^* - n \frac{\Gamma'(\alpha)}{\Gamma(\alpha)} = 0.
+        $$
+        \item This equation \emph{cannot be solved} in closed-form for $\alpha$.
       \end{itemize}
     }
     
   \end{exampleblock}
   
+  \framebreak
+  
+  \begin{itemize}
+    \item The previous example leads us to consider numeric techniques for optimization and root finding.
+    \item Note that this class is \alert{not} an optimization course, so we'll only cover some of the most basic ideas.
+    \item More modern and efficient numeric optimization techniques are readily available in R (or any other statistical software).
+    \item For this class, we'll introduce some basic ideas like the Newton-Raphsom approach for root finding and optimization, as well as some other basic methods.
+  \end{itemize}
+  
+\end{frame}
+
+\begin{frame}[allowframebreaks,fragile]{Newton-Raphsom root-finding algorithm}
+  \begin{itemize}
+    \item Idea: start at a point $\theta_0$, and approximate find the tangent line of $f(\theta)$ at the point $\theta_0$:
+    $$
+    y - f(\theta_0) = f'(\theta_0)\big(\theta - \theta_0\big)
+    $$
+    \item Then, find the root of the tangent line by setting $y = 0$, and solving for $\theta$:
+    $$
+    \theta = \theta_0 - \frac{f(\theta_0)}{f'(\theta_0)}.
+    $$
+    \item This root of the tangent line will be closer than our original guess $\theta_0$, so we set:
+    $$
+    \theta_1 = \theta_0 - \frac{f(\theta_0)}{f'(\theta_0)},
+    $$
+    and repeat:
+    $$
+    \theta_{n + 1} = \theta_n - \frac{f(\theta_n)}{f'(\theta_n)}.
+    $$
+    \item We stop based on some convergence criteria, often something like $|\theta_{n + 1} - \theta_n| < \epsilon$, for a small choice of $\epsilon$.
+    \item (In class, check out wikipedia or draw a picture).
+  \end{itemize}
+  
+  \framebreak
+  
+  \begin{itemize}
+    \item We need now a starting point $\theta_0$.
+    \item Really we can pick anything, but it's best if we are close to the MLE.
+    \item For our current problem (Gamma distribution), we could use the MoM estimator:
+    $$
+    \hat{\alpha}_{\text{MoM}} = \theta_0 = \frac{\big(\bar{x}^*_n\big)^2}{\frac{1}{n}\sum_{i = 1}^n \big(x_i^* - \bar{x}^*_n\big)^2}.
+    $$
+  \end{itemize}
+  
+\begin{knitrout}\small
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hldef{NR_root} \hlkwb{<-} \hlkwa{function}\hldef{(}\hlkwc{theta0}\hldef{,} \hlkwc{fn}\hldef{,} \hlkwc{deriv}\hldef{,} \hlkwc{tol} \hldef{=} \hlnum{1e-8}\hldef{,} \hlkwc{maxiter} \hldef{=} \hlnum{1000}\hldef{) \{}
+  \hldef{iter} \hlkwb{<-} \hlnum{0}
+  \hldef{theta_old} \hlkwb{<-} \hldef{theta0}
+  \hldef{theta_new} \hlkwb{<-} \hldef{theta_old} \hlopt{+} \hlnum{10} \hlopt{*} \hldef{tol}
+
+  \hlkwa{while}\hldef{(}\hlkwd{abs}\hldef{(theta_old} \hlopt{-} \hldef{theta_new)} \hlopt{>} \hldef{tol} \hlopt{&&} \hldef{iter} \hlopt{<} \hldef{maxiter) \{}
+    \hldef{iter} \hlkwb{<-} \hldef{iter} \hlopt{+} \hlnum{1}
+    \hldef{theta_old} \hlkwb{<-} \hldef{theta_new}
+    \hldef{theta_new} \hlkwb{<-} \hldef{theta_old} \hlopt{-} \hlkwd{fn}\hldef{(theta_old)} \hlopt{/} \hlkwd{deriv}\hldef{(theta_new)}
+  \hldef{\}}
+  \hlkwd{cat}\hldef{(}\hlsng{"iters: "}\hldef{, iter,} \hlsng{"\textbackslash{}n"}\hldef{)}
+  \hldef{theta_new}
+\hldef{\}}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+
+\framebreak
+
+\begin{knitrout}\small
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hldef{alpha_fn} \hlkwb{<-} \hlkwa{function}\hldef{(}\hlkwc{alpha}\hldef{,} \hlkwc{data}\hldef{) \{}
+  \hldef{n} \hlkwb{<-} \hlkwd{length}\hldef{(data)}
+  \hldef{n} \hlopt{*} \hlkwd{log}\hldef{(alpha)} \hlopt{-} \hldef{n} \hlopt{*} \hlkwd{log}\hldef{(}\hlkwd{mean}\hldef{(data))} \hlopt{+} \hlkwd{sum}\hldef{(}\hlkwd{log}\hldef{(data))} \hlopt{-} \hldef{n} \hlopt{*} \hlkwd{digamma}\hldef{(alpha)}
+\hldef{\}}
+
+\hldef{alpha_deriv} \hlkwb{<-} \hlkwa{function}\hldef{(}\hlkwc{alpha}\hldef{,} \hlkwc{data}\hldef{) \{}
+  \hldef{n} \hlkwb{<-} \hlkwd{length}\hldef{(data)}
+  \hldef{(n}\hlopt{/}\hldef{alpha)} \hlopt{-} \hldef{n} \hlopt{*} \hlkwd{psigamma}\hldef{(alpha,} \hlnum{1}\hldef{)}
+\hldef{\}}
+
+\hlkwd{set.seed}\hldef{(}\hlnum{123}\hldef{)}
+\hldef{data} \hlkwb{<-} \hlkwd{rgamma}\hldef{(}\hlkwc{n} \hldef{=} \hlnum{23}\hldef{,} \hlnum{1}\hldef{,} \hlnum{2}\hldef{)}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+
+\framebreak
+
+\begin{knitrout}\small
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlcom{# Not the exact MoM estimate, but close enough:}
+\hldef{alpha_mom} \hlkwb{<-} \hldef{(}\hlkwd{mean}\hldef{(data)}\hlopt{^}\hlnum{2}\hldef{)} \hlopt{/} \hlkwd{sd}\hldef{(data)}
+
+\hlkwd{NR_root}\hldef{(}
+  \hlkwc{theta0} \hldef{=} \hlnum{0.86}\hldef{,}
+  \hlkwc{fn} \hldef{=} \hlkwa{function}\hldef{(}\hlkwc{x}\hldef{)} \hlkwd{alpha_fn}\hldef{(x,} \hlkwc{data} \hldef{= data),}
+  \hlkwc{deriv} \hldef{=} \hlkwa{function}\hldef{(}\hlkwc{x}\hldef{)} \hlkwd{alpha_deriv}\hldef{(x,} \hlkwc{data} \hldef{= data),}
+  \hlkwc{tol} \hldef{=} \hlnum{1e-10}
+\hldef{)}
+\end{alltt}
+\begin{verbatim}
+iters:  5 
+[1] 0.9728019
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+
 \end{frame}
 
 \newcommand\acknowledgments{

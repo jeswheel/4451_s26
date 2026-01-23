@@ -368,6 +368,63 @@ plot(x = x, y = y, type = 'l')
 
 \end{frame}
 
+\begin{frame}[allowframebreaks,fragile]{Plotting Normal Likelihood}
+  \begin{itemize}
+    \item The likelihood function (not just to point estimate) will be used to measure uncertainty.
+    \item For models with a single parameter, we often plot the likelihood curve.
+    \item With more than one parameter, however, we have a \alert{likelihood surface}.
+    \item For the iid Normal$(\mu, \sigma^2)$ model, code for plotting this surface is available with course source-code.
+  \end{itemize}
+  
+  \framebreak
+  
+<<echo=FALSE, fig.align='center',fig.height=2.5,fig.width=3.5,include=FALSE>>=
+set.seed(123)
+
+truth <- c(10, 2)
+rdata <- rnorm(n = 25, mean = truth[1], sd = truth[2])
+mle <- c(mean(rdata), (length(rdata) - 1) / (length(rdata)) * sd(rdata))
+
+
+x <- seq(8, 12, length.out = 100)
+y <- seq(0.5, 4, length.out = 100)
+grid_data <- tidyr::expand_grid(x = x, y = y)
+
+grid_data$density <- purrr::map2_dbl(.x = grid_data$x, .y = grid_data$y, .f = function(x, y) prod(dnorm(rdata, mean = x, sd = y)))
+
+levels <- c(0.95, 0.90, 0.85, 0.50)
+
+dens_sorted <- sort(grid_data$density, decreasing = TRUE)
+dens_cumsum <- cumsum(dens_sorted) / sum(dens_sorted)
+
+density_cutoff <- function(level) {
+  dens_sorted[min(which(dens_cumsum >= level))]
+}
+
+breaks <- sapply(levels, density_cutoff)
+
+# Plot the contours
+ggplot(grid_data, aes(x = x, y = y, z = density)) +
+  geom_contour(breaks = breaks) + # Adjust 'bins' for the number of contour lines
+  labs(title = latex2exp::TeX("Likelihood of Normal$(\\mu, \\sigma^2)$ Distribution"),
+       x = expression(mu),
+       y = expression(sigma)) +
+  theme_bw() + 
+  geom_point(x = truth[1], y = truth[2], col = 'red', pch = 4, size = 5) + 
+  geom_point(x = mle[1], y = mle[2], col = 'blue', pch = 4) + 
+  theme(plot.title = element_text(hjust = 0.5, size = 6))
+
+ggsave("bivariateNormal.png")
+@
+
+
+\begin{figure}[ht]
+\includegraphics[width=0.8\textwidth]{bivariateNormal.png}
+\caption{Likelihood surface of data generated from normal distribution.}
+\end{figure}
+
+\end{frame}
+
 \section{Numeric Optimization}
 
 \begin{frame}[allowframebreaks]{Numeric Optimization}
@@ -415,14 +472,109 @@ plot(x = x, y = y, type = 'l')
         $$
         \hat{\lambda} = \frac{\hat{\alpha}}{\bar{x}^*_n},
         $$
-        implying that we need to first maximize the likelihood for $\alpha$. 
-        
-        TODO: Continue. Plug in $\hat{\lambda}$ to get the equation for $\hat{\alpha}$.
+        implying that we need to first maximize the likelihood for $\alpha$.
+        \item Plugging in $\hat{\lambda}$ into the second partial derivative, setting equal to zero, gives:
+        $$
+        n\log \alpha - n \log \bar{x}^*_n + \sum_{i = 1}^n \log x_{i}^* - n \frac{\Gamma'(\alpha)}{\Gamma(\alpha)} = 0.
+        $$
+        \item This equation \emph{cannot be solved} in closed-form for $\alpha$.
       \end{itemize}
     }
     
   \end{exampleblock}
   
+  \framebreak
+  
+  \begin{itemize}
+    \item The previous example leads us to consider numeric techniques for optimization and root finding.
+    \item Note that this class is \alert{not} an optimization course, so we'll only cover some of the most basic ideas.
+    \item More modern and efficient numeric optimization techniques are readily available in R (or any other statistical software).
+    \item For this class, we'll introduce some basic ideas like the Newton-Raphsom approach for root finding and optimization, as well as some other basic methods.
+  \end{itemize}
+  
+\end{frame}
+
+\begin{frame}[allowframebreaks,fragile]{Newton-Raphsom root-finding algorithm}
+  \begin{itemize}
+    \item Idea: start at a point $\theta_0$, and approximate find the tangent line of $f(\theta)$ at the point $\theta_0$:
+    $$
+    y - f(\theta_0) = f'(\theta_0)\big(\theta - \theta_0\big)
+    $$
+    \item Then, find the root of the tangent line by setting $y = 0$, and solving for $\theta$:
+    $$
+    \theta = \theta_0 - \frac{f(\theta_0)}{f'(\theta_0)}.
+    $$
+    \item This root of the tangent line will be closer than our original guess $\theta_0$, so we set:
+    $$
+    \theta_1 = \theta_0 - \frac{f(\theta_0)}{f'(\theta_0)},
+    $$
+    and repeat:
+    $$
+    \theta_{n + 1} = \theta_n - \frac{f(\theta_n)}{f'(\theta_n)}.
+    $$
+    \item We stop based on some convergence criteria, often something like $|\theta_{n + 1} - \theta_n| < \epsilon$, for a small choice of $\epsilon$.
+    \item (In class, check out wikipedia or draw a picture).
+  \end{itemize}
+  
+  \framebreak
+  
+  \begin{itemize}
+    \item We need now a starting point $\theta_0$.
+    \item Really we can pick anything, but it's best if we are close to the MLE.
+    \item For our current problem (Gamma distribution), we could use the MoM estimator:
+    $$
+    \hat{\alpha}_{\text{MoM}} = \theta_0 = \frac{\big(\bar{x}^*_n\big)^2}{\frac{1}{n}\sum_{i = 1}^n \big(x_i^* - \bar{x}^*_n\big)^2}.
+    $$
+  \end{itemize}
+  
+<<>>=
+NR_root <- function(theta0, fn, deriv, tol = 1e-8, maxiter = 1000) {
+  iter <- 0
+  theta_old <- theta0
+  theta_new <- theta_old + 10 * tol
+  
+  while(abs(theta_old - theta_new) > tol && iter < maxiter) {
+    iter <- iter + 1
+    theta_old <- theta_new
+    theta_new <- theta_old - fn(theta_old) / deriv(theta_new)
+  }
+  cat("iters: ", iter, "\n")
+  theta_new
+}
+@
+
+\framebreak
+
+<<>>=
+alpha_fn <- function(alpha, data) {
+  n <- length(data)
+  n * log(alpha) - n * log(mean(data)) + sum(log(data)) - n * digamma(alpha)
+}
+
+alpha_deriv <- function(alpha, data) {
+  n <- length(data)
+  (n/alpha) - n * psigamma(alpha, 1)
+}
+
+set.seed(123)
+data <- rgamma(n = 23, 1, 2)
+@ 
+
+\framebreak
+
+<<>>=
+# Not the exact MoM estimate, but close enough:
+alpha_mom <- (mean(data)^2) / sd(data)
+
+NR_root(
+  theta0 = 0.86, 
+  fn = function(x) alpha_fn(x, data = data), 
+  deriv = function(x) alpha_deriv(x, data = data), 
+  tol = 1e-10
+)
+@
+
+
 \end{frame}
 
 \newcommand\acknowledgments{
