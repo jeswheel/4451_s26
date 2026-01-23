@@ -557,7 +557,7 @@ alpha_deriv <- function(alpha, data) {
 }
 
 set.seed(123)
-data <- rgamma(n = 23, 1, 2)
+data <- rgamma(n = 23, shape = 1, rate = 2)
 @ 
 
 \framebreak
@@ -567,6 +567,15 @@ data <- rgamma(n = 23, 1, 2)
 alpha_mom <- (mean(data)^2) / sd(data)
 
 NR_root(
+  theta0 = alpha_mom, 
+  fn = function(x) alpha_fn(x, data = data), 
+  deriv = function(x) alpha_deriv(x, data = data), 
+  tol = 1e-10
+)
+@
+
+<<echo=FALSE,include=FALSE>>=
+alpha_hat <- NR_root(
   theta0 = 0.86, 
   fn = function(x) alpha_fn(x, data = data), 
   deriv = function(x) alpha_deriv(x, data = data), 
@@ -575,6 +584,186 @@ NR_root(
 @
 
 
+\framebreak
+
+\begin{itemize}
+  \item Once the estimate of $\alpha$ is found, we can then plug it in to get the estimate of $\lambda$:
+  $$
+  \hat{\lambda} = \frac{\hat{\alpha}}{\bar{x}^*_n} = \Sexpr{round(alpha_hat / mean(data), 3)}.
+  $$
+\end{itemize}
+
+\framebreak
+
+<<echo=FALSE, fig.align='center',fig.height=2.5,fig.width=3.5,include=FALSE>>=
+
+truth <- c(1, 2)
+mle <- c(alpha_hat, alpha_hat / mean(data))
+
+x <- seq(0.5, 2.5, length.out = 100)
+y <- seq(0.75, 4, length.out = 100)
+grid_data <- tidyr::expand_grid(x = x, y = y)
+
+grid_data$density <- purrr::map2_dbl(.x = grid_data$x, .y = grid_data$y, .f = function(x, y) prod(dgamma(data, shape = x, rate = y)))
+
+levels <- c(0.95, 0.90, 0.85, 0.50)
+
+dens_sorted <- sort(grid_data$density, decreasing = TRUE)
+dens_cumsum <- cumsum(dens_sorted) / sum(dens_sorted)
+
+density_cutoff <- function(level) {
+  dens_sorted[min(which(dens_cumsum >= level))]
+}
+
+breaks <- sapply(levels, density_cutoff)
+
+# Plot the contours
+ggplot(grid_data, aes(x = x, y = y, z = density)) +
+  geom_contour(breaks = breaks) + # Adjust 'bins' for the number of contour lines
+  labs(title = latex2exp::TeX("Likelihood of Gamma$(\\alpha, \\lambda)$ Distribution"),
+       x = expression(alpha),
+       y = expression(lambda)) +
+  theme_bw() + 
+  geom_point(x = truth[1], y = truth[2], col = 'red', pch = 4, size = 5) + 
+  geom_point(x = mle[1], y = mle[2], col = 'blue', pch = 4) + 
+  theme(plot.title = element_text(hjust = 0.5, size = 6))
+
+ggsave("GammaSurface.png")
+@
+
+
+\begin{figure}[ht]
+\includegraphics[width=0.8\textwidth]{GammaSurface.png}
+\caption{Likelihood surface of data generated from Gamma distribution.}
+\end{figure}
+
+\end{frame}
+
+\begin{frame}[allowframebreaks,fragile]{Root-find considerations}
+
+\begin{itemize}
+  \item The function that we built for solving $f(\theta) = 0$ requires the derivative $f'(\theta)$.
+  \item In some cases, the derivative is not readily available. Instead, we can approximate using the definition:
+  $$
+  f'(\theta) = \lim_{h \rightarrow 0} \frac{f(\theta + h) - f(\theta)}{h} \approx \frac{f(\theta + \Delta) - f(\theta)}{\Delta}.
+  $$
+  \item We just pick $\Delta$ to be small, and we get a very good approximation of the derivative.
+  \item Thus, we don't really need to derivative for uni-variate root-finding.
+  \item The same mathematical approach can readily be extended into higher dimensional $\theta$, replacing the derivative with a \alert{gradient}.
+  \item An important consideration, however, is that the results may depend on your starting parameter $\theta_0$. In practice, you may want to try multiple values of $\theta_0$.
+  
+  \framebreak
+  
+  \item In most programming languages, there will be pre-built methods for root-fining and optimization. 
+  \item Our function we built works, but it doesn't do careful error checking, and it isn't optimized for speed.
+  \item For univariate-root finding $f(\theta) = 0$ in R, we can use the \code{uniroot} function, which doesn't require a derivative.
+  \item This function is very efficient for solving roots if $\theta \in \R$. For higher dimensions, we need to import a different package.
+\end{itemize}
+
+<<echo=TRUE>>=
+uniroot(
+  function(x) alpha_fn(x, data = data),
+  interval = c(0.5, 2)
+)
+@
+
+\end{frame}
+
+\begin{frame}[allowframebreaks,fragile]{Direct Numeric Optimization}
+  \begin{itemize}
+    \item Based on our last example, we solved for one parameter $\lambda$, and numerically found the other, $\alpha$, via root-finding.
+    \item In many cases, this is not possible. Instead, we might want to directly optimize both parameters.
+    \item We will first introduce this by extending the Newton-Raphson to perform optimization rather than root-finding.
+    
+    \framebreak
+    
+    \item The idea is simple: local maximum are just the zeros (roots) of the derivative function.
+    \item Thus, we still perform Newton-Raphson, but on the derivative rather than the original function.
+    \item Starting with initial estimate $\theta_0$, we update following the equations until convergence:
+    $$
+    \theta_{n + 1} = \theta_{n} - \frac{f'(\theta_n)}{f''(\theta_n)}
+    $$
+    
+    \framebreak
+    
+    \item If $\theta$ is multivariate, then again we use the \alert{gradient}: $\nabla f(\theta)$, which is a vector, and Hessian: $\nabla^2 f(\theta)$, which is a matrix:
+    $$
+    \theta_{n+1} = \theta_n - \big(\nabla^2 f(\theta_n)\big)^{-1}\nabla \big(f(\theta_n)\big).
+    $$
+    \item This is the basic approach of many traditional machine learning algorithms:
+    \begin{itemize}
+      \item Pick a model that depends on $\theta$, and a loss-function $f(\theta)$ that depends on the data and model (here, our loss is the log-likelihood function).
+      \item If possible, calculate the derivative of the loss function with respect to $\theta$. If not, approximate numerically.
+      \item If possible, calculate the Hessian of the loss function with respect to $\theta$. If not, approximate numerically.
+      \item Start with initial guess for $\theta$, take steps the size of the (approximate) hessian of $f(\theta)$, in the direction of the gradient $f(\theta)$. 
+    \end{itemize}
+  
+    \item Many optimization strategies are variants of this basic approach: In practice, Hessians / Gradients may be expensive to compute.
+    \item We will primarily focus our attention on pre-existing solutions.
+    \item In R, the function we will use is called \code{optim}.
+    \item There are several optimization methods available within this function
+    
+    \framebreak
+    
+    \begin{itemize}
+      \item Nelder-Mead: a heuristic, direct search method. Does not require differentiability. Slow, but robust.
+      \item BFGS / L-BFGS-B: A Quasi-Newton approach, approximates either (or both) the Hessian and Gradient numerically. Extremely effective for (twice) differentiable functions, but slow as $\theta$ grows in dimension.
+      \item SANN: A stochastic approach. Hard to tune, but effective on ``rough" surfaces
+      \item CG: Conjugate Gradients. More ``fragile" than BFGS, but require less memory storage so can be useful for large $\theta$.
+      \item Brent: Only univariate $\theta$. In these cases, approximates the gradient and hessian, similar to what we proposed. Very effective, but requires univariate $\theta$. 
+    \end{itemize}
+    
+    \framebreak
+    
+    \item How it works: Get function $f$, method you want to use, and starting point $\theta_0$. Example:
+  \end{itemize}
+    
+<<>>=
+gamma_negloglik <- function(theta) {
+  -dgamma(
+    x = data, 
+    shape = theta[1], rate = theta[2],
+    log = TRUE
+  ) |> sum()
+}
+@
+
+\framebreak
+
+<<>>=
+optim(
+  c(2, 5), 
+  fn = gamma_negloglik, 
+  method = 'L-BFGS-B',  # Constrained theta>0
+  lower = c(1e-8, 1e-8)
+)
+@
+    
+\end{frame}
+    
+\begin{frame}[allowframebreaks]{Gradient Descent and Variations}
+
+\begin{itemize}
+    
+    \item In Newton-Raphson, the Hessian just tells us the \emph{size} of the step. 
+    \item Often the gradient is available, but not the Hessian (or it is expensive to compute the inverse, since it is a matrix). 
+    \item In these cases, we often use a different approach called \alert{gradient descent}.
+    \item Idea: still step in the direction of the (negative) gradient, but the step size will just be small $\delta_n$, and let $\delta_n$ shrink over-time:
+    $$
+    \theta_{n+1} = \theta_{n} - \delta_n \nabla f(\theta_n).
+    $$
+    \item The idea is simple, but a lot of modern optimization techniques and theory are based on this idea, finding various strategies for specifying $\delta_n$.
+    \item Ex: BFGS approximates the Hessian, but scales poorly with dimension. In deep learning, $\theta$ has dimension in millions / billions, so BFGS won't work (nor does \code{optim}).
+    \item The success of deep-learning and AI is largely due to the advent of \alert{automatic differentiation}: software that calculates the exact gradient of $f(\theta_n)$, after simple calculations.
+    \item Auto-diff libraries: PyTorch, TensorFlow, JAX, etc. Mostly available in Python, though some are available in R.
+    
+    \framebreak
+    
+    \item Final approach we will discuss is \alert{stochastic} gradient descent, which is effectively randomly sampling the data to compute an approximate gradient.
+    \item The idea is that, even with auto-diff, gradients (with entire data) are expensive to compute.
+    \item Thus, randomly sample data to get a stochastic approximation of the gradient; this is faster to compute, so we get more update-steps.
+    \item This is the primary technique used in most deep-learning frameworks.
+  \end{itemize}
 \end{frame}
 
 \newcommand\acknowledgments{
