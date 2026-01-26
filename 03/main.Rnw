@@ -378,7 +378,7 @@ plot(x = x, y = y, type = 'l')
 
   \framebreak
 
-<<echo=FALSE, fig.align='center',fig.height=2.5,fig.width=3.5,include=FALSE>>=
+<<echo=FALSE, fig.align='center',fig.height=2.5,fig.width=3.5,include=FALSE,cache=TRUE>>=
 set.seed(123)
 
 truth <- c(10, 2)
@@ -583,7 +583,7 @@ data <- rgamma(n = 23, shape = 1, rate = 2)
 
 \framebreak
 
-<<>>=
+<<cache=TRUE>>=
 # Not the exact MoM estimate, but close enough:
 alpha_mom <- (mean(data)^2) / sd(data)
 
@@ -595,7 +595,7 @@ NR_root(
 )
 @
 
-<<echo=FALSE,include=FALSE>>=
+<<echo=FALSE,include=FALSE,cache=TRUE>>=
 alpha_hat <- NR_root(
   theta0 = 0.86,
   fn = function(x) alpha_fn(x, data = data),
@@ -616,7 +616,7 @@ alpha_hat <- NR_root(
 
 \framebreak
 
-<<echo=FALSE, fig.align='center',fig.height=2.5,fig.width=3.5,include=FALSE>>=
+<<echo=FALSE, fig.align='center',fig.height=2.5,fig.width=3.5,include=FALSE,cache=TRUE>>=
 
 truth <- c(1, 2)
 mle <- c(alpha_hat, alpha_hat / mean(data))
@@ -681,7 +681,7 @@ ggsave("GammaSurface.png")
   \item This function is very efficient for solving roots if $\theta \in \R$. For higher dimensions, we need to import a different package.
 \end{itemize}
 
-<<echo=TRUE>>=
+<<echo=TRUE,cache=TRUE>>=
 uniroot(
   function(x) alpha_fn(x, data = data),
   interval = c(0.5, 2)
@@ -751,7 +751,7 @@ gamma_negloglik <- function(theta) {
 
 \framebreak
 
-<<>>=
+<<cache=TRUE>>=
 optim(
   c(2, 5),
   fn = gamma_negloglik,
@@ -870,7 +870,7 @@ gamma_negloglik2 <- function(alpha) {
 
 \framebreak
 
-<<>>=
+<<cache=TRUE>>=
 results <- optim(
   c(log(2), log(5)),
   fn = gamma_negloglik2,
@@ -984,6 +984,82 @@ exp(results$par)  # Theta
 
 \end{frame}
 
+\begin{frame}[allowframebreaks,fragile]{Hardy-Weinberg Equilibrium}
+
+  \begin{itemize}
+    \item Consider alleles expressed as dominant (A) and recessive (a), and they are expressed with rates $1-\theta$ and $\theta$, respectively.
+    \item The Hardy-Weinberg principle states genotypes are expressed in large, randomly mixing populations following the Punnett square in Table~\ref{tab:punnett}.
+  \end{itemize}
+
+  \begin{table}[ht]
+  \centering
+  \begin{tabular}{|c|c|c|}\hline
+    & A & a \\\hline
+  A & $(1-p)^2$ & $p(1-p)$ \\\hline
+  a & $p(1-p)$ & $p^2$\\\hline
+  \end{tabular}
+  \caption{\label{tab:punnett}Genotype frequencies in large, randomly mixing population.}
+  \end{table}
+
+  \framebreak
+
+  \begin{itemize}
+    \item Since the order of Aa or aA doesn't matter, this results in frequencies for $AA$, $Aa$, and $aa$: $(1-\theta)^2, 2\theta(1-\theta), \theta^2$.
+    \item Supposing that we observe a population with these three possible gene expressions. Then, using population counts, we want to fit a multinomial model with $m = 3$ categories, and probabilities defined as:
+    $$
+    p_1 = (1-\theta)^2, \quad p_2 = 2\theta(1-\theta), \quad p_3 = \theta^2.
+    $$
+  \end{itemize}
+
+  \framebreak
+
+  \begin{exampleblock}{Blood Types}
+    In a Chinese population of Hong Kong in 1937, blood types occurred with the following frequencies, where $M$ and $N$ are erythrocyte antigens: M (342), MN (500), N (187), for a total of 1029 samples. Use a multinomial model to estimate the frequency of alleles and genotypes.
+
+    \mode<article>{
+      \begin{itemize}
+        \item A naive approach may be to say that $N$ occurs with frequency $\theta^2$, so our estimate would be $\theta = \sqrt{187/1029}$, or approximately 0.4263. However, this seems to ignore some of the information in the table available from the other cell-counts.
+        \item Instead, let's do maximum likelihood.
+        \item Recall that the multinomial probability model, where the probabilities $p_1, \ldots, p_m$ are functions of $\theta$ has log-likelihood:
+        $$
+        \ell(\theta) = \log n! - \sum_{i = 1}^m \log x_i^*! + \sum{i = 1}^m x_i \log p_i(\theta).
+        $$
+        \item Thus, plugging in the Hardy-Weinberg equilibrium values:
+    $$
+    p_1 = (1-\theta)^2, \quad p_2 = 2\theta(1-\theta), \quad p_3 = \theta^2,
+    $$
+    we get the log-likelihood of $\theta$:
+    \begin{align*}
+    \ell(\theta) &= \log n! - \sum_{i = 1}^3 \log x^*_i! + x_1^*\log(1-\theta)^2 + x_2^* \log 2\theta(1-\theta) + x_3^* \log \theta^2\\
+    &= \log n! - \sum_{i = 1}^3 \log x^*_i! + (2x_1^* + x_2^*)\,\log(1 - \theta) + (2x_3^* + x_2^*)\log(\theta) + x_2^* \log 2.
+    \end{align*}
+    \item In the equation above, we don't need to worry that the probabilities sum to 1, since the equations for $p_i(\theta)$ were explicitly designed so that they do. We should check of course that $0 \leq \theta \leq 1$ (though the only critical point does indeed lie in this region).
+    \item Taking the derivative with respect to $\theta$, and setting equal to zero, gives the equation:
+    $$
+    -\frac{2x_1^* + x_2^*}{1-\theta} + \frac{2x^*_3 + x^*_2}{\theta} = 0,
+    $$
+    which can be solved to give:
+    \begin{align*}
+      \theta &= \frac{2x^*_3 + x^*_2}{2x_1^* + 2x_2^* + 2x_3^*} \\
+             &= \frac{2x^*_3 + x^*_2}{2n}.
+    \end{align*}
+    \item Plugging in the values from the problem, we get the MLE:
+    $$
+    \hat{\theta} = 0.4247
+    $$
+
+      \end{itemize}
+    }
+
+  \end{exampleblock}
+\end{frame}
+
+\begin{frame}[allowframebreaks]{Example: logistic regression}
+  \begin{itemize}
+    \item TODO.
+  \end{itemize}
+\end{frame}
+
 \newcommand\acknowledgments{
 \begin{itemize}
 \item   Compiled on {\today} using \Rlanguage version \Sexpr{getRversion()}.
@@ -1023,10 +1099,5 @@ exp(results$par)  # Theta
 
 
 \end{document}
-
-
-
-
-
 
 
