@@ -746,7 +746,7 @@ $value
 
 $counts
 function gradient 
-      16       16 
+      19       19 
 
 $convergence
 [1] 0
@@ -825,6 +825,12 @@ $message
   }
 
 \end{exampleblock}
+
+  \framebreak
+  
+  \begin{quote}
+    ``If [the likelihood] cannot by maximized analytically, it may be possible to use a computer to maximize [the likelihood] numerically. In fact, this is one of the most important features of the MLE. If a model can be written down, then there is some hope of maximizing it numerically, and, hence, finding MLEs of the parameters." -- \citet[][Section 7.2]{casella24}
+  \end{quote}
 
 \end{frame}
 
@@ -987,7 +993,6 @@ $message
   $$
   \ell(\theta) = \log n! - \sum_{i = 1}^m \log x_i^*! + \sum{i = 1}^m x_i \log p_i(\theta).
   $$
-  \item TODO: Finished 8.5.1 Example A, RICE.
 \end{itemize}
 
 \end{frame}
@@ -1060,17 +1065,114 @@ $message
     }
 
   \end{exampleblock}
+  
 \end{frame}
 
-\begin{frame}[allowframebreaks]{Example: logistic regression}
+
+
+\section{Invariance property of the MLE}
+
+\begin{frame}[allowframebreaks]{Invariance property}
+\begin{itemize}
+  \item We will next talk about general properties of estimators, and introduce some theory.
+  \item Before we do that, we still want to discuss point-estimation following the Bayesian approach.
+  \item The order of things is a little tricky, but before moving on we will introduce one property of the MLE that can be used in finding the MLE.
+  \item The property is known as \alert{invariance}.
+  \item Idea: information we have about $\theta$ should be the same information we have about $g(\theta)$ -- we don't gain or loose information by transforming the variable.
+\end{itemize}
+
+\framebreak
+
+\begin{block}{Theorem: Invariance property of the MLE}
+  \citep[Theorem~7.2.10,][]{casella24} If $\hat{\theta}$ is the MLE of $\theta$, then for any function $g$, $g(\hat{\theta})$ is the MLE of $g(\theta)$. For instance, if $\hat{\theta} = \bar{x}^*_n$, then the MLE of $\sin (\theta)$ is $\sin (\bar{x}^*_n)$.
+  
+  \mode<article>{
+    \begin{itemize}
+      \item The proof for when $g$ is a one-to-one function is fairly straight forward, as we can assume an inverse function exists. 
+      \item We'll provide a proof sketch without this, following the proof from \citet{casella24}.
+      \item First, we will introduce the idea of the \emph{induced} likelihood. The idea is that if $g$ is not one to one, then there could be more than one way to get a particular outcome.
+      \item For example, if $g(\theta) = \theta^2$, then $g(2) = g(-2) = 4$.
+      \item Thus, the set $A_\eta = \{\theta: g(\theta) = \eta\}$ may have more than one element.
+      \item We define the \emph{induced likelihood function}, as:
+      $$
+      L^*(\eta) = \sup_{\theta \in A_\eta} L(\theta),
+      $$
+      where for any value $\eta$, $A_\eta = \{\theta: g(\theta) = \eta\}$ is the pre-image of $\eta$ under the map $g$, and $L(\theta)$ is the typical likelihood, conditioned on the data $x^*$.
+      \item Note that if $g$ is one-to-one, the $g^{-1}$ exists, and $A_\eta = \{\theta: g(\theta) = \eta\} = g^{1}(\eta)$, and then the induced likelihood function is:
+      $$
+      L^*(\eta) = L\big(g^{-1}(\eta)\big)
+      $$
+      \item In general, we note that the definition of $L^*$ implies that the maximums of $L^*$ and $L$ coincide. Now for the proof:
+      \end{itemize}
+      \begin{proof}
+        Let $\hat{\eta}$ denote the value that maximizes $L^*(\eta)$. Then by definition of the maximum and the function $L^*$,
+        \begin{align*}
+          L^*(\hat{\eta}) &= \sup_\eta L^*(\eta)\\
+                          &= \sup_\eta \sup_{\theta \in A_\eta} L(\theta) \\
+                          &= \sup_{\theta} L(\theta) \\
+                          &= L(\hat{\theta}),
+        \end{align*}
+        where $\hat{\theta}$ is the MLE of $\theta$. The third equality is because the iterated maximization is equal to the unconditional maximization over $\theta$. That is, the inner $\sup_{\theta \in A_\eta}$ says that, for any fixed $\eta$, we want to get the maximum $\theta$ value. The outer $\sup_\eta$ now says that we want to pick the $\eta$ value that maximizes the inner condition, so any value of $\eta$ is ``up for grabs", so the $\eta$ value that results in the largest $L(\theta)$ is equivalent to picking the largest $\theta$ for $L(\theta)$.
+        % Heuristically, this argues that picking the maximum $\hat{\theta}$ based on the maximizing the induced likelihood $L^*(\eta)$ ends up giving the MLE of $L(\theta)$. Next, we show the opposite direction.
+        
+        Now, recall that $g(\hat{\theta})$ is some value in the $\eta$ space, and thus we can consider the preimage of $g(\hat{\theta})$ as the set of all $\theta$ where $g(\theta) = g(\hat{\theta})$.
+        Since $\hat{\theta}$ maximizes the MLE, we have:
+        \begin{align*}
+        L(\hat{\theta}) &= \sup_{\theta \in A_{g(\hat{\theta})}} \\
+                        &= L^*\big(g(\hat{\theta})\big),
+        \end{align*}
+        The second equality coming from the definition of $L^*$. Combining the first set of equalities with the second, we get:
+        $$
+        L^*\big(\hat{\eta}\big) = L^*\big(g(\hat{\theta})\big),
+        $$
+        from which we conclude that if $\hat{\theta}$ is the MLE of $L(\theta)$, then $g\big(\hat{\theta}\big)$ maximizes $L^*(\eta)$, or that $g\big(\hat{\theta}\big)$ is the MLE of $g(\theta)$.
+      \end{proof}
+  }
+  
+\end{block}
+
+\framebreak
+
+\begin{itemize}
+  \item Note in the previous theorem, nothing is preventing $\theta$ to be multivariate.
+  \item Thus, if $\hat{\theta} = (\hat{\theta}_1, \ldots, \hat{\theta}_k)$ is the MLE of $\theta$,
+  then $g(\hat{\theta}) = \Big(g\big(\hat{\theta_1}\big), \ldots, g\big(\hat{\theta_k}\big)\Big)$ is the MLE of $g(\theta)$.
+  \item For a more concrete example: suppose that $p$ is the probability of an event, a model parameter that we want to estimate. Then if $\hat{p}$ is the MLE, then we can find the MLE for the odds-ratio or log-odds ratio very easily:
+  $$
+  \text{MLE of odds ratio} = \frac{\hat{p}}{1 - \hat{p}}, \quad \text{MLE of log-odds ratio} = \log \frac{\hat{p}}{1 - \hat{p}}.
+  $$
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[allowframebreaks]{Comments on maximum likelihood}
   \begin{itemize}
-    \item TODO.
+    \item There are many advantages of MLE, and is one reason that MLE is one of the gold-standards of statistical estimation (the other dominant approach being Bayesian estimation).
+    \item Maximum likelihood is generally considered a frequentist approach due to asymptotic theory results, which we cover later. As presented, however, the MLE has more of a Bayesian flavor to it: the likelihood measures some degree of ``belief" about a parameter, and we estimate the parameter by picking the value that maximizes this belief.
+    \item Maximum likelihood is not without it's criticisms. For instance: 
+    \begin{itemize}
+      \item The MLE may not be unique (i.e., more than one global maximum). For instance, $\hat{\theta}_1$ and $\hat{\theta}_2$ may both maximize the likelihood $L(\theta)$; if they are very different estimates, this could cause a problem. It's also possible for an infinite number of $\theta$ values to maximize the likelihood, which again can be problematic.
+      \item The MLE is often biased, and this can be particularly problematic in small sample sizes.
+      \item The MLE depends on model assumptions. If they are wrong, the estimates might not make much sense.
+      \item The MLE might not even exist! Le Cam, a famous 20th century statistician who was largely a proponent of the MLE approach, wrote a fun paper about some of these weaknesses, and warned against blindly using the MLE \citep{lecam90}:
+    \end{itemize}
+    \begin{quote}
+    ``We present a list of principles leading to the construction of good estimates.The main principle says that one should not believe in principles but study each problem for its own sake."" -- \citep{lecam90}
+    \end{quote}
+    
+    \item Other difficulties arise in more complex models, such as time-series or spatial data. Here, the data are not IID, and the distribution of each observation changes over times / space, and observations are not independent. As a result, it's generally very difficult to write down the likelihood, or find the MLE. Minimizing a loss-function is generally easier in complex settings, even if it results in a loss of information (discussed later), or is equivalent to unrealistic Gaussian approximations (i.e., minimizing MSE). 
   \end{itemize}
 \end{frame}
 
+% \begin{frame}[allowframebreaks]{Example: logistic regression}
+%   \begin{itemize}
+%     \item TODO.
+%   \end{itemize}
+% \end{frame}
+
 \newcommand\acknowledgments{
 \begin{itemize}
-\item   Compiled on {\today} using \Rlanguage version 4.5.1.
+\item   Compiled on {\today} using \Rlanguage version 4.5.2.
 \item   \parbox[t]{0.75\textwidth}{Licensed under the \link{http://creativecommons.org/licenses/by-nc/4.0/}{Creative Commons Attribution-NonCommercial license}.
     Please share and remix non-commercially, mentioning its origin.}
     \parbox[c]{1.5cm}{\includegraphics[height=12pt]{../cc-by-nc}}
