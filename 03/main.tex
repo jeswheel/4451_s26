@@ -1160,6 +1160,8 @@ $message
     ``We present a list of principles leading to the construction of good estimates.The main principle says that one should not believe in principles but study each problem for its own sake."" -- \citep{lecam90}
     \end{quote}
     
+    \item Even if likelihoods can be maximized numerically, care is needed to ensure that final estimates correspond to global maximums and not just local solutions.
+    
     \item Other difficulties arise in more complex models, such as time-series or spatial data. Here, the data are not IID, and the distribution of each observation changes over times / space, and observations are not independent. As a result, it's generally very difficult to write down the likelihood, or find the MLE. Minimizing a loss-function is generally easier in complex settings, even if it results in a loss of information (discussed later), or is equivalent to unrealistic Gaussian approximations (i.e., minimizing MSE). 
   \end{itemize}
 \end{frame}
