@@ -1,0 +1,101 @@
+\input{../header}
+
+% \mode<beamer>{\usetheme{AnnArbor}}
+\mode<beamer>{\usetheme{metropolis}}
+\mode<beamer>{\metroset{block=fill}}
+% \mode<beamer>{\usecolortheme{wolverine}}
+
+\mode<beamer>{\setbeamertemplate{section in toc}[sections numbered]}
+\mode<beamer>{\setbeamertemplate{subsection in toc}[subsections numbered indented]}
+
+% \mode<beamer>{\usefonttheme{serif}}
+\mode<beamer>{\setbeamertemplate{footline}}
+\mode<beamer>{\setbeamertemplate{footline}[frame number]}
+\mode<beamer>{\setbeamertemplate{frametitle continuation}[from second][\insertcontinuationcountroman]}
+\mode<beamer>{\setbeamertemplate{navigation symbols}{}}
+
+\mode<handout>{\pgfpagesuselayout{2 on 1}[letterpaper,border shrink=5mm]}
+
+\newcommand\CHAPTER{4}
+% \newcommand\answer[2]{\textcolor{blue}{#2}} % to show answers
+% \newcommand\answer[2]{\textcolor{red}{#2}} % to show answers
+ \newcommand\answer[2]{#1} % to show blank space
+
+\title{\vspace{2mm} \link{https://jeswheel.github.io/4451_f25/}{Mathematical Statistics II}\\ \vspace{2mm}
+The Bayesian Approach to Parameter Estimation}
+\author{Jesse Wheeler}
+\date{}
+
+\setbeamertemplate{footline}[frame number]
+
+
+
+
+\begin{document}
+
+\maketitle
+
+\mode<article>{\tableofcontents}
+
+% \mode<presentation>{
+%   \begin{frame}{Outline}
+%     \tableofcontents
+%   \end{frame}
+% }
+
+\section{Introduction}
+
+\begin{frame}[allowframebreaks]{TODO}
+
+\begin{itemize}
+  \item Much of this work is based on \citet[][Section~8.6]{rice07}
+\end{itemize}
+
+\end{frame}
+
+\newcommand\acknowledgments{
+\begin{itemize}
+\item   Compiled on {\today} using \Rlanguage version 4.5.2.
+\item   \parbox[t]{0.75\textwidth}{Licensed under the \link{http://creativecommons.org/licenses/by-nc/4.0/}{Creative Commons Attribution-NonCommercial license}.
+    Please share and remix non-commercially, mentioning its origin.}
+    \parbox[c]{1.5cm}{\includegraphics[height=12pt]{../cc-by-nc}}
+\item We acknowledge \link{https://jeswheel.github.io/4451_s26/acknowledge.html}{students and instructors for previous versions of this course / slides}.
+\end{itemize}
+}
+
+\mode<presentation>{
+\begin{frame}[allowframebreaks=0.8]{References and Acknowledgements}
+
+\bibliography{../bib4451}
+
+\vspace{3mm}
+
+\acknowledgments
+
+\end{frame}
+}
+
+\mode<article>{
+
+\newpage
+
+{\bf \Large \noindent Acknowledgments}
+
+\acknowledgments
+
+\newpage
+
+\bibliography{../bib4451}
+
+}
+
+
+
+\end{document}
+
+
+
+
+
+
+

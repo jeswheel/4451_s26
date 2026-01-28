@@ -23,6 +23,7 @@ See [Section on planned topics](#planned-topics-spring-2026) for more details
 1. [Introduction: Philosophy of Statistics](01/index.html)
 2. [Introduction to point estimation](02/index.html)
 3. [Maximum Likelihood Estimation](03/index.html)
+4. [Bayesian approach to parameter estimation](04/index.html)
 
 ------
 

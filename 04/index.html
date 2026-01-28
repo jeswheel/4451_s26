@@ -9,10 +9,10 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
-<meta name="author" content="Instructor: Jesse Wheeler" />
+<meta name="author" content="Jesse Wheeler" />
 
 
-<title>Math 4451 (Spring 2026) ‘Mathematical Statistics II’</title>
+<title>Mathematical Statistics II Math 4451. Bayesian approach to parameter estimation</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -349,253 +349,48 @@ display: none;
 
 
 
-<h1 class="title toc-ignore">Math 4451 (Spring 2026) ‘Mathematical
-Statistics II’</h1>
-<h4 class="author">Instructor: Jesse Wheeler</h4>
+<h1 class="title toc-ignore">Mathematical Statistics II<br>Math
+4451.<br>Bayesian approach to parameter estimation</h1>
+<h4 class="author">Jesse Wheeler</h4>
 
 </div>
 
-<div id="TOC">
-<ul>
-<li><a href="#course-description" id="toc-course-description">Course
-description</a></li>
-<li><a href="#class-notes" id="toc-class-notes">Class notes</a>
-<ul>
-<li><a href="#planned-topics-spring-2026" id="toc-planned-topics-spring-2026">Planned topics (Spring
-2026)</a></li>
-<li><a href="#additional-course-information" id="toc-additional-course-information">Additional Course
-Information:</a></li>
-</ul></li>
-<li><a href="#math-4450-notes-fall-2025" id="toc-math-4450-notes-fall-2025">Math 4450 Notes (Fall 2025)</a></li>
-<li><a href="#homework-and-participation-assignments" id="toc-homework-and-participation-assignments">Homework and
-participation assignments</a></li>
-<li><a href="#midterm" id="toc-midterm">Midterm</a></li>
-<li><a href="#final-exam" id="toc-final-exam">Final Exam</a></li>
-<li><a href="#acknowledgements-and-license" id="toc-acknowledgements-and-license">Acknowledgements and
-License</a></li>
-</ul>
-</div>
 
 <hr />
-<div id="course-description" class="section level2">
-<h2>Course description</h2>
-<p>The second of a two-part sequence on: Probability, random variables,
-discrete and continuous distributions, order statistics, limit theorems,
-point and interval estimation, uniformly most powerful tests, likelihood
-ratio tests, chi-square and F tests, nonparametric tests. PREREQ: MATH
-3326 and MATH 3352. Offered Even Years in the Spring Semester.</p>
-<p>See <a href="#planned-topics-spring-2026">Section on planned
-topics</a> for more details</p>
+<p>This section considers the problem of parameter estimation from a
+Bayesian perspective. So far, we have been concerned about
+point-estimation. Because Bayesian estimates correspond to posterior
+distributions, there is more than one possible point estimate when using
+the Bayesian approach. Furthermore, it serves as a nice introduction to
+measuring parameter uncertainty, as parameter uncertainty in Bayesian
+models is very natural.</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left"> </th>
+<th align="center"> </th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Lecture slides</td>
+<td align="center"><a href="slides.pdf">pdf</a></td>
+</tr>
+<tr class="even">
+<td align="left">Lecture notes</td>
+<td align="center"><a href="notes.pdf">pdf</a></td>
+</tr>
+</tbody>
+</table>
+<!-- | Annotated Slides | [pdf](annotatedSlides.pdf) | -->
+<div id="section" class="section level2">
+<h2><!-- | Discussion Problems | [pdf](discussionProbs.pdf) | --></h2>
 <hr />
-</div>
-<div id="class-notes" class="section level2">
-<h2>Class notes</h2>
-<ol style="list-style-type: decimal">
-<li><a href="01/index.html">Introduction: Philosophy of
-Statistics</a></li>
-<li><a href="02/index.html">Introduction to point estimation</a></li>
-<li><a href="03/index.html">Maximum Likelihood Estimation</a></li>
-<li><a href="04/index.html">Bayesian approach to parameter
-estimation</a></li>
-</ol>
+<p><a href="../index.html">Back to course homepage</a><br />
+<a href="../acknowledge.html">Acknowledgements</a><br />
+<a href="http://github.com/jeswheel/4451_f25/tree/main/02/">Source code
+for these notes</a></p>
 <hr />
-<div id="planned-topics-spring-2026" class="section level3">
-<h3>Planned topics (Spring 2026)</h3>
-<p>The course description and objectives provide very little direction
-for this course. A tentative list of course topics is provided below. In
-parenthesis is provided some supplementary reference chapters from
-relevant textbooks.</p>
-<ul>
-<li>Parameter estimation
-<ul>
-<li>Method of moments estimators (Rice, 8.4)</li>
-<li>Maximum likelihood estimation (Rice, 8.5)</li>
-<li>Bayesian estimation (Rice, 8.6)</li>
-<li>Sufficiency, minimal sufficiency, and the invariance principle (Rice
-8.8, Pawitan 3.1–3.2, Pawitan 2.8–2.9)</li>
-</ul></li>
-<li>Parameter uncertainty
-<ul>
-<li>Exact Intervals (e.g., Rice 8.5.3)</li>
-<li>Revisiting Bayesian posteriors (Rice, 8.6)</li>
-<li>Frequentist intervals
-<ul>
-<li>The Score function and Fisher’s Information / Observed Information
-(Pawitan 2.5)</li>
-<li>Asymptotic properties of the MLE (Rice 8.5.2–8.5.3)</li>
-<li>Wald intervals (Rice 8.5.2–8.5.3, Pawitan 3.3)</li>
-</ul></li>
-<li>Likelihood based intervals (Pawitan 2.6)
-<ul>
-<li>Likelihood ratios</li>
-<li>Invariance / minimal sufficiency of likelihood (Pawitan 2.9)</li>
-<li>Profile likelihooods (Pawitan 3.4)</li>
-</ul></li>
-<li>Cram&#39;er-Rao Lower Bound (Rice 8.7)</li>
-<li>Bias and variance of point estimates (Pawitan 5)
-<ul>
-<li>Reducing bias via Taylor series, jacknife, or bootstrap
-methods.</li>
-</ul></li>
-</ul></li>
-<li>Hypothesis testing (Rice 9.1–9.5, Casella and Berger 8.3)
-<ul>
-<li>Neyman-Pearson vs Fisher</li>
-<li>Uniformly most powerful tests</li>
-<li>Duality of confidence intervals and hypothesis tests.</li>
-<li>Non-parametric tests</li>
-<li>Chi-square tests</li>
-<li>Criticisms of confidence intervals (Pawitan 5.10)</li>
-</ul></li>
-</ul>
-<div id="optional-topics" class="section level4">
-<h4>Optional topics</h4>
-<ul>
-<li>Survey Sampling (Rice Chapter 7)</li>
-<li>Empirical Bayes, Hierarchical Bayes</li>
-<li>Computational Statistics
-<ul>
-<li>Visualization, advanced R topics, command line computing, etc.</li>
-<li>Numeric optimization</li>
-<li>Monte Carlo methods</li>
-<li>Advanced Bayesian methods (Metropolis-Hastings, MCMC,
-Gibbs-sampling)</li>
-</ul></li>
-<li>Introduction to time-series</li>
-<li>Regression Theory + Nonlinear regression (Rice Chapter 14)</li>
-<li>Gaussian Mixture Models + the EM algorithm</li>
-</ul>
-</div>
-</div>
-<div id="additional-course-information" class="section level3">
-<h3>Additional Course Information:</h3>
-<ul>
-<li><a href="syllabus.pdf">Course Syllabus</a></li>
-</ul>
-<hr />
-</div>
-</div>
-<div id="math-4450-notes-fall-2025" class="section level2">
-<h2>Math 4450 Notes (Fall 2025)</h2>
-<ol style="list-style-type: decimal">
-<li><p><a href="https://jeswheel.github.io/4450_f25/01/index.html">Chapter 1:
-Probability</a></p></li>
-<li><p><a href="https://jeswheel.github.io/4450_f25/02/index.html">Chapter 2:
-Random Variables</a></p></li>
-<li><p><a href="https://jeswheel.github.io/4450_f25/03/index.html">Chapter 3:
-Joint Distributions</a></p></li>
-<li><p><a href="https://jeswheel.github.io/4450_f25/04/index.html">Chapter 4:
-Expected Values</a></p></li>
-<li><p><a href="https://jeswheel.github.io/4450_f25/05/index.html">Chapter 5:
-Limit Theorems</a></p></li>
-<li><p><a href="https://jeswheel.github.io/4450_f25/06/index.html">Chapter 6:
-Distributions Derived from the Normal Distribution</a></p></li>
-</ol>
-<!--
-
--->
-<hr />
-</div>
-<div id="homework-and-participation-assignments" class="section level2">
-<h2>Homework and participation assignments</h2>
-<p>Please read the <a href="rubric_homework.html">grading rubric</a>
-before submitting homework.</p>
-<ul>
-<li><a href="hw01/hw01.pdf">Homework 1</a>, due Wed Jan 28, 11:59pm. <a href="hw01/hw01.tex">TeX file</a></li>
-</ul>
-<!--- 
-
-* [Homework 2](hw02/hw02.pdf), due Wed Sep 17, 11:59pm.
-[TeX file](hw02/hw02.tex).
-[In class discussion](hw02/HW2discussion.pdf)
-
-* [Homework 3](hw03/hw03.pdf), due Wed Sep 24, 11:59pm.
-[TeX file](hw03/hw03.tex).
-[In class discussion](hw03/HW3discussion.pdf).
-
-* [Homework 4](hw04/hw04.pdf), due Wed Oct 1, 11:59pm.
-[TeX file](hw04/hw04.tex).
-[In class discussion](hw04/HW4discussion.pdf).
-
-* [Homework 5](hw05/hw05.pdf), due Fri Oct 10, 11:59pm.
-[TeX file](hw05/hw05.tex).
-[In class discussion](hw05/HW5discussion.pdf).
-
-* [Homework 6](hw06/hw06.pdf), due Wed Nov 5, 11:59pm.
-[TeX file](hw06/hw06.tex).
-
-* [Homework 7](hw07/hw07.pdf), due Wed Nov 12, 11:59pm.
-[TeX file](hw07/hw07.tex).
-[In class discussion](hw07/hw7discussion.pdf).
-
-* [Homework 8](hw08/hw08.pdf), due Fri Nov 21, 11:59pm.
-[TeX file](hw08/hw08.tex).
-
-* [Homework 9](hw09/hw09.pdf), due Tue Dec 9, 11:59pm
-[TeX file](hw09/hw09.tex)
-
-* [Homework 10 (Final Exam Review)](hw10/hw10.pdf), due Sun Dec 14, 11:59pm
-[TeX file](hw10/hw10.tex)
-
--->
-<!--- 
-
-* [Participation 4](participation/participation4.html), due Sun Feb 18, 11:59pm.
-
-* [Homework 5](hw05/hw05.html), due Sun Mar 17, 11:59pm.
-[Solution](hw05/sol05.html).
-
-* [Participation 5](participation/participation5.html), due Sun Mar 17, 11:59pm.
-
-
-* [Homework 6](hw06/hw06.html), due Sun Mar 24, 11:59pm. 
-[Solution](hw06/sol06.html).
-
-* [Participation 6](participation/participation6.html), due Sun Mar 24, 11:59pm.
-
-* [Homework 7](hw07/hw07.html), due Sun Mar 31, 11:59pm. Extended to Wed Apr 3.
-[Solution](hw07/sol07.html).
-
-
-* [Participation 7](participation/participation7.html), due Sun Mar 31, 11:59pm. Extended to Wed Apr 3.
-
-
-* [Homework 8](hw08/hw08.pdf), due Sun Apr 14, 11:59pm.
-[Solution](hw08/sol08.pdf).
-
-* [Participation 8](participation/participation8.html), due Sun Apr 14, 11:59pm.
-
--->
-<!--
-
-* There is no assigned homework for the last two weeks of the semester. You should work on your final project. The remaining lectures contain material that will be useful for your final projects.
-
--->
-<hr />
-</div>
-<div id="midterm" class="section level2">
-<h2>Midterm</h2>
-<!--
-
-* [Review](midterm/MidtermReview.pdf).
-
-* [Formula Sheet](midterm/formulaSheet.pdf)
-
--->
-<hr />
-</div>
-<div id="final-exam" class="section level2">
-<h2>Final Exam</h2>
-<p>TODO: Update.</p>
-<p>The final exam will be help in our regular classroom on Dec 18, 10:00
-a.m. – 12:00 p.m. The final exam will be comprehensive, closed book.</p>
-<hr />
-</div>
-<div id="acknowledgements-and-license" class="section level2">
-<h2>Acknowledgements and License</h2>
-<p>This course and the code involved are made available with an <a href="LICENSE">MIT license</a>. Some components follow a Creative
-Commons Attribution non-commercial license. A longer list of
-acknowledgments is <a href="acknowledge.html">available</a>.</p>
 </div>
 
 
