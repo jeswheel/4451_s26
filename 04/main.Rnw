@@ -306,10 +306,98 @@ x
 @
 
 
+\framebreak
+
+\begin{exampleblock}{Comparing Estimates}
+  Using the data above, compare estimates using the MoM, MLE, and the two Bayesian approaches, as well as the corresponding errors related to these estimates.
+\end{exampleblock}
+
+\end{frame}
+
+\begin{frame}[allowframebreaks]{Posteriors and Likelihood}
   \begin{itemize}
-    \item TODO: Compare Bayes 1 to Bayes 2 to MLE
+    \item In the problem above, we saw that we get very similar estimates using MLE or Bayesian approaches, regardless of which prior we picked.
+    \item We can argue why this will often be the case, especially for IID data.
+    \item Previously, we saw:
+    $$
+    \text{posterior} \propto \text{likelihood} \times \text{prior}
+    $$
+    \item When $n$ gets large, the likelihood dominates in this equation. In the IID case:
+    $$
+    \text{likelihood} = \prod_{i = 1}^n f(x^*_i | \theta).
+    $$
+    \item In particular, each new data point scales the likelihood larger and larger, to the point where the prior has little impact on the posterior distribution.
+    \item See the accompanying Lecture 4 R code for a visual demonstration of this using the Poisson distribution.
+  \end{itemize}
+\end{frame}
+
+\section{Introduction to Numeric Integration}
+
+\begin{frame}[allowframebreaks]{Numeric Integration}
+  \begin{itemize}
+    \item As we saw in the previous example, one of the primary challenges of Bayesian estimation is the integration in the denominator of the posterior.
+    \item Bayesian statistics has really exploded since the late 20th century, largely thanks to improved computational tools that help with the numeric integration.
+    \item For this set of lectures, we only briefly introduce this topic. Depending on time and interest, we can explore this topic more later in the semester.
+  \end{itemize}
+\end{frame}
+
+\section{Choice of Priors}
+
+\begin{frame}[allowframebreaks]{Conjugate priors}
+  \begin{itemize}
+    \item The Poisson$(\lambda)$ example showed two main approaches:
+    \begin{itemize}
+      \item The traditional (subjective) Bayesian, who takes seriously the choice of prior, and chose a Gamma density to aid computations.
+      \item The utilitarian (objective) Bayesian, who picked an uninformative prior.
+    \end{itemize}
+    \item The former approach was aided by what is known as a \alert{conjugate prior}.
   \end{itemize}
   
+  \framebreak
+  
+  \begin{block}{Definition: Conjugate priors}
+    Suppose the prior distribution belongs to a family of distributions, $G$, and the data come from a family of distributions $H$.
+    
+    $G$ is said to be conjugate to $H$ if the posterior is in the family $G$.
+  \end{block}
+  
+  \begin{itemize}
+    \item Example: If the data-model is Poisson$(\lambda)$, then the family $H$ is the family of Poisson distributions. The Gamma family ($G$) of distributions is conjugate to the Poisson family, because if Gamma is selected as the prior distribution, then the posterior distribution (under data model $H$) is still Gamma $(G)$, with updated parameters. 
+
+  \framebreak
+    
+    \item Much of the Bayesian statistics of the 20th century relied on conjugate priors to help with integration, or were confined to models with very few parameters.
+    \item Recent developments in computing, both hardware, software, and theory of Bayesian computing, has enabled fitting much more complex models using arbitrary priors.
+    \item Still, it's worth discussing conjugate priors, and we will provide a few examples.
+    
+  \end{itemize}
+  
+\end{frame}
+
+\begin{frame}[allowframebreaks]{Jeffrey's priors}
+  \begin{itemize}
+    \item TODO
+  \end{itemize}
+\end{frame}
+
+\section{Hierarchical Bayes}
+
+\begin{frame}[allowframebreaks]{Hierarchical Bayes}
+
+\end{frame}
+
+\section{Empirical Bayes}
+
+\begin{frame}[allowframebreaks]{Empirical Bayes}
+  TODO
+\end{frame}
+
+\section{Uncertainty quantification}
+
+\begin{frame}[allowframebreaks]{Uncertainty in Bayes estimates}
+  \begin{itemize}
+    \item TODO
+  \end{itemize}
 \end{frame}
 
 \newcommand\acknowledgments{
