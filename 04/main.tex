@@ -388,6 +388,57 @@ The Bayesian Approach to Parameter Estimation}
 
 \begin{frame}[allowframebreaks]{Hierarchical Bayes}
 
+  \begin{itemize}
+    \item The idea behind Hierarchical Bayes is simple: our model $f$ depends on parameters $\theta$.
+    \item We can get a prior for $\theta$, $\pi(\theta)$.
+    \item The prior itself depends on parameters, say $\pi(\theta;\psi)$.
+    \item How do we choose $\psi$? Why don't we put a prior on these as well?
+    \item In some way, this allows us to be less-committal about the parameters in the prior model, and instead allow the data to inform our choice of priors (to some degree).
+    \item Philosophically, this situation naturally arises if we want to pick a conjugate prior for $\Theta$, but are not committal about the \alert{hyperparameters} $\Psi$ that define the distribution of $\Theta$. Then, $\Psi$ should also be modeled as a random variable.
+
+    \framebreak
+
+    \item This leads to a hierarchical model:
+    $$
+    X|\Theta = \theta, \Psi = \psi \sim f(x | \theta, \psi),
+    $$
+    and
+    $$
+    \Theta | \Psi = \psi = g(\theta | \psi), \quad \Psi \sim \pi(\psi).
+    $$
+
+    \item Why would we want to do this? Do we need a prior now hyper-parameters for $\psi$?
+    \begin{enumerate}
+      \item We'll see that this is sometimes a very useful way of thinking about a problem.
+      \item We could, but this is not usually useful.
+    \end{enumerate}
+
+  \end{itemize}
+
+\framebreak
+
+\begin{exampleblock}{Trivial case: hierarchical Normal-Normal}
+  Suppose that the data $X_i$ are iid $N(\theta, 1)$. Set a prior for $\theta$ as $\Theta|M = \mu \sim N(\mu, 1)$, and $M \sim N(0, 1)$.
+
+  \mode<article>{
+    \begin{itemize}
+      \item This model seems rather odd, unless there is a good reason to get the posterior $(\Theta, M) | X = x^*$.
+      \item Otherwise, we can show that the \emph{hyperparameter} $M$ can be eliminated from the model.
+      \item In particular, consider the marginal distribution of $\Theta$:
+      $$
+      \pi_\Theta(\theta) = \int \pi_{\Theta | M}(\theta | \mu) \pi_M(\mu) \, d\mu,
+      $$
+      \item Some algebra (i.e., completing the square in the exponential terms), shows that this implies: $\Theta \sim N(0, 2)$.
+      \item Thus, if we're not interested in the hyper-parameters themselves, then what we are interested in is:
+      $$
+      \Theta | X = x^*,
+      $$
+      which can just be calculated by setting the prior $\Theta \sim N(0, 2)$, and following the standard Bayesian approach.
+    \end{itemize}
+  }
+
+\end{exampleblock}
+
 \end{frame}
 
 \section{Empirical Bayes}
