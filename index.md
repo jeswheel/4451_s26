@@ -112,6 +112,8 @@ Please read the [grading rubric](rubric_homework.html) before submitting homewor
 
 * [Homework 1](hw01/hw01.pdf), due Wed Jan 28, 11:59pm.
 [TeX file](hw01/hw01.tex)
+* [Homework 2](hw02/hw02.pdf), due Wed Feb 04, 11:59pm.
+[TeX file](hw02/hw02.tex)
 
 <!--- 
 
