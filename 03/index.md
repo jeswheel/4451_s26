@@ -18,6 +18,8 @@ We first will formally define the term likelihood, re-visiting the probability (
 ----------------------
 
 
+[Sample likelihood R code done in class](ExampleLikelihoodCode.R)
+
 
 ----------------------
 
