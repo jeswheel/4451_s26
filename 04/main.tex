@@ -391,26 +391,49 @@ The Bayesian Approach to Parameter Estimation}
   \begin{itemize}
     \item The idea behind Hierarchical Bayes is simple: our model $f$ depends on parameters $\theta$.
     \item We can get a prior for $\theta$, $\pi(\theta)$.
-    \item The prior itself depends on parameters, say $\pi(\theta;\psi)$.
-    \item How do we choose $\psi$? Why don't we put a prior on these as well?
+    \item The prior itself depends on parameters, say $\pi(\theta;\theta_1)$.
+    \item How do we choose $\theta_1$? Sometimes we might know $\theta_1$, but sometimes not.
+    \item In a pure Bayesian paradigm, if we don't know the value of $\theta_1$, then it is also a random variable $\Theta_1$, and we should put a prior on this as well!
     \item In some way, this allows us to be less-committal about the parameters in the prior model, and instead allow the data to inform our choice of priors (to some degree).
-    \item Philosophically, this situation naturally arises if we want to pick a conjugate prior for $\Theta$, but are not committal about the \alert{hyperparameters} $\Psi$ that define the distribution of $\Theta$. Then, $\Psi$ should also be modeled as a random variable.
-
+    \item Philosophically, this situation naturally arises if we want to pick a conjugate prior for $\Theta$, but are not committal about the \alert{hyperparameters} $\Theta_1$ that define the distribution of $\Theta$.
+  
+    \item We could continue doing this many times if we wanted!
+    \item The prior for $\Theta_1$ might depend on parameters $\theta_2$, which we model as a random variable $\Theta_2$, $\ldots$.
+    \item This leads to a model for $(X, \Theta, \Theta_1, \ldots, \Theta_N)$.
+    \item However, there is a conditional structure to this model:
+    $$
+    \Theta_N \longrightarrow \Theta_{N-1} \longrightarrow \ldots \longrightarrow \Theta \longrightarrow X.
+    $$
+    \item Thus, $X$ depends only on $\Theta$, and $\Theta_n$ only on $\Theta_{n+1}$:
+    % $$
+    % X | \Theta = \theta \sim f(x | \theta), \,\, \Theta | \Theta_1 = \theta_1 \sim \pi_{1}(\theta|\theta_1), \ldots, \Theta_{N - 1} | \Theta_{N} = \theta_{N} = \pi_{N-1}(\theta_{N-1} | \theta_{N})\, \Theta_N \sim \pi_N(\theta_n).
+    % $$
+    $$
+    X | \Theta = \theta \sim f(x | \theta), \,\, \Theta | \Theta_1 = \theta_1 \sim \pi_{1}(\theta|\theta_1)\,\, \ldots \,\, \Theta_N \sim \pi_N(\theta_n).
+    $$
+    
     \framebreak
+    
+    \item Using rules of marginal probability and conditional probability, then
+    \begin{align*}
+      \pi(\theta) &= \int \pi(\theta, \theta_1, \ldots, \theta_N) \, d\theta_{1:N} \\
+      &= \int \pi(\theta | \theta_{1:N}) \pi(\theta_{1:N}) \, d\theta_{1:N} \\
+      &= \int \pi(\theta|\theta_1) \pi(\theta_1 | \theta_{2:N})\pi(\theta_{2:N})\, d\theta_{1:N}\\
+      &= \vdots \\
+      &= \int \pi(\theta|\theta_1)\pi(\theta_1|\theta_2) \ldots, \pi(\theta_{N-1}|\theta_N)\pi(\theta_N) \, d\theta_{1:N}
+    \end{align*}
+    
+    \item Thus, the hierarchical model is functionally equivalent to the standard Bayesian model:
+    $$
+    X|\Theta = \theta \sim f(x|\theta)\quad \Theta \sim \pi(\theta),
+    $$
+    where $\pi(\theta)$ is given by the integral above.
 
-    \item This leads to a hierarchical model:
-    $$
-    X|\Theta = \theta, \Psi = \psi \sim f(x | \theta, \psi),
-    $$
-    and
-    $$
-    \Theta | \Psi = \psi = g(\theta | \psi), \quad \Psi \sim \pi(\psi).
-    $$
-
-    \item Why would we want to do this? Do we need a prior now hyper-parameters for $\psi$?
+    \item Why would we want to do this?
     \begin{enumerate}
-      \item We'll see that this is sometimes a very useful way of thinking about a problem.
-      \item We could, but this is not usually useful.
+      \item Sometimes the data / problem give rise to a natural hierarchical structure, and this idea will be useful. Here, we might actually be interested in the hyperparameters $\theta_1, \ldots, \theta_N$.
+      \item We can now be less committal about our priors, while still using desirable structures.
+      \item It can sometimes aid computations. 
     \end{enumerate}
 
   \end{itemize}
@@ -418,17 +441,17 @@ The Bayesian Approach to Parameter Estimation}
 \framebreak
 
 \begin{exampleblock}{Trivial case: hierarchical Normal-Normal}
-  Suppose that the data $X_i$ are iid $N(\theta, 1)$. Set a prior for $\theta$ as $\Theta|M = \mu \sim N(\mu, 1)$, and $M \sim N(0, 1)$.
+  Suppose that the data $X_i$ are iid $N(\theta, 1)$. Set a prior for $\theta$ as $\Theta|\Theta_1 = \theta_1 \sim N(\theta_1, 1)$, and $\Theta_1 \sim N(0, 1)$.
 
   \mode<article>{
     \begin{itemize}
-      \item This model seems rather odd, unless there is a good reason to get the posterior $(\Theta, M) | X = x^*$.
-      \item Otherwise, we can show that the \emph{hyperparameter} $M$ can be eliminated from the model.
+      \item This model seems rather odd, unless there is a good reason to get the posterior $(\Theta, \Theta_1) | X = x^*$.
+      \item Otherwise, we can show that the \emph{hyperparameter} $\Theta_1$ can be eliminated from the model.
       \item In particular, consider the marginal distribution of $\Theta$:
       $$
-      \pi_\Theta(\theta) = \int \pi_{\Theta | M}(\theta | \mu) \pi_M(\mu) \, d\mu,
+      \pi_\Theta(\theta) = \int \pi_{\Theta | \Theta_1}(\theta | \theta_1) \pi_{\Theta_1})(\theta_1) \, d\theta_1,
       $$
-      \item Some algebra (i.e., completing the square in the exponential terms), shows that this implies: $\Theta \sim N(0, 2)$.
+      \item Some algebra (i.e., completing the square in the exponential terms), shows that this is equivalent to: $\Theta \sim N(0, 2)$.
       \item Thus, if we're not interested in the hyper-parameters themselves, then what we are interested in is:
       $$
       \Theta | X = x^*,
@@ -439,6 +462,154 @@ The Bayesian Approach to Parameter Estimation}
 
 \end{exampleblock}
 
+\framebreak
+
+\begin{exampleblock}{More realistic example: Coin-toss experiment}
+  Suppose your friend gives you a coin from another country, and you want to estimate $\theta = p$, the probability of heads. Thus, in $N$ tosses, the natural model for $X$, the number of heads, $X \sim \text{Bin}(N, \theta)$. You're believe that the proportion is close to $1/2$, but not quite sure.
+  A nice prior would be the Beta$(\alpha, \beta)$-distribution, since it is conjugate for the binomial family.
+  
+  
+  If $\Theta \sim \text{Beta}(\alpha, \beta)$, then $E[\Theta] = \frac{\alpha}{\alpha + \beta}$. Thus, if I want a prior centered at $1/2$, I can pick: $\theta_1 = \alpha = \beta$, and $E[\Theta] = \theta_1 / 2\theta_1 = 1/2$.
+  We can now give a prior for $\Theta_1$.
+  
+\end{exampleblock}
+
+\end{frame}
+
+\begin{frame}[allowframebreaks,fragile]{Hierarchical Bayes (continued)}
+  \begin{itemize}
+    \item For now, we will restrict our choices of $\Theta_1$ to be integers.
+  \end{itemize}
+  
+
+\begin{knitrout}\small
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hldef{Theta} \hlkwb{<-} \hlkwd{seq}\hldef{(}\hlnum{1e-8}\hldef{,} \hlnum{1}\hlopt{-}\hlnum{1e-8}\hldef{,} \hlkwc{length.out} \hldef{=} \hlnum{1000}\hldef{)}
+\hldef{B1} \hlkwb{<-} \hlkwd{dbeta}\hldef{(Theta,} \hlnum{1}\hldef{,} \hlnum{1}\hldef{)}
+\hldef{B2} \hlkwb{<-} \hlkwd{dbeta}\hldef{(Theta,} \hlnum{2}\hldef{,} \hlnum{2}\hldef{)}
+\hldef{B3} \hlkwb{<-} \hlkwd{dbeta}\hldef{(Theta,} \hlnum{3}\hldef{,} \hlnum{3}\hldef{)}
+\hldef{B5} \hlkwb{<-} \hlkwd{dbeta}\hldef{(Theta,} \hlnum{5}\hldef{,} \hlnum{5}\hldef{)}
+\hldef{B10} \hlkwb{<-} \hlkwd{dbeta}\hldef{(Theta,} \hlnum{10}\hldef{,} \hlnum{10}\hldef{)}
+
+\hlkwd{plot}\hldef{(}\hlkwc{x} \hldef{= Theta,} \hlkwc{y} \hldef{= B1,} \hlkwc{type} \hldef{=} \hlsng{'l'}\hldef{,} \hlkwc{ylim} \hldef{=} \hlkwd{c}\hldef{(}\hlnum{0}\hldef{,} \hlnum{3.5}\hldef{),} \hlkwc{col} \hldef{=} \hlsng{"#c6dbef"}\hldef{,} \hlkwc{xlab} \hldef{=} \hlsng{"Theta"}\hldef{,} \hlkwc{ylab} \hldef{=} \hlsng{"density"}\hldef{)}
+\hlkwd{lines}\hldef{(}\hlkwc{x} \hldef{= Theta,} \hlkwc{y} \hldef{= B2,} \hlkwc{type} \hldef{=} \hlsng{'l'}\hldef{,} \hlkwc{col} \hldef{=} \hlsng{'#9ecae1'}\hldef{)}
+\hlkwd{lines}\hldef{(}\hlkwc{x} \hldef{= Theta,} \hlkwc{y} \hldef{= B3,} \hlkwc{type} \hldef{=} \hlsng{'l'}\hldef{,} \hlkwc{col} \hldef{=} \hlsng{'#6baed6'}\hldef{)}
+\hlkwd{lines}\hldef{(}\hlkwc{x} \hldef{= Theta,} \hlkwc{y} \hldef{= B5,} \hlkwc{type} \hldef{=} \hlsng{'l'}\hldef{,} \hlkwc{col} \hldef{=} \hlsng{'#3182bd'}\hldef{)}
+\hlkwd{lines}\hldef{(}\hlkwc{x} \hldef{= Theta,} \hlkwc{y} \hldef{= B10,} \hlkwc{type} \hldef{=} \hlsng{'l'}\hldef{,} \hlkwc{col} \hldef{=} \hlsng{'#08519c'}\hldef{)}
+\end{alltt}
+\end{kframe}
+
+{\centering \includegraphics[width=\maxwidth]{tmp/figure/unnamed-chunk-3-1} 
+
+}
+
+
+\end{knitrout}
+
+
+\framebreak
+  
+  
+  \begin{itemize}
+    \item As $\theta_1$ grows, the variance of $\Theta$ shrinks at a rate $O(\theta_1)$.
+    \item Thus, to be noncommittal about our prior on $\Theta$, we will set a \alert{hyperprior} on $\Theta_1$ that has more weight on smaller values of $k$:
+    $$
+    \pi_{\Theta_1}(k) = \frac{1}{2\log (2) k(2k-1)},\, \quad k \in \{1, 2, \ldots\}
+    $$
+    \item This hyper-prior was selected somewhat out of convenience (The Catalan Numbers), which will allow us to get the marginal prior of $\Theta$:
+    
+    $$
+    \pi(\theta) = \sum_{k = 1}^\infty \pi_{\Theta|\Theta_1}(\theta | k)\pi_{\Theta_1}(k) = \frac{1 - |1 - 2\theta|}{4\log(2) \theta(1 - \theta)}, \quad 0<\theta<1
+    $$
+
+    \framebreak
+
+    \mode<article>{
+
+      \begin{proof}
+        \item The proof relies primarily on the Binomial Theorem. Some algebraic manipulation has already been done for us in the derivation of the Catalan numbers \citep{wikiCatalan}.
+        
+        \begin{align*}
+          \pi(\theta) &= \sum_{k = 1}^\infty \pi_{\Theta|\Theta_1}(\theta | k)\pi_{\Theta_1}(k) \\
+          &= \sum_{k = 1}^\infty \frac{\theta^{k-1}(1 - \theta)^{k-1}}{B(k, k)}\frac{1}{2\log(2)k(2k-1)}
+        \end{align*}
+        
+        \item Since we picked $\theta_1 = k$ to be an integer (replacing with $k$ because the notation will be easier), 
+        $$
+        B(k, k) = \frac{\Gamma(k)\Gamma(k)}{\Gamma(2k)} = \frac{(k-1)!(k-1)!}{(2k-1)!}.
+        $$
+        thus,
+        \begin{align*}
+          \pi(\theta) &= \sum_{k = 1}^\infty \frac{\theta^{k-1}(1-\theta)^{k-1}(2k-1)!}{(k-1)!(k-1)!2\log(2)k(2k-1)} \\
+          &= \frac{1}{2\log 2}\sum_{k = 1}^\infty \binom{2k-1}{k-1}\frac{\theta^{k-1}(1-\theta)^{k-1}}{(2k-1)} \\
+          &= \frac{1}{2\log 2} \sum_{j = 0}^\infty \binom{2j + 1}{j}\frac{\big(\theta(1-\theta)\big)^j}{2j+1},
+        \end{align*}
+        where the second inequality uses the identity:
+        $$
+        \binom{2k-1}{k-1} = \frac{(2k-1)!}{(k-1)!(k-1)!k},
+        $$
+        and then we made the substitution $j = k - 1$ to get the third equality.
+        \item Now if we make the substitution $\theta(1-\theta) = x$, such that $0 \leq x \leq 1/4$, then we get:
+        $$
+        \pi(\theta) = \frac{1}{2\log 2}\sum_{j = 0}^\infty \frac{1}{j+1}\binom{2j}{j}x^j = \frac{1}{2\log 2} c(x),
+        $$
+        where $c(x)$ is the generating unction for the Catalan numbers:
+        $$
+        c(x) = \frac{1-\sqrt{1 - 4x}}{2x}.
+        $$
+        \item Replacing $x = (\theta)(1-\theta)$, and noting that $1-4(\theta)(1-\theta) = (1-2\theta)^2$, we can then simplify to:
+        $$
+        \pi(\theta) = \frac{1-|1-2\theta|}{4\log(2) \theta(1-\theta)}, \quad 0 \leq \theta \leq 1.
+        $$
+        
+      \end{proof}
+    }
+    \item In this case, we can get a closed-form expression for $\pi(\theta)$, but as you can tell, it can often get very difficult to do this mathematically.
+    \item Thus, while the hierarchical structure is equivalent to just setting $\pi(\theta)$ as our prior (and not worrying about hierarchical model), this additional structure can aid in computations.
+    
+    \item If we are looking to estimate, for instance, the posterior mean:
+    $$
+    E_{\Theta|X}[\Theta],
+    $$
+    Then the law of total expectation gives:
+    $$
+    E_{\Theta|X}[\Theta|X] = E_{\Theta_1|X}\big[E_{\Theta|\Theta_1, X}[\Theta|\Theta_1, X]\big].
+    $$
+    \item Thus, the calculation of the posterior mean of $\Theta|X$ can be done without needing explicit form of the posterior $\Theta|X$, which can simplify the problem. 
+    
+    \item Our particular choice of likelihood and prior makes it easy to calculate the marginal-likelihood of $\Theta_1 = k$:
+    \begin{align*}
+    \pi_{X|\Theta_1}(x|k) &= \int_0^1 f(x|\theta, k)\pi_{\Theta|\Theta_1}(\theta; k)\, d\theta \\
+    &= \binom{N}{x}\frac{B(x + k, N - x + k)}{B(k, k)}.
+    \end{align*}
+    
+    \item Also, The Beta distribution was picked because it is conjugate, so the posterior mean $\Theta|\Theta_1 = k, X$ is readily available:
+    $$
+    E_{\Theta|\Theta_1 = k, X} = \mu_k = \frac{x + k}{N + 2k}.
+    $$
+    \item Now we need to take the expectation of this, with respect to the marginal posterior (un-normalized weights) $\pi_{\Theta_1|x}(k|x)$:
+    \begin{align*}
+    \pi_{\Theta_1|x}(k|x) &\propto w_k \\
+    &= \pi_{X|\Theta_1}(x|k)\pi_{\Theta_1}(k) \\
+    &= \frac{B(x + k, N - x + k)}{2\log(2)B(k, k)k(2k-1)}.
+    \end{align*}
+    \item Then, the normalized weights are:
+    $$
+    \bar{w}_k = \frac{w_k}{\sum_j w_j} = p(k | x),
+    $$
+    and the posterior mean is:
+    $$
+    E[\Theta | x] = \sum_{k = 1}^\infty \bar{w}_k \mu_k.
+    $$
+    \item For this particular example, the sum can be calculated exactly. However, we can also approximate this using software by taking the first $K$ partial sums. Check out the provided HB-code R code.
+  \end{itemize}
+  
+  
+  % $$
+  % \pi(p) = \sum_{k = 1}^\infty \frac{p^{k-1}(1 - p)^{k-1}}{B(k, k)}\frac{1}{2\log(2)k(2k-1)} = \frac{1 - |1 - 2p|}{4\log(2)p(1- p)}
+  % $$
+  
 \end{frame}
 
 \section{Empirical Bayes}
