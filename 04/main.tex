@@ -247,38 +247,6 @@ The Bayesian Approach to Parameter Estimation}
     }
     
   \end{exampleblock}
-  
-  \framebreak
-  
-  \begin{exampleblock}{Poisson posterior, uniform prior}
-    Revisit the Poisson$(\lambda)$ model, while taking the alternative approach of using a uniform prior.
-    
-    \mode<article>{
-      \begin{itemize}
-        \item The setup for the problem is the exact same, so note that the posterior distribution is:
-        $$
-        f_{\Lambda | X}(\lambda | x^*) = \frac{\lambda^{\sum_{i = 1}^n x^*_i} e^{-n\lambda}\, f_\Lambda(\lambda)}{\int \lambda^{\sum_{i = 1}^n x^*_i} e^{-n\lambda}\, f_\Lambda(\lambda) \, d\lambda}.
-        $$
-        \item Now suppose we really don't have a good guess for the parameter $\lambda$, or we want to more utilitarian / noncommittal approach. Now what?
-        \item The default is a uniform probability, but the possible values of $\lambda$ is the interval $(0, \infty)$; we can't have a uniform prior on this interval (it doesn't exist)
-        \item Instead, we will feign confidence that $\lambda$ must be smaller than some fixed number based on the problem at hand. For instance, maybe $0 < \lambda \leq 100$ is reasonable.
-        \item Then, the prior would be:
-        $$
-        f_\Lambda(\lambda) = \frac{1}{100} 1(0 < \lambda \leq 100),
-        $$
-        and the posterior would be:
-        \begin{align*}
-        f_{\Lambda | X}(\lambda | x^*) &= \frac{\frac{1}{100}\lambda^{\sum_{i = 1}^n x^*_i} e^{-n\lambda}}{\frac{1}{100}\int_0^{100} \lambda^{\sum_{i = 1}^n x^*_i} e^{-n\lambda} \, d\lambda}1(0 < \lambda \leq 100)\\
-        &= \frac{\lambda^{\sum_{i = 1}^n x^*_i} e^{-n\lambda}}{\int_0^{100} \lambda^{\sum_{i = 1}^n x^*_i} e^{-n\lambda} \, d\lambda} 1(0 < \lambda \leq 100).
-        \end{align*}
-        \item In this case, we can't just do the denominator-integration trick! It looks very similar, because the denominator is still a constant, and the kernel in the numerator looks very similar to a Gamma kernel, \textbf{but} we have a new bound $0 < \lambda \leq 100$ that makes it distinct from the Gamma distribution, since the Gamma distribution has support on $(0, \infty)$.
-        \item Unfortunately, there is not an easy way to compute the integral either (partly because of the bound). Thus, the integral needs to be computed numerically.
-        \item For now, we will just use the \code{integrate} function in R, which is really good at integrating univariate functions.
-        \item The posterior mean can similarly be found using a numeric integration technique, and posterior mode can be found using numeric optimization strategies covered in the last set of lecture notes.
-      \end{itemize}
-    }
-    
-  \end{exampleblock}
 
 \end{frame}
 
@@ -313,7 +281,7 @@ The Bayesian Approach to Parameter Estimation}
 \framebreak
 
 \begin{exampleblock}{Comparing Estimates}
-  Using the data above, compare estimates using the MoM, MLE, and the two Bayesian approaches, as well as the corresponding errors related to these estimates.
+  Using the data above, compare estimates using the MoM, MLE, and the Bayesian approach with a Gamma prior. Also, discuss the corresponding errors related to these estimates.
 \end{exampleblock}
 
 \end{frame}
@@ -337,12 +305,656 @@ The Bayesian Approach to Parameter Estimation}
 
 \section{Introduction to Numeric Integration}
 
-\begin{frame}[allowframebreaks]{Numeric Integration}
+\begin{frame}[allowframebreaks,fragile]{Numeric Integration}
   \begin{itemize}
-    \item As we saw in the previous example, one of the primary challenges of Bayesian estimation is the integration in the denominator of the posterior.
+    \item As we saw in the previous examples, one of the primary challenges of Bayesian estimation is the integration in the denominator of the posterior.
     \item Bayesian statistics has really exploded since the late 20th century, largely thanks to improved computational tools that help with the numeric integration.
     \item For this set of lectures, we only briefly introduce this topic. Depending on time and interest, we can explore this topic more later in the semester.
+  
+  \framebreak
+  
+    \item For univariate functions, there are numerous approaches to well-approximate an integral.
+    \item Traditional approaches are very simply, and are often based on Riemann-sum approximations.
+    \item In R, one reliable function is the \code{integrate} function.
+    \item Consider the integral $f(x) = x^2$,
+    $$
+    \int_{0}^3 x^2 \, dx = 9
+    $$
+    
+    \end{itemize}
+    
+\begin{knitrout}\small
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hldef{x_sq} \hlkwb{<-} \hlkwa{function}\hldef{(}\hlkwc{x}\hldef{) x}\hlopt{^}\hlnum{2}
+\hlkwd{integrate}\hldef{(x_sq,} \hlkwc{lower} \hldef{=} \hlnum{0}\hldef{,} \hlkwc{upper} \hldef{=} \hlnum{3}\hldef{)}
+\end{alltt}
+\begin{verbatim}
+9 with absolute error < 1e-13
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+  
+  \framebreak
+  
+  \begin{exampleblock}{Poisson posterior, uniform prior}
+    Revisit the Poisson$(\lambda)$ model, while taking the alternative approach of using a uniform prior.
+    
+    \mode<article>{
+      \begin{itemize}
+        \item The setup for the problem is the exact same, so note that the posterior distribution is:
+        $$
+        f_{\Lambda | X}(\lambda | x^*) = \frac{\lambda^{\sum_{i = 1}^n x^*_i} e^{-n\lambda}\, f_\Lambda(\lambda)}{\int \lambda^{\sum_{i = 1}^n x^*_i} e^{-n\lambda}\, f_\Lambda(\lambda) \, d\lambda}.
+        $$
+        \item Now suppose we really don't have a good guess for the parameter $\lambda$, or we want to more utilitarian / noncommittal approach. Now what?
+        \item The default is a uniform probability, but the possible values of $\lambda$ is the interval $(0, \infty)$; we can't have a uniform prior on this interval (it doesn't exist)
+        \item Instead, we will feign confidence that $\lambda$ must be smaller than some fixed number based on the problem at hand. For instance, maybe $0 < \lambda \leq 100$ is reasonable.
+        \item Then, the prior would be:
+        $$
+        f_\Lambda(\lambda) = \frac{1}{100} 1(0 < \lambda \leq 100),
+        $$
+        and the posterior would be:
+        \begin{align*}
+        f_{\Lambda | X}(\lambda | x^*) &= \frac{\frac{1}{100}\lambda^{\sum_{i = 1}^n x^*_i} e^{-n\lambda}}{\frac{1}{100}\int_0^{100} \lambda^{\sum_{i = 1}^n x^*_i} e^{-n\lambda} \, d\lambda}1(0 < \lambda \leq 100)\\
+        &= \frac{\lambda^{\sum_{i = 1}^n x^*_i} e^{-n\lambda}}{\int_0^{100} \lambda^{\sum_{i = 1}^n x^*_i} e^{-n\lambda} \, d\lambda} 1(0 < \lambda \leq 100).
+        \end{align*}
+        \item In this case, we can't just do the denominator-integration trick! It looks very similar, because the denominator is still a constant, and the kernel in the numerator looks very similar to a Gamma kernel, \textbf{but} we have a new bound $0 < \lambda \leq 100$ that makes it distinct from the Gamma distribution, since the Gamma distribution has support on $(0, \infty)$.
+        \item Unfortunately, there is not an easy way to compute the integral either (partly because of the bound). Thus, the integral needs to be computed numerically.
+        \item For now, we will just use the \code{integrate} function in R, which is really good at integrating univariate functions.
+        \item The posterior mean can similarly be found using a numeric integration technique, and posterior mode can be found using numeric optimization strategies covered in the last set of lecture notes.
+      \end{itemize}
+    }
+    
+  \end{exampleblock}
+  
+  \framebreak
+  
+  \begin{itemize}
+    \item Let $m$ be the number of points used to evaluate the integral:
+    $$
+    \int_A f(x)\, dx.
+    $$
+    \item If $x$ is univariate, then the approach above is the take $m$ points and do a numeric approximation.
+    \item The standard Riemann approximation can be shown to converge to the true value at rate $O(1/m)$ for univariate functions, and can even be improved to faster rates \cite[][Chatper~1]{liu01}.
+    \item However, these approaches scale very poorly as the dimensions of $x$ and the integration area $A$ increase.
+    \item For instance, suppose that $A$ is a 10-dimensional area (not even that large). Then, in order to achieve the $O(1/m)$ promised rate, you need to evaluate $O(m^{10})$ different points!
+    \item The primary alternative approach is known as \alert{Monte Carlo} approximation. 
+  
+  \framebreak
+  
+    \item Let $f(x; \theta)$ denote a pdf of some random variable, $X$. Then, if $I$ is the integral
+    $$
+    I = E[g(x)] = \int_A g(x) f(x; \theta)\, dx,
+    $$
+    then the law of large numbers states that
+    $$
+    \hat{I}_m = \frac{1}{m}\sum_{i = 1}^m g(X_i) \overset{a.s.}{\rightarrow} I,
+    $$
+    where $X_i$ is sampled from the distribution with density $f(x; \theta)$. 
+    
+  \framebreak
+  
+  \item Because we have an average of samples, the CLT gives us a way to approximate the error:
+  $$
+  \sqrt{m}(I_m - I) \dlim N(0, \sigma^2),
+  $$
+  where $\sigma^2 = \Var\big(g(X)\big)$.
+  \item Thus, the error rate of the Monte-Carlo method is $O(m^{-1/2})$, regardless of the dimension of $A$.
+  \item The most common integral of this type is by letting $f$ be uniform over the area $A$, in which case $f(x) = \frac{1}{|A|}$, and
+  $$
+  I = \int_A g(x)\, dx, \quad I_m = \frac{|A|}{m}\sum_{i = 1}^m g(X_i), \,\, X_i \sim \text{Uniform}(A).
+  $$
+  \item If $x$ is univariate, this approach is worse than standard deterministic approaches $O(1/m)$), but it has better performance in higher dimensional settings.
+  
+  \framebreak
+  
+  \item Example: $f(x) = x^2$ on the region $A = [0, 3]$
+  
+\begin{knitrout}\small
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{set.seed}\hldef{(}\hlnum{12345}\hldef{)}
+\hldef{m} \hlkwb{<-} \hlnum{10000}
+\hldef{X} \hlkwb{<-} \hlkwd{runif}\hldef{(}\hlkwc{n} \hldef{= m,} \hlnum{0}\hldef{,} \hlnum{3}\hldef{)}
+\hlnum{3} \hlopt{*} \hlkwd{mean}\hldef{(}\hlkwd{x_sq}\hldef{(X))}
+\end{alltt}
+\begin{verbatim}
+[1] 8.992983
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+  
+  \item Using the CLT, we can get a standard error of this estimate. $\Var(3X^2) = 64.8$, and therefore:
+  $$
+  SE \approx \sqrt{\frac{64.8}{m}}.
+  $$
+  
   \end{itemize}
+  
+  \framebreak
+  
+\begin{knitrout}\small
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{sqrt}\hldef{(}\hlnum{64.8}\hlopt{/}\hldef{m)}
+\end{alltt}
+\begin{verbatim}
+[1] 0.08049845
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+  
+\begin{knitrout}\small
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlcom{# Numeric Approximation: }
+\hlkwd{sd}\hldef{(}\hlnum{3} \hlopt{*} \hldef{X}\hlopt{^}\hlnum{2}\hldef{)} \hlopt{/} \hlkwd{sqrt}\hldef{(m)}
+\end{alltt}
+\begin{verbatim}
+[1] 0.07999898
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+\framebreak
+
+\begin{itemize}
+  \item Theoretically, the Monte-Carlo approximation converges at a rate $O(m^{-1/2})$. There are two primary problems:
+  \begin{enumerate}
+    \item The numerator in finite-sample approximations of the variance $\sigma^2/m$ might be very large.
+    \item Drawing uniform samples from $A$ might be hard.
+  \end{enumerate}
+  \item The solution to these two problems is more advanced Monte-Carlo designs. We'll introduce \alert{importance sampling}.
+  
+  \framebreak
+  
+  \item Idea: not intervals of $x$ contribute equally the function $f(x)$ and it's integral.
+  \item For instance, if $f(x) = x^2$, then values of $x$ close to zero mean that the function $f \approx 0$. However, values of $x$ near $3$ have larger influence on the integral evaluation.
+  \item Because of this, we don't need lots of samples from $x$ near zero, and we should focus more on samples near $3$.
+  
+  \framebreak
+  
+  \item We can do this mathematically:
+  \begin{align*}
+  \int g(x) f(x) dx = E_{X \sim f(x)}[g(X_i)] \approx \frac{1}{m}\sum_{i = 1}^m g(X_i),
+  \end{align*}
+  which is the same as
+  \begin{align*}
+  \int \frac{g(x)f(x)}{\pi(x)}\pi(x)\, dx &= E_{X \sim \pi(x)}\Big[\frac{g(X)f(X)}{\pi(X)}\Big] \\
+  &\approx \frac{1}{m}\sum_{i = 1}^m \frac{g(X_i)f(X_i)}{\pi(X_i)}.
+  \end{align*}
+  \item The above approximation looks more complicated, but it has several advantages.
+  \item The ratio $f(X_i) / \pi(X_i) = w_i$ is called the \alert{importance weight}.
+  \item Now an important part of this is picking an appropriate sampling distribution $\pi(x)$.
+  \item There is no ``correct" way to do this, other than we want to have more samples that are concentrated in more ``important" regions.
+  \item We'll look at a couple concrete examples to make this more clear.
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[allowframebreaks,fragile]{Importance Sampling, Example 1}
+
+  \begin{itemize}
+  
+  \item Consider approximating the integral:
+  $$
+  \int_{0}^3 x^2\, dx
+  $$.
+  \item We did the standard Monte-Carlo approach, using Uniform(0, 3) random variables:
+  
+\begin{knitrout}\small
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{set.seed}\hldef{(}\hlnum{12345}\hldef{)}
+\hldef{m} \hlkwb{<-} \hlnum{10000}
+\hldef{X} \hlkwb{<-} \hlkwd{runif}\hldef{(}\hlkwc{n} \hldef{= m,} \hlnum{0}\hldef{,} \hlnum{3}\hldef{)}
+\hlnum{3} \hlopt{*} \hlkwd{mean}\hldef{(}\hlkwd{x_sq}\hldef{(X))}
+\end{alltt}
+\begin{verbatim}
+[1] 8.992983
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+  
+  \item We numerically approximated the standard error of this estimate to be: 
+  
+\begin{knitrout}\small
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlcom{# Numeric Approximation: }
+\hlkwd{sd}\hldef{(}\hlnum{3} \hlopt{*} \hldef{X}\hlopt{^}\hlnum{2}\hldef{)} \hlopt{/} \hlkwd{sqrt}\hldef{(m)}
+\end{alltt}
+\begin{verbatim}
+[1] 0.07999898
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+  
+  \framebreak
+  
+  \item Now let's try importance sampling. We don't want many low-values of $X$, and values should be between 0-3. Let's let $B_i \sim \text{Beta}(\alpha, \beta)$, and then $X_i = 3B_i$.
+  \item After some checking, a good distribution might be:
+  $$
+  X_i \sim 3\times \text{Beta}(2, 1)
+  $$
+  \item A quick change-of-variables application gives:
+  \begin{align*}
+  \pi(x) &= \frac{1}{3}\frac{(x/3)^{\alpha-1}(1-x/3)^{\beta-1}}{B(\alpha,\beta)}, \quad x\in [0, 3] \\
+  &= \frac{1}{3}\frac{(x/3)}{B(2,1)}, \quad x\in [0, 3] \\
+  &= \frac{2}{9}x, \quad x\in[0, 3]
+  \end{align*}
+  
+  \item Now that we have a sampling distribution $\pi(x)$, there are two different ways to think about the problem. The first is just a direct integral:
+  $$
+  \int g(x)\, dx = \int \frac{g(x)}{\pi(x)}\pi(x) \, dx = E_{X \sim \pi(x)}\Big[\frac{g(X)}{\pi(X)}\Big],
+  $$
+  or via the ``target" distribution $f(x)$ approach:
+  \begin{align*}
+  \int \frac{g(x)f(x)}{\pi(x)}\pi(x)\, dx &= E_{X \sim \pi(x)}\Big[\frac{g(X)f(X)}{\pi(X)}\Big] \\
+  &\approx \frac{1}{m}\sum_{i = 1}^m \frac{g(X_i)f(X_i)}{\pi(X_i)}.
+  \end{align*}
+  \item Both are correct, and sometimes the second is a useful way to think about a problem.
+  
+  \item In this case, the first approach is obvious, and the second approach we would pick the target distribution $f$ to correspond to a uniform$(0, 3)$ distribution.
+  \item Thus, approximating the integral:
+  
+\begin{knitrout}\small
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hldef{m} \hlkwb{<-} \hlnum{10000}
+\hldef{X} \hlkwb{<-} \hlnum{3} \hlopt{*} \hlkwd{rbeta}\hldef{(}\hlkwc{n} \hldef{= m,} \hlnum{2}\hldef{,} \hlnum{1}\hldef{)}
+\hldef{pi_x} \hlkwb{<-} \hlkwa{function}\hldef{(}\hlkwc{x}\hldef{)} \hlnum{2}\hlopt{*}\hldef{x}\hlopt{/}\hlnum{9}
+\hlkwd{mean}\hldef{(}\hlkwd{x_sq}\hldef{(X)}\hlopt{/}\hlkwd{pi_x}\hldef{(X))}
+\end{alltt}
+\begin{verbatim}
+[1] 8.993616
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+ 
+ \item We can once again get an estimate of the standard error using the CLT:
+ $$
+ SE \approx \frac{\sigma^2_{w_i}}{\sqrt{m}},
+ $$
+ where $w_i$ is the importance weight.
+ 
+\begin{knitrout}\small
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{sd}\hldef{( (X}\hlopt{^}\hlnum{2}\hldef{)} \hlopt{/} \hldef{(}\hlnum{2} \hlopt{*} \hldef{X} \hlopt{/} \hlnum{9}\hldef{) )} \hlopt{/} \hlkwd{sqrt}\hldef{(m)}
+\end{alltt}
+\begin{verbatim}
+[1] 0.03181511
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+ 
+ This error was about half of the default Monte-Carlo method.
+  
+  % \begin{align*}
+  % \pi(x) &= \frac{1}{3}\frac{(x/3)^{\alpha-1}(1-x/3)^{\beta-1}}{B(\alpha,\beta)}, \quad x\in [0, 3] \\
+  % &= \frac{1}{3}\frac{(x/3)^{2}}{B(3,1)}, \quad x\in [0, 3] \\
+  % &= \frac{1}{9}x^{2}, \quad x\in[0, 3]
+  % \end{align*}
+  
+  \framebreak
+  
+  \item This example is a bit trivial, because the integral is not hard to compute.
+  \item Also, our choice of sampling distribution meant we could get a closed-form solution for sampling weights:
+  \begin{align*}
+  I_m &= \frac{1}{m} \sum_{i = 1}^m \frac{X^2}{\frac{2X}{9}} \\
+  &= \frac{1}{m} \sum_{i = 1}^m \frac{9X}{2} \\
+  &= \frac{9}{2}\bar{X}.
+  \end{align*}
+  \item We could actually simplify this even further by picking a Beta(3, 1) sampling distribution:
+  \begin{align*}
+  \pi(x) &= \frac{1}{3}\frac{(x/3)^{\alpha-1}(1-x/3)^{\beta-1}}{B(\alpha,\beta)}, \quad x\in [0, 3] \\
+  &= \frac{1}{3}\frac{(x/3)^{2}}{B(3,1)}, \quad x\in [0, 3] \\
+  &= \frac{1}{9}x^{2}, \quad x\in[0, 3]
+  \end{align*}
+  \framebreak 
+  \item Thus, if we picked this distribution, we could actually get the exact answer!
+  \begin{align*}
+    I_m &= \frac{1}{m} \sum_{i = 1}^m \frac{X^2}{\frac{X^2}{9}} \\
+  &= \frac{9}{m} \sum_{i = 1}^m 1 \\
+  &= 9.
+  \end{align*}
+  \item This leads us to the identity that if $\pi(x) \propto g(x)$, such that $g(x) = c\pi(x)$, then the integral is:
+  $$
+  \int g(x)\, dx = \int g(x)/\pi(x) \pi(x)\, dx = c\int \pi(x) \, dx = c
+  $$
+  \item This effectively never happens in real worl-scenarios, because if it did there wouldn't be a reason to do Monte-Carlo.
+  \item However, it does help us decide a useful principle: try to pick a $\pi(x)$ such that $\pi(x) \propto g(x)$ as much as possible.
+  \end{itemize}
+  
+\end{frame}
+
+\begin{frame}[allowframebreaks,fragile]{Importance Sampling, Example II}
+  \begin{exampleblock}
+    If $Z \sim N(0, 1)$, approximate the probability:
+    $$
+    P(Z > 3) = I = \int_{3}^\infty \frac{1}{2\sqrt{\pi}}e^{-x^2/2}\, dx.
+    $$
+  \end{exampleblock}
+  
+  \begin{itemize}
+    \item Once again, we have an exact method to calculate the integral, so we can see how good our approximation is:
+    
+\begin{knitrout}\small
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlcom{# Actual value}
+\hlnum{1}\hlopt{-}\hlkwd{pnorm}\hldef{(}\hlnum{3}\hldef{)}
+\end{alltt}
+\begin{verbatim}
+[1] 0.001349898
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+    
+    \framebreak
+    
+    \item We can use indicator functions to help write this in the standard Monte-Carlo form:
+    $$
+    h(x) = I(x > 3),
+    $$
+    then
+    $$
+    I = \int_3^\infty \frac{1}{2\sqrt{\pi}}e^{-x^2/2}\, dx = \int_{-\infty}^\infty h(x)\frac{1}{2\sqrt{\pi}}e^{-x^2/2}\, dx.
+    $$
+    \item Thus, the standard Monte-Carlo approach may be:
+    $$
+    \hat{I}_m = \frac{1}{m}\sum_{i = 1}^m h(X_i), \quad X_i \sim N(0, 1).
+    $$
+    
+    \framebreak
+    
+\begin{knitrout}\small
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hldef{m} \hlkwb{<-} \hlnum{10000}
+\hldef{X1} \hlkwb{<-} \hlkwd{rnorm}\hldef{(}\hlkwc{n} \hldef{=} \hlnum{10000}\hldef{)}
+\hldef{h} \hlkwb{<-} \hlkwa{function}\hldef{(}\hlkwc{x}\hldef{)} \hlkwd{ifelse}\hldef{(x} \hlopt{>} \hlnum{3}\hldef{,} \hlnum{1}\hldef{,} \hlnum{0}\hldef{)}
+
+\hlkwd{mean}\hldef{(}\hlkwd{h}\hldef{(X1))}
+\end{alltt}
+\begin{verbatim}
+[1] 0.0013
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+    
+    \item Because $h(X_i)$ is binary, the standard error is:
+    $$
+    SE \approx \sqrt{\frac{\hat{I}_m(1-\hat{I}_m)}{m}}
+    $$
+    
+\begin{knitrout}\small
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{sqrt}\hldef{(}\hlkwd{mean}\hldef{(}\hlkwd{h}\hldef{(X1))} \hlopt{*} \hldef{(}\hlnum{1} \hlopt{-} \hlkwd{mean}\hldef{(}\hlkwd{h}\hldef{(X1)))} \hlopt{/} \hldef{m)}
+\end{alltt}
+\begin{verbatim}
+[1] 0.0003603207
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+    
+    
+    \framebreak
+    
+    \item The problem with this approach, however, is that if the $X_i \sim N(0, 1)$, then almost none of the samples will be larger than $3$ (very rare event), so the estimate is high-variance!
+    \item That is, we will end up with $h(X_i)=0$ for \alert{nearly all} samples of $X_i$.
+    \item We want to focus our samples in the ``important" regions to reduce variance.
+    \item Thus, consider instead sampling from $\pi(x) \sim N(4, 1)$, so we have more weight in the important part. Then:
+    $$
+    \hat{I}_m = \frac{1}{m}\sum_{i = 1}^m h(X_i)\frac{f(X_i)}{\pi(X_i)}, \quad X_i \sim N(4, 1).
+    $$
+  
+  \framebreak
+  
+  
+\begin{knitrout}\small
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hldef{X2} \hlkwb{<-} \hlkwd{rnorm}\hldef{(m,} \hlkwc{mean} \hldef{=} \hlnum{4}\hldef{)}
+\hldef{weights2} \hlkwb{<-} \hlkwd{dnorm}\hldef{(X2)} \hlopt{/} \hlkwd{dnorm}\hldef{(X2,} \hlkwc{mean} \hldef{=} \hlnum{4}\hldef{)}
+\hlkwd{mean}\hldef{(}\hlkwd{h}\hldef{(X2)} \hlopt{*} \hldef{weights2)}
+\end{alltt}
+\begin{verbatim}
+[1] 0.001326697
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+  
+  \item This time, the standard error is given numerically by:
+  $$
+  SE \approx \frac{\text{sd}(h(X_i)w_i)}{\sqrt{m}}
+  $$
+  
+\begin{knitrout}\small
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{sd}\hldef{(}\hlkwd{h}\hldef{(X2)}\hlopt{*}\hldef{weights2)} \hlopt{/} \hlkwd{sqrt}\hldef{(m)}
+\end{alltt}
+\begin{verbatim}
+[1] 3.047903e-05
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+  
+  \framebreak
+  
+  \item There is an issue that many of the sampled $X_i$ values are less than 3, so we might want to try a completely different sampling approach.
+  \item Consider the function $g(x)$, when $x > 3$, then $g(3)\propto e^{-9}$.
+  \item Thus, we might consider sampling $X_i$ such that:
+  $$
+  X_i \sim 3 + \text{Exp}(-9)
+  $$
+  \item We again need to do a variable transformation, but this one is easy. If $Y\sim \text{Exp}(\lambda)$, then for $X = Y + 3$, 
+  
+  $$
+  \pi(x) = f_y(x - 3).
+  $$
+  
+\begin{knitrout}\small
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hldef{X3} \hlkwb{<-} \hlnum{3} \hlopt{+} \hlkwd{rexp}\hldef{(m,} \hlnum{9}\hldef{)}
+\hldef{weights3} \hlkwb{<-} \hlkwd{dnorm}\hldef{(X3)} \hlopt{/} \hlkwd{dexp}\hldef{(X3}\hlopt{-}\hlnum{3}\hldef{,} \hlnum{9}\hldef{)}
+\hlkwd{mean}\hldef{(}\hlkwd{h}\hldef{(X3)} \hlopt{*} \hldef{weights3)}
+\end{alltt}
+\begin{verbatim}
+[1] 0.001303543
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+  
+  \framebreak
+  
+  \item Finally, let's compute these 3 different estimate for every value of $m \in \{2, 3, \ldots, 10000\}$.
+  
+\begin{knitrout}\small
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{library}\hldef{(ggplot2)}
+\hldef{est1} \hlkwb{<-} \hlkwd{cumsum}\hldef{(}\hlkwd{h}\hldef{(X1))} \hlopt{/} \hlnum{1}\hlopt{:}\hldef{m}
+\hldef{est2} \hlkwb{<-} \hlkwd{cumsum}\hldef{(}\hlkwd{h}\hldef{(X2)} \hlopt{*} \hldef{weights2)} \hlopt{/} \hlnum{1}\hlopt{:}\hldef{m}
+\hldef{est3} \hlkwb{<-} \hlkwd{cumsum}\hldef{(}\hlkwd{h}\hldef{(X3)} \hlopt{*} \hldef{weights3)} \hlopt{/} \hlnum{1}\hlopt{:}\hldef{m}
+\hldef{all_vals} \hlkwb{<-} \hlkwd{data.frame}\hldef{(}
+  \hlkwc{val} \hldef{=} \hlkwd{c}\hldef{(est1, est2, est3),}
+  \hlkwc{method} \hldef{=} \hlkwd{rep}\hldef{(}\hlnum{1}\hlopt{:}\hlnum{3}\hldef{,} \hlkwc{each} \hldef{= m) |>} \hlkwd{factor}\hldef{(),}
+  \hlkwc{m} \hldef{=} \hlkwd{rep}\hldef{(}\hlnum{1}\hlopt{:}\hldef{m,} \hlnum{3}\hldef{)}
+\hldef{)}
+
+\hlkwd{ggplot}\hldef{(all_vals |> dplyr}\hlopt{::}\hlkwd{filter}\hldef{(m} \hlopt{>} \hlnum{100}\hldef{),} \hlkwd{aes}\hldef{(}\hlkwc{x} \hldef{= m,} \hlkwc{y} \hldef{= val,} \hlkwc{col} \hldef{= method))} \hlopt{+}
+  \hlkwd{geom_line}\hldef{()} \hlopt{+}
+  \hlkwd{geom_hline}\hldef{(}\hlkwc{yintercept} \hldef{=} \hlnum{1}\hlopt{-}\hlkwd{pnorm}\hldef{(}\hlnum{3}\hldef{),} \hlkwc{linetype} \hldef{=} \hlsng{'dashed'}\hldef{)} \hlopt{+}
+  \hlkwd{theme_bw}\hldef{()}
+\end{alltt}
+\end{kframe}
+
+{\centering \includegraphics[width=\maxwidth]{tmp/figure/unnamed-chunk-17-1} 
+
+}
+
+
+\end{knitrout}
+  
+  
+  \end{itemize}
+  
+\end{frame}
+
+\begin{frame}[allowframebreaks,fragile]{Rejection Sampling}
+  \begin{itemize}
+    \item We can now see some recurring themes in Bayesian computing (and more generally, approximating integrals).
+    \item For Monte-Carlo integral calculations, we first need to find an appropriate distribution to get samples $X_i \sim \pi(x)$, then apply importance sampling.
+    \item Often, there's not an obvious choice for $\pi$, or we can't directly sample from $\pi(x)$.
+    \item In many cases, we can do \alert{rejection sampling} to get samples from $\pi(x)$, as discussed last semester.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]{Variance reduction techniques}
+  \begin{itemize}
+    \item We won't go into a lot of details here, but there are some approaches highlighted in \citet[Section~2.3 of ][]{liu01} that can help with Monte-Carlo evaluations.
+    \item One of the main problems is the variance $\sigma^2$ that arises in the numerator. These approaches are intended to reduce the variance, while not adding any bias.
+    
+  \end{itemize}
+  
+    \framebreak
+    
+    \begin{block}{Stratified Sampling}
+      Suppose we wish to calculate the integral
+      $$
+      \int_A f(x)\, dx.
+      $$
+      Using Monte-Carlo sampling, the variance is $\sigma^2 /n$, where $\sigma^2$ is the variance of the function $f$ over the domain $A$. 
+      
+      Instead, consider breaking the domain $A$ into distinct areas: $A_1$, $A_2$, \ldots, $A_k$, such that the variance of $f$ over these areas is roughly constant, then get Monte-Carlo samples from these regions independently. 
+      
+      \mode<article>{
+        \begin{itemize}
+          \item For each sub-region $A_i$, we get $m_i$ samples, and estimate the integral:
+          $$
+          \mu_i = \int_{A_i} f(x)\, dx \approx \frac{1}{m_i} \sum_{j = 1}^{m_i} f(X_{i, j}),
+          $$
+          where $X_{i, j}$ is uniformly sampled on $A_i$.
+          \item Then, if the variance on each region is roughly constant, we can get an improved estimate:
+          $$
+          \int_A f(x)\, dx \approx \sum_{i = 1}^k \hat{\mu_i},
+          $$
+          where
+          $$
+          \hat{\mu_i} = \sum_{j = 1}^{m_{i}} f(X_{i, j}).
+          $$
+          \item If done properly, the areas are independent, so the total overall variance is just a sum of variances, which should be smaller than the default variance approach:
+          $$
+          \Var{(\hat{\mu})} = \sum_{i = 1}^k \frac{\sigma^2_i}{m_i} \leq \frac{\sigma^2}{m}
+          $$
+          \item However, if the variance over the individual regions is \emph{not} constant, this can actually result in worse variance.
+        \end{itemize}
+      }
+      
+    \end{block}
+    
+  
+  \framebreak
+  
+  \begin{block}{Control Variates Method}
+    In this method, one uses a control variate $C$ which is correlated with the sample $X$, to produce a better estimate. 
+    
+    Suppose we want to estimate $\mu = E[X]$, and $\mu_C = E[C]$ is known. Then, we can produce Monte Carlo samples of the form:
+    $$
+    X_i^* = X_i - b(C - \mu_C).
+    $$
+    
+    Then, $E[X_i^*] = E[X] = \mu$, but the variance is:
+    $$
+    \Var(X^*_i) = \Var(X) - 2b\cov(X, C) + b^2 \Var(C).
+    $$
+    You can show that there is always a choice of $b$ such that $\Var(X^*_i) < \Var(X_i)$.
+    
+    \mode<article>{
+      \begin{itemize}
+        \item If the covariance and variance terms are easy, we can select an optimal value of $b$ as:
+        $$
+        b = \frac{\Cov(X, C)}{\Var(C)},
+        $$
+        in which case 
+        $$
+        \Var(X_i^*) = (1 - \rho_{XC}^2)\Var(X) < \Var(X_i).
+        $$
+        
+        \item As a concrete example, consider approximating $\mu = E[e^X]$ if $X$ is a standard normal distribution.
+        \item In this case, the true value can be given by the MGF, in particular $\mu = m(1) = e^{-1/2}$
+        \item A standard Monte-Carlo evaluation would be to sample $X_i \sim N(0, 1)$, and compute:
+        $$
+        \hat{\mu} = \frac{1}{m} \sum_{i = 1}^m e^{X_i}.
+        $$
+        
+        \item However, consider introducing a covariate $C_i$ that is correlated with $X_i$ to reduce the variance.
+        \item One choice is $C_i = X_i$, in which case $\mu_C = 0$, and we can let:
+        $$
+        b = \frac{\Cov(e^{X_i}, X_i)}{\Var(X_i)} = \Cov(e^{X_i}).
+        $$
+        \item Since $b$ might be hard to get analytically, we'll just approximate using the covariance function numerically: $\hat{b} = \texttt{cov(exp(X), x)}$. 
+        \item Then, setting:
+        $$
+        X_i^* = e^{X_i} + \hat{b}(X_i - 0),
+        $$
+        then $E[X_i^*] = E[e^{X_i^*}] = \mu$, but the variance has been reduced.
+        \item You can try this in R by simulating $e^{X_i}$, calculating the variance, then calculating $b$ and the transformed variable $X_i^* = e^{X_i} - bX_i$, and calculating the variance. They have the same expectation, but the later estimate is lower variance.
+        
+      \end{itemize}
+    }
+    
+  \end{block}
+  
+  \framebreak
+  
+  \begin{block}{Antithetic Variates Method}
+    The next approach is similar, but gives a way of simulating negatively correlated random variables.
+    
+    In the simplest case, suppose we want to compute an integral
+    $$
+    \int_0^1 f(x) dx.
+    $$
+    We can sample $U_i \sim U(0, 1)$, and do Monte-Carlo as usual with $f(U_i)$. However, if $f$ is monotonic, then $U'_i = 1-U_i$ is antithetic to $U_i$, and 
+    $$
+    \Cov(U_i, 1-U_i) = -Var(U_i).
+    $$
+    Thus, for every sample $U_i \sim U(0, 1)$ drawn, calculate instead:
+    $$
+    \int_0^1 f(x) dx \approx \frac{1}{m}\sum_{i = 1}^m (f(u_i) + f(1-u_i))/2
+    $$
+    
+    \mode<article>{
+    \begin{itemize}
+    \item More generally, we don't necessarily need to use Monte-Carlo samples from the uniform distribution.
+    \item Recall from the last semester, we proved that if $U_i \sim U(0, 1)$, then we can simulate $X$ from any distribution function $F$ via:
+    $$
+    X_i = F^{-1}(U_i).
+    $$
+    Similarly, if $U_i$ is uniform, then $1-U_i$ is also uniform, so
+    $$
+    X'_i = F^{-1}(1-U_1)
+    $$
+    also comes from the same distribution. However, we fix a specific $U_i = u$, then $X'_i \neq X_i$, and we can show that $\Cov(X_i, X'_i) < 0$. Thus for any monotonic function $f$, if we want to do Monte Carlo integration using $X \sim F$ with $F$ known, then a more efficient approach is $U_i \sim U(0, 1)$, $X_i = F^{-1}(U_i)$, $X'_i = F^{-1}(1-U_i)$, and then:
+    $$
+    \int f(x)\, dx \approx \frac{1}{m}\sum_{i = 1}^m \frac{f(X_i)+f(X'_i)}{2}.
+    $$
+
+    \item As a more concrete example, note that if $U_i \sim U(0, 1)$ is uniform, then $X_i = -\log(U_i)$ is exponential$1$. Thus, a better approximation of $\mu = \int g(x)f(x)\, dx$, where $f(x) = e^{-x}$ and $g$ is any monotone function, is:
+    $$
+    \hat{\mu} = \frac{1}{m}\sum_{i = 1}^m \frac{g\big(-\log(U_i)\big)+g\big(-\log(1-U_i)\big)}{2}
+    $$
+    \end{itemize}
+    }
+    
+  \end{block}
+  
 \end{frame}
 
 \section{Choice of Priors}
@@ -375,6 +987,12 @@ The Bayesian Approach to Parameter Estimation}
     \item Still, it's worth discussing conjugate priors, and we will provide a few examples.
     
   \end{itemize}
+  
+  \framebreak
+  
+  \begin{exampleblock}{Conjugate Normals}
+    TODO
+  \end{exampleblock}
   
 \end{frame}
 
@@ -500,7 +1118,7 @@ The Bayesian Approach to Parameter Estimation}
 \end{alltt}
 \end{kframe}
 
-{\centering \includegraphics[width=\maxwidth]{tmp/figure/unnamed-chunk-3-1} 
+{\centering \includegraphics[width=\maxwidth]{tmp/figure/unnamed-chunk-18-1} 
 
 }
 
