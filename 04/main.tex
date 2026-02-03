@@ -286,9 +286,112 @@ The Bayesian Approach to Parameter Estimation}
 
 \end{frame}
 
+
+\begin{frame}[allowframebreaks]{Conjugate priors}
+  \begin{itemize}
+    \item The first approach to the Poisson$(\lambda)$ example was the traditional (subjective) Bayesian, who takes seriously the choice of prior, and chose a Gamma density to aid computations.
+      % \item The utilitarian (objective) Bayesian, who picked an uninformative prior.
+    % \end{itemize}
+    \item This approach was aided by the choice of a Gamma prior, which helped the calculation. 
+    \item This type of prior is known as a \alert{conjugate prior}.
+  \end{itemize}
+  
+  \framebreak
+  
+  \begin{block}{Definition: Conjugate priors}
+    Suppose the prior distribution belongs to a family of distributions, $G$, and the data come from a family of distributions $H$.
+    
+    $G$ is said to be conjugate to $H$ if the posterior is in the family $G$.
+  \end{block}
+  
+  \begin{itemize}
+    \item Example: If the data-model is Poisson$(\lambda)$, then the family $H$ is the family of Poisson distributions. The Gamma family ($G$) of distributions is conjugate to the Poisson family, because if Gamma is selected as the prior distribution, then the posterior distribution (under data model $H$) is still Gamma $(G)$, with updated parameters. 
+
+  \framebreak
+    
+    \item Much of the Bayesian statistics of the 20th century relied on conjugate priors to help with integration, or were confined to models with very few parameters.
+    \item Recent developments in computing, both hardware, software, and theory of Bayesian computing, has enabled fitting much more complex models using arbitrary priors.
+    \item Still, it's worth discussing conjugate priors, and we will provide a few examples.
+    
+  \end{itemize}
+  
+  \framebreak
+  
+  \begin{exampleblock}{Conjugate Normals}
+    Model $X_1, \ldots, X_n \sim N(\mu, \sigma^2)$. Treating $\sigma^2$ as fixed, consider the prior for $\mu \sim N(\mu_0, \sigma_0^2)$. Find the posterior of $\mu | X = x^*$.
+    
+    \mode<article>{
+      \begin{proof}
+        The likelihood function is given by:
+        \begin{align*}
+        f(x^*|\mu, \sigma^2) &= \prod_{i = 1}^n \frac{1}{\sigma \sqrt{2\pi}}e^{-\frac{1}{2\sigma^2}(x^*_i - \mu)^2}\\
+        &= \sigma^{-n}(2\pi)^{-n/2} \exp\Big\{-\frac{1}{2\sigma^2}\sum_{i = 1}^n(x_i^* - \mu)^2\Big\},
+        \end{align*}
+        and the posterior is:
+        $$
+        \pi(\mu) = \frac{1}{\sigma_0\sqrt{2\pi}} \exp\big\{-\frac{1}{2\sigma_0^2}(\mu -\mu_0)^2\big\}.
+        $$
+        \item Thus, the posterior is proportional to:
+        \begin{align*}
+          \pi(\mu | x^*) &\propto \sigma^{-n} \exp\Big\{-\frac{1}{2\sigma^2}\sum_{i = 1}^n(x_i^* - \mu)^2\Big\} \times \sigma_0^{-1} \exp\big\{-\frac{1}{2\sigma_0^2}(\mu -\mu_0)^2\big\} \\
+          &\propto \exp\Big\{-\frac{1}{2\sigma^2}\sum_{i = 1}^n(x_i^* - \mu)^2\Big\} \times \exp\big\{-\frac{1}{2\sigma_0^2}(\mu -\mu_0)^2\big\}.
+        \end{align*}
+        In the last step, we note that we are only interested in the parameter $\mu$; other parameters that arise can be treated as constants with respect to $\mu$.
+        
+        We now apply a common trick for Normal distributions, which is combining the exponential terms and completing the square.
+        Using the posterior expression above, we have:
+        \begin{align*}
+          \pi(\mu | x^*) &\propto \exp\Big\{-\frac{1}{2\sigma^2}\sum_{i = 1}^n(x_i^* - \mu)^2 + \frac{1}{2\sigma_0^2}(\mu - \mu_0)^2\Big\} \\
+          &= \exp\Big\{-\frac{1}{2\sigma^2}\big[\sum_{i = 1}^n\big(x_i^*\big)^2 - 2n\mu\bar{x}^* + n\mu^2\big] + \frac{1}{2\sigma_0^2}\big[\mu^2 - 2\mu_0\mu + \mu_0^2\big]\Big\}
+        \end{align*}
+        Now recall that any factor not involving $\mu$ is a constant (with respect to $\mu$). Thus, we can further simplify be removing a term from each of the inner exponential arguments:
+        \begin{align*}
+          \pi(\mu | x^*) &\propto \exp\Big\{-\frac{1}{2\sigma^2}\big[- 2n\mu\bar{x}^* + n\mu^2\big] + \frac{1}{2\sigma_0^2}\big[\mu^2 - 2\mu_0\mu\big]\Big\}
+        \end{align*}
+        Now we want to combine like terms in the exponential. In particular, we have terms for $\mu^2$ and $\mu$:
+        \begin{align*}
+        -\frac{1}{2\sigma^2}n\mu^2 + \frac{1}{2\sigma_0^2}\mu^2 &= \Big(\frac{1}{2\sigma_0^2} - \frac{n}{2\sigma^2}\Big)\mu^2 \\
+        & = -\frac{1}{2}\Big(\frac{n\sigma^2 - \sigma^2_0}{2\sigma^2\sigma_0^2}\Big)\mu^2 \\
+        &= -\frac{1}{2}a\mu^2
+        \end{align*}
+        Similarly, for the $\mu$ terms in the exponent,
+        \begin{align*}
+          \frac{2n\mu\bar{x}^*}{2\sigma^2} - \frac{2\mu_0\mu}{2\sigma^2_0} &= \frac{n\bar{x}^*}{\sigma^2}\mu - \frac{\mu_0}{\sigma^2_0}\mu \\
+          &= \Big(\frac{n\bar{x}^*}{\sigma^2} - \frac{\mu_0}{\sigma^2_0}\Big)\mu \\
+          &= \Big(\frac{n\bar{x}^*\sigma_0^2 - \mu_0\sigma^2}{\sigma^2\sigma_0^2}\Big)\mu \\
+          % &= -\frac{1}{2}\Big(\frac{2\mu_0\sigma^2-2n\bar{x}^*\sigma_0^2}{\sigma^2\sigma_0^2}\Big)\mu\\
+          &= b\mu = -\frac{1}{2}(2b\mu)
+        \end{align*}
+        Making the substitutions above for $a$ and $b$, we now have the posterior in the form: 
+        $$
+        \pi(\mu | x^*) \propto \exp\Big\{-\frac{1}{2}(a\mu^2 - 2b\mu)\Big\}.
+        $$
+        Now the final step is to complete the square. 
+        Within the exponential, we have
+        \begin{align*}
+        -\frac{1}{2}(a\mu^2 - 2b\mu) &= -\frac{a}{2}(\mu^2 - \frac{2b}{a}\mu) \\
+        &= -\frac{a}{2}\big(\mu^2 - \frac{2b}{a}\mu + \frac{b^2}{a^2}\big) + \frac{b^2}{2a} \\
+        &= -\frac{a}{2}(\mu - \frac{b}{a})^2 + \text{(some constant)}.
+        \end{align*}
+        Thus,
+        $$
+        \pi(\mu | x^*) \propto \exp\Big\{-\frac{a}{2}\Big(\mu - \frac{b}{a}\Big)^2\Big\}
+        $$
+        This is directly proportional to the pdf of a Normal distribution for $\mu$, with mean $b/a$, variance $1/a$. Solving for these:
+        \begin{align*}
+          b/a &= \Big(\frac{n\bar{x}^*\sigma_0^2 - \mu_0\sigma^2}{\sigma^2\sigma_0^2}\Big)/\Big(\frac{n\sigma^2 - \sigma^2_0}{2\sigma^2\sigma_0^2}\Big) \\
+          &= \frac{n\bar{x}^*\sigma_0^2 - \mu_0\sigma^2}{n\sigma^2 - \sigma^2_0}
+        \end{align*}
+      \end{proof}
+    }
+    
+  \end{exampleblock}
+  
+\end{frame}
+
 \begin{frame}[allowframebreaks]{Posteriors and Likelihood}
   \begin{itemize}
-    \item In the problem above, we saw that we get very similar estimates using MLE or Bayesian approaches, regardless of which prior we picked.
+    \item In the Poisson-Gamma model, we saw that we get very similar estimates using MLE or Bayesian approaches, regardless of which prior we picked.
     \item We can argue why this will often be the case, especially for IID data.
     \item Previously, we saw:
     $$
@@ -301,6 +404,46 @@ The Bayesian Approach to Parameter Estimation}
     \item In particular, each new data point scales the likelihood larger and larger, to the point where the prior has little impact on the posterior distribution.
     \item See the accompanying Lecture 4 R code for a visual demonstration of this using the Poisson distribution.
   \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]{Uniform priors}
+
+\begin{itemize}
+  \item The choice of conjugate priors is useful if we want to actually use a prior and a conjugate is available.
+  \item A common alternative choice is a uniform prior.
+  \item This is saying: we don't have any prior knowledge or belief about a parameter.
+  \item A uniform prior is not always possible (e.g., $\lambda > 0$ has no uniform prior), but we can approximate it.
+\end{itemize}
+
+\begin{exampleblock}{Poisson posterior, uniform prior}
+    Revisit the Poisson$(\lambda)$ model, while taking the alternative approach of using a uniform prior.
+    
+    \mode<article>{
+      \begin{itemize}
+        \item The setup for the problem is the exact same, so note that the posterior distribution is:
+        $$
+        f_{\Lambda | X}(\lambda | x^*) = \frac{\lambda^{\sum_{i = 1}^n x^*_i} e^{-n\lambda}\, f_\Lambda(\lambda)}{\int \lambda^{\sum_{i = 1}^n x^*_i} e^{-n\lambda}\, f_\Lambda(\lambda) \, d\lambda}.
+        $$
+        \item Now suppose we really don't have a good guess for the parameter $\lambda$, or we want to more utilitarian / noncommittal approach. Now what?
+        \item The default is a uniform probability, but the possible values of $\lambda$ is the interval $(0, \infty)$; we can't have a uniform prior on this interval (it doesn't exist)
+        \item Instead, we will feign confidence that $\lambda$ must be smaller than some fixed number based on the problem at hand. For instance, maybe $0 < \lambda \leq 100$ is reasonable.
+        \item Then, the prior would be:
+        $$
+        f_\Lambda(\lambda) = \frac{1}{100} 1(0 < \lambda \leq 100),
+        $$
+        and the posterior would be:
+        \begin{align*}
+        f_{\Lambda | X}(\lambda | x^*) &= \frac{\frac{1}{100}\lambda^{\sum_{i = 1}^n x^*_i} e^{-n\lambda}}{\frac{1}{100}\int_0^{100} \lambda^{\sum_{i = 1}^n x^*_i} e^{-n\lambda} \, d\lambda}1(0 < \lambda \leq 100)\\
+        &= \frac{\lambda^{\sum_{i = 1}^n x^*_i} e^{-n\lambda}}{\int_0^{100} \lambda^{\sum_{i = 1}^n x^*_i} e^{-n\lambda} \, d\lambda} 1(0 < \lambda \leq 100).
+        \end{align*}
+        \item In this case, we can't just do the denominator-integration trick! It looks very similar, because the denominator is still a constant, and the kernel in the numerator looks very similar to a Gamma kernel, \textbf{but} we have a new bound $0 < \lambda \leq 100$ that makes it distinct from the Gamma distribution, since the Gamma distribution has support on $(0, \infty)$.
+        \item Unfortunately, there is not an easy way to compute the integral either (partly because of the bound). Thus, the integral needs to be computed numerically.
+        \item For now, we will just use the \code{integrate} function in R, which is really good at integrating univariate functions.
+        \item The posterior mean can similarly be found using a numeric integration technique, and posterior mode can be found using numeric optimization strategies covered in the last set of lecture notes.
+      \end{itemize}
+    }
+    
+  \end{exampleblock}
 \end{frame}
 
 \section{Introduction to Numeric Integration}
@@ -335,38 +478,6 @@ The Bayesian Approach to Parameter Estimation}
 \end{kframe}
 \end{knitrout}
 
-  
-  \framebreak
-  
-  \begin{exampleblock}{Poisson posterior, uniform prior}
-    Revisit the Poisson$(\lambda)$ model, while taking the alternative approach of using a uniform prior.
-    
-    \mode<article>{
-      \begin{itemize}
-        \item The setup for the problem is the exact same, so note that the posterior distribution is:
-        $$
-        f_{\Lambda | X}(\lambda | x^*) = \frac{\lambda^{\sum_{i = 1}^n x^*_i} e^{-n\lambda}\, f_\Lambda(\lambda)}{\int \lambda^{\sum_{i = 1}^n x^*_i} e^{-n\lambda}\, f_\Lambda(\lambda) \, d\lambda}.
-        $$
-        \item Now suppose we really don't have a good guess for the parameter $\lambda$, or we want to more utilitarian / noncommittal approach. Now what?
-        \item The default is a uniform probability, but the possible values of $\lambda$ is the interval $(0, \infty)$; we can't have a uniform prior on this interval (it doesn't exist)
-        \item Instead, we will feign confidence that $\lambda$ must be smaller than some fixed number based on the problem at hand. For instance, maybe $0 < \lambda \leq 100$ is reasonable.
-        \item Then, the prior would be:
-        $$
-        f_\Lambda(\lambda) = \frac{1}{100} 1(0 < \lambda \leq 100),
-        $$
-        and the posterior would be:
-        \begin{align*}
-        f_{\Lambda | X}(\lambda | x^*) &= \frac{\frac{1}{100}\lambda^{\sum_{i = 1}^n x^*_i} e^{-n\lambda}}{\frac{1}{100}\int_0^{100} \lambda^{\sum_{i = 1}^n x^*_i} e^{-n\lambda} \, d\lambda}1(0 < \lambda \leq 100)\\
-        &= \frac{\lambda^{\sum_{i = 1}^n x^*_i} e^{-n\lambda}}{\int_0^{100} \lambda^{\sum_{i = 1}^n x^*_i} e^{-n\lambda} \, d\lambda} 1(0 < \lambda \leq 100).
-        \end{align*}
-        \item In this case, we can't just do the denominator-integration trick! It looks very similar, because the denominator is still a constant, and the kernel in the numerator looks very similar to a Gamma kernel, \textbf{but} we have a new bound $0 < \lambda \leq 100$ that makes it distinct from the Gamma distribution, since the Gamma distribution has support on $(0, \infty)$.
-        \item Unfortunately, there is not an easy way to compute the integral either (partly because of the bound). Thus, the integral needs to be computed numerically.
-        \item For now, we will just use the \code{integrate} function in R, which is really good at integrating univariate functions.
-        \item The posterior mean can similarly be found using a numeric integration technique, and posterior mode can be found using numeric optimization strategies covered in the last set of lecture notes.
-      \end{itemize}
-    }
-    
-  \end{exampleblock}
   
   \framebreak
   
@@ -816,7 +927,7 @@ The Bayesian Approach to Parameter Estimation}
   \end{itemize}
 \end{frame}
 
-\begin{frame}[allowframebreaks]{Variance reduction techniques}
+\begin{frame}[allowframebreaks,fragile]{Variance reduction techniques}
   \begin{itemize}
     \item We won't go into a lot of details here, but there are some approaches highlighted in \citet[Section~2.3 of ][]{liu01} that can help with Monte-Carlo evaluations.
     \item One of the main problems is the variance $\sigma^2$ that arises in the numerator. These approaches are intended to reduce the variance, while not adding any bias.
@@ -870,13 +981,13 @@ The Bayesian Approach to Parameter Estimation}
     X_i^* = X_i - b(C - \mu_C).
     $$
     
+    \mode<article>{
     Then, $E[X_i^*] = E[X] = \mu$, but the variance is:
     $$
     \Var(X^*_i) = \Var(X) - 2b\cov(X, C) + b^2 \Var(C).
     $$
     You can show that there is always a choice of $b$ such that $\Var(X^*_i) < \Var(X_i)$.
     
-    \mode<article>{
       \begin{itemize}
         \item If the covariance and variance terms are easy, we can select an optimal value of $b$ as:
         $$
@@ -912,16 +1023,14 @@ The Bayesian Approach to Parameter Estimation}
     
   \end{block}
   
+  
   \framebreak
   
+  
   \begin{block}{Antithetic Variates Method}
-    The next approach is similar, but gives a way of simulating negatively correlated random variables.
     
-    In the simplest case, suppose we want to compute an integral
-    $$
-    \int_0^1 f(x) dx.
-    $$
-    We can sample $U_i \sim U(0, 1)$, and do Monte-Carlo as usual with $f(U_i)$. However, if $f$ is monotonic, then $U'_i = 1-U_i$ is antithetic to $U_i$, and 
+   Suppose we want to compute an integral $\int_0^1 f(x) dx$.
+    We can sample $U_i \sim U(0, 1)$, and do Monte-Carlo as usual with $f(U_i)$. However, if $f$ is monotonic, then $U'_i = 1-U_i$ is \alert{antithetic} to $U_i$, and 
     $$
     \Cov(U_i, 1-U_i) = -Var(U_i).
     $$
@@ -937,6 +1046,9 @@ The Bayesian Approach to Parameter Estimation}
     $$
     X_i = F^{-1}(U_i).
     $$
+    
+    TODO: There's a sign-error in the $\mu$ term. They should both be the same sign!
+    
     Similarly, if $U_i$ is uniform, then $1-U_i$ is also uniform, so
     $$
     X'_i = F^{-1}(1-U_1)
@@ -958,43 +1070,6 @@ The Bayesian Approach to Parameter Estimation}
 \end{frame}
 
 \section{Choice of Priors}
-
-\begin{frame}[allowframebreaks]{Conjugate priors}
-  \begin{itemize}
-    \item The Poisson$(\lambda)$ example showed two main approaches:
-    \begin{itemize}
-      \item The traditional (subjective) Bayesian, who takes seriously the choice of prior, and chose a Gamma density to aid computations.
-      \item The utilitarian (objective) Bayesian, who picked an uninformative prior.
-    \end{itemize}
-    \item The former approach was aided by what is known as a \alert{conjugate prior}.
-  \end{itemize}
-  
-  \framebreak
-  
-  \begin{block}{Definition: Conjugate priors}
-    Suppose the prior distribution belongs to a family of distributions, $G$, and the data come from a family of distributions $H$.
-    
-    $G$ is said to be conjugate to $H$ if the posterior is in the family $G$.
-  \end{block}
-  
-  \begin{itemize}
-    \item Example: If the data-model is Poisson$(\lambda)$, then the family $H$ is the family of Poisson distributions. The Gamma family ($G$) of distributions is conjugate to the Poisson family, because if Gamma is selected as the prior distribution, then the posterior distribution (under data model $H$) is still Gamma $(G)$, with updated parameters. 
-
-  \framebreak
-    
-    \item Much of the Bayesian statistics of the 20th century relied on conjugate priors to help with integration, or were confined to models with very few parameters.
-    \item Recent developments in computing, both hardware, software, and theory of Bayesian computing, has enabled fitting much more complex models using arbitrary priors.
-    \item Still, it's worth discussing conjugate priors, and we will provide a few examples.
-    
-  \end{itemize}
-  
-  \framebreak
-  
-  \begin{exampleblock}{Conjugate Normals}
-    TODO
-  \end{exampleblock}
-  
-\end{frame}
 
 \begin{frame}[allowframebreaks]{Jeffrey's priors}
   \begin{itemize}
