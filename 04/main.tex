@@ -346,23 +346,22 @@ The Bayesian Approach to Parameter Estimation}
           &= \exp\Big\{-\frac{1}{2\sigma^2}\big[\sum_{i = 1}^n\big(x_i^*\big)^2 - 2n\mu\bar{x}^* + n\mu^2\big] - \frac{1}{2\sigma_0^2}\big[\mu^2 - 2\mu_0\mu + \mu_0^2\big]\Big\}
         \end{align*}
 
-        TODO: There are errors after this part, signs are flipped in the second part of the exponential.
 
         Now recall that any factor not involving $\mu$ is a constant (with respect to $\mu$). Thus, we can further simplify be removing a term from each of the inner exponential arguments:
         \begin{align*}
-          \pi(\mu | x^*) &\propto \exp\Big\{-\frac{1}{2\sigma^2}\big[- 2n\mu\bar{x}^* + n\mu^2\big] + \frac{1}{2\sigma_0^2}\big[\mu^2 - 2\mu_0\mu\big]\Big\}
+          \pi(\mu | x^*) &\propto \exp\Big\{-\frac{1}{2\sigma^2}\big[- 2n\mu\bar{x}^* + n\mu^2\big] - \frac{1}{2\sigma_0^2}\big[\mu^2 - 2\mu_0\mu\big]\Big\}
         \end{align*}
         Now we want to combine like terms in the exponential. In particular, we have terms for $\mu^2$ and $\mu$:
         \begin{align*}
-        -\frac{1}{2\sigma^2}n\mu^2 + \frac{1}{2\sigma_0^2}\mu^2 &= \Big(\frac{1}{2\sigma_0^2} - \frac{n}{2\sigma^2}\Big)\mu^2 \\
-        & = -\frac{1}{2}\Big(\frac{n\sigma^2 - \sigma^2_0}{2\sigma^2\sigma_0^2}\Big)\mu^2 \\
+        -\frac{1}{2\sigma^2}n\mu^2 - \frac{1}{2\sigma_0^2}\mu^2 &= \Big(-\frac{1}{2\sigma_0^2} - \frac{n}{2\sigma^2}\Big)\mu^2 \\
+        & = -\frac{1}{2}\Big(\frac{n\sigma_0^2 + \sigma^2}{\sigma^2\sigma_0^2}\Big)\mu^2 \\
         &= -\frac{1}{2}a\mu^2
         \end{align*}
         Similarly, for the $\mu$ terms in the exponent,
         \begin{align*}
-          \frac{2n\mu\bar{x}^*}{2\sigma^2} - \frac{2\mu_0\mu}{2\sigma^2_0} &= \frac{n\bar{x}^*}{\sigma^2}\mu - \frac{\mu_0}{\sigma^2_0}\mu \\
-          &= \Big(\frac{n\bar{x}^*}{\sigma^2} - \frac{\mu_0}{\sigma^2_0}\Big)\mu \\
-          &= \Big(\frac{n\bar{x}^*\sigma_0^2 - \mu_0\sigma^2}{\sigma^2\sigma_0^2}\Big)\mu \\
+          \frac{2n\mu\bar{x}^*}{2\sigma^2} + \frac{2\mu_0\mu}{2\sigma^2_0} &= \frac{n\bar{x}^*}{\sigma^2}\mu + \frac{\mu_0}{\sigma^2_0}\mu \\
+          &= \Big(\frac{n\bar{x}^*}{\sigma^2} + \frac{\mu_0}{\sigma^2_0}\Big)\mu \\
+          &= \Big(\frac{n\bar{x}^*\sigma_0^2 + \mu_0\sigma^2}{\sigma^2\sigma_0^2}\Big)\mu \\
           % &= -\frac{1}{2}\Big(\frac{2\mu_0\sigma^2-2n\bar{x}^*\sigma_0^2}{\sigma^2\sigma_0^2}\Big)\mu\\
           &= b\mu = -\frac{1}{2}(2b\mu)
         \end{align*}
@@ -383,13 +382,35 @@ The Bayesian Approach to Parameter Estimation}
         $$
         This is directly proportional to the pdf of a Normal distribution for $\mu$, with mean $b/a$, variance $1/a$. Solving for these:
         \begin{align*}
-          b/a &= \Big(\frac{n\bar{x}^*\sigma_0^2 - \mu_0\sigma^2}{\sigma^2\sigma_0^2}\Big)/\Big(\frac{n\sigma^2 - \sigma^2_0}{2\sigma^2\sigma_0^2}\Big) \\
-          &= \frac{n\bar{x}^*\sigma_0^2 - \mu_0\sigma^2}{n\sigma^2 - \sigma^2_0}
+          E[\mu|X = x^*] &= b/a \\
+          &= \Big(\frac{n\bar{x}^*\sigma_0^2 + \mu_0\sigma^2}{\sigma^2\sigma_0^2}\Big)/\Big(\frac{n\sigma_0^2 + \sigma^2}{\sigma^2\sigma_0^2}\Big) \\
+          &= \frac{n\bar{x}^*\sigma_0^2 + \mu_0\sigma^2}{n\sigma_0^2 + \sigma^2},
         \end{align*}
+        and
+        \begin{align*}
+          \Var(\mu | X = x^*) &= 1/a \\
+          &= \frac{\sigma^2\sigma_0^2}{n\sigma_0^2 + \sigma^2}
+        \end{align*}
+        Giving the final posterior distribution:
+        $$
+        \mu | X = x^* \sim N\Big(\frac{n\bar{x}^*\sigma_0^2 + \mu_0\sigma^2}{n\sigma_0^2 + \sigma^2}, \frac{\sigma^2\sigma_0^2}{n\sigma_0^2 + \sigma^2}\Big)
+        $$
       \end{proof}
     }
 
   \end{exampleblock}
+
+\framebreak
+
+\begin{exampleblock}{Beta-Binomial conjugate relation}
+  One example that we have actually seen already is the Beta-Binomial distributions.
+  
+  The Beta$(\alpha, \beta)$ distribution is conjugate to Binomial$(n, p)$. In the coin flipping example, we selected a Beta$(1, 1)$ prior.
+\end{exampleblock}
+
+\begin{itemize}
+  \item This example will be a HW problem. 
+\end{itemize}
 
 \end{frame}
 
@@ -1334,7 +1355,7 @@ The Bayesian Approach to Parameter Estimation}
 
 \newcommand\acknowledgments{
 \begin{itemize}
-\item   Compiled on {\today} using \Rlanguage version 4.5.1.
+\item   Compiled on {\today} using \Rlanguage version 4.5.2.
 \item   \parbox[t]{0.75\textwidth}{Licensed under the \link{http://creativecommons.org/licenses/by-nc/4.0/}{Creative Commons Attribution-NonCommercial license}.
     Please share and remix non-commercially, mentioning its origin.}
     \parbox[c]{1.5cm}{\includegraphics[height=12pt]{../cc-by-nc}}
