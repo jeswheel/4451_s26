@@ -51,7 +51,7 @@ The Bayesian Approach to Parameter Estimation}
   \item Much of this work is based on \citet[][Section~8.6]{rice07}.
   \item We have already discussed the philosophy of Bayesian statistics.
   \item We start with a prior belief about parameter values, and update these beliefs using observed data.
-  \item The resulting \alert{distribution} is called the \emph{posterior}, and it represents our updated belief after observing data. 
+  \item The resulting \alert{distribution} is called the \emph{posterior}, and it represents our updated belief after observing data.
   \item This is very natural idea that is closely related to the idea of likelihood: likelihood quantifies some degree of belief about a parameter value.
 \end{itemize}
 
@@ -65,14 +65,14 @@ The Bayesian Approach to Parameter Estimation}
     \item In the context of Bayesian inference, we treat unknown parameter vectors as random variables, which I will denote $\Theta$.
     \item Thus, our probability model can be expressed as $f(x|\Theta = \theta)$, which we often shorten to $f(x|\theta)$.
   \end{itemize}
-  
+
   \begin{block}{Bayes' Theorem}
     Let $X$ be the random vector representing observed data, and $\Theta$ the random parameter vector, and $x^*$ the observed data. Bayes Theorem states:
     \begin{align*}
     \pi_{\Theta|X}(\theta|x^*) &= \frac{f_{X|\Theta}(x^*|\theta)\pi_\Theta(\theta)}{f_X(x^*)} \\
     &= \frac{f_{X|\theta}(x^*|\theta)\pi_\Theta(\theta)}{\int f_{X|\Theta}(x^*|\tau)\pi_\Theta(\tau)\,d\tau}
     \end{align*}
-    
+
     \mode<article>{
       \begin{itemize}
         \item There are a few things to note in the equation above. First, the likelihood function $L(\theta) = f(x^*|\theta)$ makes its presence on the right hand side of the equation.
@@ -85,18 +85,18 @@ The Bayesian Approach to Parameter Estimation}
         \item The above notation does a bit of "function overload", but it is often clear from context and the symbols used as input what is meant.
       \end{itemize}
     }
-    
+
   \end{block}
-  
+
   \begin{itemize}
     \item As before, $f$ is taken to be either a pmf or pdf, depending on the problem.
   \end{itemize}
-  
+
   \framebreak
-  
+
   \begin{exampleblock}{Flipping 10 coins}
     Our friend hands us a coin from another country, and we want to estimate $\theta = p$, the probability that the coin lands heads. Suppose we flip a coin 10 times, and see $n$ heads. Find a Bayesian estimate for $\theta$.
-    
+
     \mode<article>{
       \begin{itemize}
         \item The probability model describing the data is Binomial$(N = 10, p = \theta)$, which has mass function:
@@ -117,7 +117,7 @@ The Bayesian Approach to Parameter Estimation}
         $$
         \Theta | X = n \sim \text{Binom}(\text{Beta}(n + 1, N - n + 1))
         $$
-        \item Now our belief about $\Theta$ has been updated using the data $X = n$. This belief is represented not be a single point, but an entire distribution. 
+        \item Now our belief about $\Theta$ has been updated using the data $X = n$. This belief is represented not be a single point, but an entire distribution.
         \item There are multiple ways to get a single point estimation.
         \item One idea is the mean of the posterior, $E[\Theta|X = n]$. In this case, the mean of the Beta distribution is known, and we find:
         $$
@@ -138,11 +138,11 @@ The Bayesian Approach to Parameter Estimation}
         \item Another possible point estimate is the median of the posterior distribution. There's not a closed-form expression for the median of a Beta-distribution, but it can be calculated via software.
       \end{itemize}
     }
-    
+
   \end{exampleblock}
-  
+
   \framebreak
-  
+
   \begin{itemize}
     \item Even in the simple problem above, we see two of the primary challenges with Bayesian parameter estimation:
     \begin{itemize}
@@ -150,27 +150,27 @@ The Bayesian Approach to Parameter Estimation}
       \item Even in this very simple model and prior, the denominator $f(x)$ was difficult to compute. What about more complex models and priors? A large amount of Bayesian computation and theory is dedicated to solving this problem.
     \end{itemize}
   \end{itemize}
-  
+
   \framebreak
-  
+
   \begin{block}{Proposition: the MAP and MLE}
     Let $\theta$ be a parameter of interest, and $x^*$ the observed data. If our prior distribution is proportional to $1$, i.e., $\pi(\theta) \propto 1$ (which is effectively a uniform prior on a bounded interval), then
     $$
     \hat{\theta}_{\text{MAP}} = \hat{\theta}_{\text{MLE}}.
     $$
-    
+
     \mode<article>{
       \begin{itemize}
         \item A proof sketch is given in class, but is left as an exercise in these notes.
       \end{itemize}
     }
-    
+
   \end{block}
-  
+
   \begin{itemize}
     \item This is true for the Coin-tossing example; look back at the likelihood function and posterior, and use R to plot them both.
   \end{itemize}
-  
+
 \end{frame}
 
 \section{Examples}
@@ -178,7 +178,7 @@ The Bayesian Approach to Parameter Estimation}
 \begin{frame}[allowframebreaks]{Bayesian point-estimate examples}
   \begin{exampleblock}{Poisson model}
     Suppose we have observations $n$ observations, which we wish to model as IID Poisson$(\lambda)$. Find a Bayesian estimate of $\Lambda = \lambda$ given the observed data $x^*$.
-    
+
     \mode<article>{
       \begin{itemize}
         \item First we find the density of $X | \Lambda = \lambda$, which begins with finding the density of a single observation $X_i | \Lambda = \lambda$:
@@ -230,7 +230,7 @@ The Bayesian Approach to Parameter Estimation}
         (again, swapping variables $\gamma$, $\zeta$ for $\alpha$ and $\lambda$ for obvious reasons).
         \item We can immediately conclude that the posterior MUST be a Gamma distribution (since it will integrate to one). What is left is to pick the corresponding parameter values. To do this, we must have:
         $$
-        \gamma - 1 = \sum_{i = 1}^n x^*_i + \alpha - 1 \implies \gamma = \sum_{i = 1}^n x^*_i + \alpha, 
+        \gamma - 1 = \sum_{i = 1}^n x^*_i + \alpha - 1 \implies \gamma = \sum_{i = 1}^n x^*_i + \alpha,
         $$
         and
         $$
@@ -245,7 +245,7 @@ The Bayesian Approach to Parameter Estimation}
         \item \textbf{This trick of avoiding calculating the integral in the denominator is extremely common, and it will appear again. Make sure this makes sense to you}.
       \end{itemize}
     }
-    
+
   \end{exampleblock}
 
 \end{frame}
@@ -286,40 +286,41 @@ The Bayesian Approach to Parameter Estimation}
 
 \end{frame}
 
+\section{Conjugate Priors}
 
 \begin{frame}[allowframebreaks]{Conjugate priors}
   \begin{itemize}
     \item The first approach to the Poisson$(\lambda)$ example was the traditional (subjective) Bayesian, who takes seriously the choice of prior, and chose a Gamma density to aid computations.
       % \item The utilitarian (objective) Bayesian, who picked an uninformative prior.
     % \end{itemize}
-    \item This approach was aided by the choice of a Gamma prior, which helped the calculation. 
+    \item This approach was aided by the choice of a Gamma prior, which helped the calculation.
     \item This type of prior is known as a \alert{conjugate prior}.
   \end{itemize}
-  
-  \framebreak
-  
-  \begin{block}{Definition: Conjugate priors}
-    Suppose the prior distribution belongs to a family of distributions, $G$, and the data come from a family of distributions $H$.
-    
-    $G$ is said to be conjugate to $H$ if the posterior is in the family $G$.
-  \end{block}
-  
-  \begin{itemize}
-    \item Example: If the data-model is Poisson$(\lambda)$, then the family $H$ is the family of Poisson distributions. The Gamma family ($G$) of distributions is conjugate to the Poisson family, because if Gamma is selected as the prior distribution, then the posterior distribution (under data model $H$) is still Gamma $(G)$, with updated parameters. 
 
   \framebreak
-    
+
+  \begin{block}{Definition: Conjugate priors}
+    Suppose the prior distribution belongs to a family of distributions, $G$, and the data come from a family of distributions $H$.
+
+    $G$ is said to be conjugate to $H$ if the posterior is in the family $G$.
+  \end{block}
+
+  \begin{itemize}
+    \item Example: If the data-model is Poisson$(\lambda)$, then the family $H$ is the family of Poisson distributions. The Gamma family ($G$) of distributions is conjugate to the Poisson family, because if Gamma is selected as the prior distribution, then the posterior distribution (under data model $H$) is still Gamma $(G)$, with updated parameters.
+
+  \framebreak
+
     \item Much of the Bayesian statistics of the 20th century relied on conjugate priors to help with integration, or were confined to models with very few parameters.
     \item Recent developments in computing, both hardware, software, and theory of Bayesian computing, has enabled fitting much more complex models using arbitrary priors.
     \item Still, it's worth discussing conjugate priors, and we will provide a few examples.
-    
+
   \end{itemize}
-  
+
   \framebreak
-  
+
   \begin{exampleblock}{Conjugate Normals}
     Model $X_1, \ldots, X_n \sim N(\mu, \sigma^2)$. Treating $\sigma^2$ as fixed, consider the prior for $\mu \sim N(\mu_0, \sigma_0^2)$. Find the posterior of $\mu | X = x^*$.
-    
+
     \mode<article>{
       \begin{proof}
         The likelihood function is given by:
@@ -327,7 +328,7 @@ The Bayesian Approach to Parameter Estimation}
         f(x^*|\mu, \sigma^2) &= \prod_{i = 1}^n \frac{1}{\sigma \sqrt{2\pi}}e^{-\frac{1}{2\sigma^2}(x^*_i - \mu)^2}\\
         &= \sigma^{-n}(2\pi)^{-n/2} \exp\Big\{-\frac{1}{2\sigma^2}\sum_{i = 1}^n(x_i^* - \mu)^2\Big\},
         \end{align*}
-        and the posterior is:
+        and the prior for $\mu$ is:
         $$
         \pi(\mu) = \frac{1}{\sigma_0\sqrt{2\pi}} \exp\big\{-\frac{1}{2\sigma_0^2}(\mu -\mu_0)^2\big\}.
         $$
@@ -337,13 +338,16 @@ The Bayesian Approach to Parameter Estimation}
           &\propto \exp\Big\{-\frac{1}{2\sigma^2}\sum_{i = 1}^n(x_i^* - \mu)^2\Big\} \times \exp\big\{-\frac{1}{2\sigma_0^2}(\mu -\mu_0)^2\big\}.
         \end{align*}
         In the last step, we note that we are only interested in the parameter $\mu$; other parameters that arise can be treated as constants with respect to $\mu$.
-        
+
         We now apply a common trick for Normal distributions, which is combining the exponential terms and completing the square.
         Using the posterior expression above, we have:
         \begin{align*}
-          \pi(\mu | x^*) &\propto \exp\Big\{-\frac{1}{2\sigma^2}\sum_{i = 1}^n(x_i^* - \mu)^2 + \frac{1}{2\sigma_0^2}(\mu - \mu_0)^2\Big\} \\
-          &= \exp\Big\{-\frac{1}{2\sigma^2}\big[\sum_{i = 1}^n\big(x_i^*\big)^2 - 2n\mu\bar{x}^* + n\mu^2\big] + \frac{1}{2\sigma_0^2}\big[\mu^2 - 2\mu_0\mu + \mu_0^2\big]\Big\}
+          \pi(\mu | x^*) &\propto \exp\Big\{-\frac{1}{2\sigma^2}\sum_{i = 1}^n(x_i^* - \mu)^2 - \frac{1}{2\sigma_0^2}(\mu - \mu_0)^2\Big\} \\
+          &= \exp\Big\{-\frac{1}{2\sigma^2}\big[\sum_{i = 1}^n\big(x_i^*\big)^2 - 2n\mu\bar{x}^* + n\mu^2\big] - \frac{1}{2\sigma_0^2}\big[\mu^2 - 2\mu_0\mu + \mu_0^2\big]\Big\}
         \end{align*}
+
+        TODO: There are errors after this part, signs are flipped in the second part of the exponential.
+
         Now recall that any factor not involving $\mu$ is a constant (with respect to $\mu$). Thus, we can further simplify be removing a term from each of the inner exponential arguments:
         \begin{align*}
           \pi(\mu | x^*) &\propto \exp\Big\{-\frac{1}{2\sigma^2}\big[- 2n\mu\bar{x}^* + n\mu^2\big] + \frac{1}{2\sigma_0^2}\big[\mu^2 - 2\mu_0\mu\big]\Big\}
@@ -362,11 +366,11 @@ The Bayesian Approach to Parameter Estimation}
           % &= -\frac{1}{2}\Big(\frac{2\mu_0\sigma^2-2n\bar{x}^*\sigma_0^2}{\sigma^2\sigma_0^2}\Big)\mu\\
           &= b\mu = -\frac{1}{2}(2b\mu)
         \end{align*}
-        Making the substitutions above for $a$ and $b$, we now have the posterior in the form: 
+        Making the substitutions above for $a$ and $b$, we now have the posterior in the form:
         $$
         \pi(\mu | x^*) \propto \exp\Big\{-\frac{1}{2}(a\mu^2 - 2b\mu)\Big\}.
         $$
-        Now the final step is to complete the square. 
+        Now the final step is to complete the square.
         Within the exponential, we have
         \begin{align*}
         -\frac{1}{2}(a\mu^2 - 2b\mu) &= -\frac{a}{2}(\mu^2 - \frac{2b}{a}\mu) \\
@@ -384,9 +388,9 @@ The Bayesian Approach to Parameter Estimation}
         \end{align*}
       \end{proof}
     }
-    
+
   \end{exampleblock}
-  
+
 \end{frame}
 
 \begin{frame}[allowframebreaks]{Posteriors and Likelihood}
@@ -417,7 +421,7 @@ The Bayesian Approach to Parameter Estimation}
 
 \begin{exampleblock}{Poisson posterior, uniform prior}
     Revisit the Poisson$(\lambda)$ model, while taking the alternative approach of using a uniform prior.
-    
+
     \mode<article>{
       \begin{itemize}
         \item The setup for the problem is the exact same, so note that the posterior distribution is:
@@ -442,7 +446,7 @@ The Bayesian Approach to Parameter Estimation}
         \item The posterior mean can similarly be found using a numeric integration technique, and posterior mode can be found using numeric optimization strategies covered in the last set of lecture notes.
       \end{itemize}
     }
-    
+
   \end{exampleblock}
 \end{frame}
 
@@ -453,9 +457,9 @@ The Bayesian Approach to Parameter Estimation}
     \item As we saw in the previous examples, one of the primary challenges of Bayesian estimation is the integration in the denominator of the posterior.
     \item Bayesian statistics has really exploded since the late 20th century, largely thanks to improved computational tools that help with the numeric integration.
     \item For this set of lectures, we only briefly introduce this topic. Depending on time and interest, we can explore this topic more later in the semester.
-  
+
   \framebreak
-  
+
     \item For univariate functions, there are numerous approaches to well-approximate an integral.
     \item Traditional approaches are very simply, and are often based on Riemann-sum approximations.
     \item In R, one reliable function is the \code{integrate} function.
@@ -463,9 +467,9 @@ The Bayesian Approach to Parameter Estimation}
     $$
     \int_{0}^3 x^2 \, dx = 9
     $$
-    
+
     \end{itemize}
-    
+
 \begin{knitrout}\small
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
@@ -478,9 +482,9 @@ The Bayesian Approach to Parameter Estimation}
 \end{kframe}
 \end{knitrout}
 
-  
+
   \framebreak
-  
+
   \begin{itemize}
     \item Let $m$ be the number of points used to evaluate the integral:
     $$
@@ -490,10 +494,10 @@ The Bayesian Approach to Parameter Estimation}
     \item The standard Riemann approximation can be shown to converge to the true value at rate $O(1/m)$ for univariate functions, and can even be improved to faster rates \cite[][Chatper~1]{liu01}.
     \item However, these approaches scale very poorly as the dimensions of $x$ and the integration area $A$ increase.
     \item For instance, suppose that $A$ is a 10-dimensional area (not even that large). Then, in order to achieve the $O(1/m)$ promised rate, you need to evaluate $O(m^{10})$ different points!
-    \item The primary alternative approach is known as \alert{Monte Carlo} approximation. 
-  
+    \item The primary alternative approach is known as \alert{Monte Carlo} approximation.
+
   \framebreak
-  
+
     \item Let $f(x; \theta)$ denote a pdf of some random variable, $X$. Then, if $I$ is the integral
     $$
     I = E[g(x)] = \int_A g(x) f(x; \theta)\, dx,
@@ -502,10 +506,10 @@ The Bayesian Approach to Parameter Estimation}
     $$
     \hat{I}_m = \frac{1}{m}\sum_{i = 1}^m g(X_i) \overset{a.s.}{\rightarrow} I,
     $$
-    where $X_i$ is sampled from the distribution with density $f(x; \theta)$. 
-    
+    where $X_i$ is sampled from the distribution with density $f(x; \theta)$.
+
   \framebreak
-  
+
   \item Because we have an average of samples, the CLT gives us a way to approximate the error:
   $$
   \sqrt{m}(I_m - I) \dlim N(0, \sigma^2),
@@ -517,11 +521,11 @@ The Bayesian Approach to Parameter Estimation}
   I = \int_A g(x)\, dx, \quad I_m = \frac{|A|}{m}\sum_{i = 1}^m g(X_i), \,\, X_i \sim \text{Uniform}(A).
   $$
   \item If $x$ is univariate, this approach is worse than standard deterministic approaches $O(1/m)$), but it has better performance in higher dimensional settings.
-  
+
   \framebreak
-  
+
   \item Example: $f(x) = x^2$ on the region $A = [0, 3]$
-  
+
 \begin{knitrout}\small
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
@@ -535,16 +539,16 @@ The Bayesian Approach to Parameter Estimation}
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
-  
+
   \item Using the CLT, we can get a standard error of this estimate. $\Var(3X^2) = 64.8$, and therefore:
   $$
   SE \approx \sqrt{\frac{64.8}{m}}.
   $$
-  
+
   \end{itemize}
-  
+
   \framebreak
-  
+
 \begin{knitrout}\small
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
@@ -555,11 +559,11 @@ The Bayesian Approach to Parameter Estimation}
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
-  
+
 \begin{knitrout}\small
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlcom{# Numeric Approximation: }
+\hlcom{# Numeric Approximation:}
 \hlkwd{sd}\hldef{(}\hlnum{3} \hlopt{*} \hldef{X}\hlopt{^}\hlnum{2}\hldef{)} \hlopt{/} \hlkwd{sqrt}\hldef{(m)}
 \end{alltt}
 \begin{verbatim}
@@ -577,15 +581,15 @@ The Bayesian Approach to Parameter Estimation}
     \item Drawing uniform samples from $A$ might be hard.
   \end{enumerate}
   \item The solution to these two problems is more advanced Monte-Carlo designs. We'll introduce \alert{importance sampling}.
-  
+
   \framebreak
-  
+
   \item Idea: not intervals of $x$ contribute equally the function $f(x)$ and it's integral.
   \item For instance, if $f(x) = x^2$, then values of $x$ close to zero mean that the function $f \approx 0$. However, values of $x$ near $3$ have larger influence on the integral evaluation.
   \item Because of this, we don't need lots of samples from $x$ near zero, and we should focus more on samples near $3$.
-  
+
   \framebreak
-  
+
   \item We can do this mathematically:
   \begin{align*}
   \int g(x) f(x) dx = E_{X \sim f(x)}[g(X_i)] \approx \frac{1}{m}\sum_{i = 1}^m g(X_i),
@@ -607,13 +611,13 @@ The Bayesian Approach to Parameter Estimation}
 \begin{frame}[allowframebreaks,fragile]{Importance Sampling, Example 1}
 
   \begin{itemize}
-  
+
   \item Consider approximating the integral:
   $$
   \int_{0}^3 x^2\, dx
   $$.
   \item We did the standard Monte-Carlo approach, using Uniform(0, 3) random variables:
-  
+
 \begin{knitrout}\small
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
@@ -627,13 +631,13 @@ The Bayesian Approach to Parameter Estimation}
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
-  
-  \item We numerically approximated the standard error of this estimate to be: 
-  
+
+  \item We numerically approximated the standard error of this estimate to be:
+
 \begin{knitrout}\small
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlcom{# Numeric Approximation: }
+\hlcom{# Numeric Approximation:}
 \hlkwd{sd}\hldef{(}\hlnum{3} \hlopt{*} \hldef{X}\hlopt{^}\hlnum{2}\hldef{)} \hlopt{/} \hlkwd{sqrt}\hldef{(m)}
 \end{alltt}
 \begin{verbatim}
@@ -641,9 +645,9 @@ The Bayesian Approach to Parameter Estimation}
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
-  
+
   \framebreak
-  
+
   \item Now let's try importance sampling. We don't want many low-values of $X$, and values should be between 0-3. Let's let $B_i \sim \text{Beta}(\alpha, \beta)$, and then $X_i = 3B_i$.
   \item After some checking, a good distribution might be:
   $$
@@ -655,7 +659,7 @@ The Bayesian Approach to Parameter Estimation}
   &= \frac{1}{3}\frac{(x/3)}{B(2,1)}, \quad x\in [0, 3] \\
   &= \frac{2}{9}x, \quad x\in[0, 3]
   \end{align*}
-  
+
   \item Now that we have a sampling distribution $\pi(x)$, there are two different ways to think about the problem. The first is just a direct integral:
   $$
   \int g(x)\, dx = \int \frac{g(x)}{\pi(x)}\pi(x) \, dx = E_{X \sim \pi(x)}\Big[\frac{g(X)}{\pi(X)}\Big],
@@ -666,10 +670,10 @@ The Bayesian Approach to Parameter Estimation}
   &\approx \frac{1}{m}\sum_{i = 1}^m \frac{g(X_i)f(X_i)}{\pi(X_i)}.
   \end{align*}
   \item Both are correct, and sometimes the second is a useful way to think about a problem.
-  
+
   \item In this case, the first approach is obvious, and the second approach we would pick the target distribution $f$ to correspond to a uniform$(0, 3)$ distribution.
   \item Thus, approximating the integral:
-  
+
 \begin{knitrout}\small
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
@@ -683,13 +687,13 @@ The Bayesian Approach to Parameter Estimation}
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
- 
+
  \item We can once again get an estimate of the standard error using the CLT:
  $$
  SE \approx \frac{\sigma^2_{w_i}}{\sqrt{m}},
  $$
  where $w_i$ is the importance weight.
- 
+
 \begin{knitrout}\small
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
@@ -700,17 +704,17 @@ The Bayesian Approach to Parameter Estimation}
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
- 
+
  This error was about half of the default Monte-Carlo method.
-  
+
   % \begin{align*}
   % \pi(x) &= \frac{1}{3}\frac{(x/3)^{\alpha-1}(1-x/3)^{\beta-1}}{B(\alpha,\beta)}, \quad x\in [0, 3] \\
   % &= \frac{1}{3}\frac{(x/3)^{2}}{B(3,1)}, \quad x\in [0, 3] \\
   % &= \frac{1}{9}x^{2}, \quad x\in[0, 3]
   % \end{align*}
-  
+
   \framebreak
-  
+
   \item This example is a bit trivial, because the integral is not hard to compute.
   \item Also, our choice of sampling distribution meant we could get a closed-form solution for sampling weights:
   \begin{align*}
@@ -724,7 +728,7 @@ The Bayesian Approach to Parameter Estimation}
   &= \frac{1}{3}\frac{(x/3)^{2}}{B(3,1)}, \quad x\in [0, 3] \\
   &= \frac{1}{9}x^{2}, \quad x\in[0, 3]
   \end{align*}
-  \framebreak 
+  \framebreak
   \item Thus, if we picked this distribution, we could actually get the exact answer!
   \begin{align*}
     I_m &= \frac{1}{m} \sum_{i = 1}^m \frac{X^2}{\frac{X^2}{9}} \\
@@ -738,7 +742,7 @@ The Bayesian Approach to Parameter Estimation}
   \item This effectively never happens in real worl-scenarios, because if it did there wouldn't be a reason to do Monte-Carlo.
   \item However, it does help us decide a useful principle: try to pick a $\pi(x)$ such that $\pi(x) \propto g(x)$ as much as possible.
   \end{itemize}
-  
+
 \end{frame}
 
 \begin{frame}[allowframebreaks,fragile]{Importance Sampling, Example II}
@@ -748,10 +752,10 @@ The Bayesian Approach to Parameter Estimation}
     P(Z > 3) = I = \int_{3}^\infty \frac{1}{2\sqrt{\pi}}e^{-x^2/2}\, dx.
     $$
   \end{exampleblock}
-  
+
   \begin{itemize}
     \item Once again, we have an exact method to calculate the integral, so we can see how good our approximation is:
-    
+
 \begin{knitrout}\small
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
@@ -763,9 +767,9 @@ The Bayesian Approach to Parameter Estimation}
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
-    
+
     \framebreak
-    
+
     \item We can use indicator functions to help write this in the standard Monte-Carlo form:
     $$
     h(x) = I(x > 3),
@@ -778,9 +782,9 @@ The Bayesian Approach to Parameter Estimation}
     $$
     \hat{I}_m = \frac{1}{m}\sum_{i = 1}^m h(X_i), \quad X_i \sim N(0, 1).
     $$
-    
+
     \framebreak
-    
+
 \begin{knitrout}\small
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
@@ -795,12 +799,12 @@ The Bayesian Approach to Parameter Estimation}
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
-    
+
     \item Because $h(X_i)$ is binary, the standard error is:
     $$
     SE \approx \sqrt{\frac{\hat{I}_m(1-\hat{I}_m)}{m}}
     $$
-    
+
 \begin{knitrout}\small
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
@@ -811,10 +815,10 @@ The Bayesian Approach to Parameter Estimation}
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
-    
-    
+
+
     \framebreak
-    
+
     \item The problem with this approach, however, is that if the $X_i \sim N(0, 1)$, then almost none of the samples will be larger than $3$ (very rare event), so the estimate is high-variance!
     \item That is, we will end up with $h(X_i)=0$ for \alert{nearly all} samples of $X_i$.
     \item We want to focus our samples in the ``important" regions to reduce variance.
@@ -822,10 +826,10 @@ The Bayesian Approach to Parameter Estimation}
     $$
     \hat{I}_m = \frac{1}{m}\sum_{i = 1}^m h(X_i)\frac{f(X_i)}{\pi(X_i)}, \quad X_i \sim N(4, 1).
     $$
-  
+
   \framebreak
-  
-  
+
+
 \begin{knitrout}\small
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
@@ -838,12 +842,12 @@ The Bayesian Approach to Parameter Estimation}
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
-  
+
   \item This time, the standard error is given numerically by:
   $$
   SE \approx \frac{\text{sd}(h(X_i)w_i)}{\sqrt{m}}
   $$
-  
+
 \begin{knitrout}\small
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
@@ -854,21 +858,21 @@ The Bayesian Approach to Parameter Estimation}
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
-  
+
   \framebreak
-  
+
   \item There is an issue that many of the sampled $X_i$ values are less than 3, so we might want to try a completely different sampling approach.
   \item Consider the function $g(x)$, when $x > 3$, then $g(3)\propto e^{-9}$.
   \item Thus, we might consider sampling $X_i$ such that:
   $$
   X_i \sim 3 + \text{Exp}(-9)
   $$
-  \item We again need to do a variable transformation, but this one is easy. If $Y\sim \text{Exp}(\lambda)$, then for $X = Y + 3$, 
-  
+  \item We again need to do a variable transformation, but this one is easy. If $Y\sim \text{Exp}(\lambda)$, then for $X = Y + 3$,
+
   $$
   \pi(x) = f_y(x - 3).
   $$
-  
+
 \begin{knitrout}\small
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
@@ -881,11 +885,11 @@ The Bayesian Approach to Parameter Estimation}
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
-  
+
   \framebreak
-  
+
   \item Finally, let's compute these 3 different estimate for every value of $m \in \{2, 3, \ldots, 10000\}$.
-  
+
 \begin{knitrout}\small
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
@@ -912,10 +916,10 @@ The Bayesian Approach to Parameter Estimation}
 
 
 \end{knitrout}
-  
-  
+
+
   \end{itemize}
-  
+
 \end{frame}
 
 \begin{frame}[allowframebreaks,fragile]{Rejection Sampling}
@@ -931,20 +935,20 @@ The Bayesian Approach to Parameter Estimation}
   \begin{itemize}
     \item We won't go into a lot of details here, but there are some approaches highlighted in \citet[Section~2.3 of ][]{liu01} that can help with Monte-Carlo evaluations.
     \item One of the main problems is the variance $\sigma^2$ that arises in the numerator. These approaches are intended to reduce the variance, while not adding any bias.
-    
+
   \end{itemize}
-  
+
     \framebreak
-    
+
     \begin{block}{Stratified Sampling}
       Suppose we wish to calculate the integral
       $$
       \int_A f(x)\, dx.
       $$
-      Using Monte-Carlo sampling, the variance is $\sigma^2 /n$, where $\sigma^2$ is the variance of the function $f$ over the domain $A$. 
-      
-      Instead, consider breaking the domain $A$ into distinct areas: $A_1$, $A_2$, \ldots, $A_k$, such that the variance of $f$ over these areas is roughly constant, then get Monte-Carlo samples from these regions independently. 
-      
+      Using Monte-Carlo sampling, the variance is $\sigma^2 /n$, where $\sigma^2$ is the variance of the function $f$ over the domain $A$.
+
+      Instead, consider breaking the domain $A$ into distinct areas: $A_1$, $A_2$, \ldots, $A_k$, such that the variance of $f$ over these areas is roughly constant, then get Monte-Carlo samples from these regions independently.
+
       \mode<article>{
         \begin{itemize}
           \item For each sub-region $A_i$, we get $m_i$ samples, and estimate the integral:
@@ -967,70 +971,70 @@ The Bayesian Approach to Parameter Estimation}
           \item However, if the variance over the individual regions is \emph{not} constant, this can actually result in worse variance.
         \end{itemize}
       }
-      
+
     \end{block}
-    
-  
+
+
   \framebreak
-  
+
   \begin{block}{Control Variates Method}
-    In this method, one uses a control variate $C$ which is correlated with the sample $X$, to produce a better estimate. 
-    
+    In this method, one uses a control variate $C$ which is correlated with the sample $X$, to produce a better estimate.
+
     Suppose we want to estimate $\mu = E[X]$, and $\mu_C = E[C]$ is known. Then, we can produce Monte Carlo samples of the form:
     $$
     X_i^* = X_i - b(C - \mu_C).
     $$
-    
+
     \mode<article>{
     Then, $E[X_i^*] = E[X] = \mu$, but the variance is:
     $$
     \Var(X^*_i) = \Var(X) - 2b\cov(X, C) + b^2 \Var(C).
     $$
     You can show that there is always a choice of $b$ such that $\Var(X^*_i) < \Var(X_i)$.
-    
+
       \begin{itemize}
         \item If the covariance and variance terms are easy, we can select an optimal value of $b$ as:
         $$
         b = \frac{\Cov(X, C)}{\Var(C)},
         $$
-        in which case 
+        in which case
         $$
         \Var(X_i^*) = (1 - \rho_{XC}^2)\Var(X) < \Var(X_i).
         $$
-        
+
         \item As a concrete example, consider approximating $\mu = E[e^X]$ if $X$ is a standard normal distribution.
         \item In this case, the true value can be given by the MGF, in particular $\mu = m(1) = e^{-1/2}$
         \item A standard Monte-Carlo evaluation would be to sample $X_i \sim N(0, 1)$, and compute:
         $$
         \hat{\mu} = \frac{1}{m} \sum_{i = 1}^m e^{X_i}.
         $$
-        
+
         \item However, consider introducing a covariate $C_i$ that is correlated with $X_i$ to reduce the variance.
         \item One choice is $C_i = X_i$, in which case $\mu_C = 0$, and we can let:
         $$
         b = \frac{\Cov(e^{X_i}, X_i)}{\Var(X_i)} = \Cov(e^{X_i}).
         $$
-        \item Since $b$ might be hard to get analytically, we'll just approximate using the covariance function numerically: $\hat{b} = \texttt{cov(exp(X), x)}$. 
+        \item Since $b$ might be hard to get analytically, we'll just approximate using the covariance function numerically: $\hat{b} = \texttt{cov(exp(X), x)}$.
         \item Then, setting:
         $$
         X_i^* = e^{X_i} + \hat{b}(X_i - 0),
         $$
         then $E[X_i^*] = E[e^{X_i^*}] = \mu$, but the variance has been reduced.
         \item You can try this in R by simulating $e^{X_i}$, calculating the variance, then calculating $b$ and the transformed variable $X_i^* = e^{X_i} - bX_i$, and calculating the variance. They have the same expectation, but the later estimate is lower variance.
-        
+
       \end{itemize}
     }
-    
+
   \end{block}
-  
-  
+
+
   \framebreak
-  
-  
+
+
   \begin{block}{Antithetic Variates Method}
-    
+
    Suppose we want to compute an integral $\int_0^1 f(x) dx$.
-    We can sample $U_i \sim U(0, 1)$, and do Monte-Carlo as usual with $f(U_i)$. However, if $f$ is monotonic, then $U'_i = 1-U_i$ is \alert{antithetic} to $U_i$, and 
+    We can sample $U_i \sim U(0, 1)$, and do Monte-Carlo as usual with $f(U_i)$. However, if $f$ is monotonic, then $U'_i = 1-U_i$ is \alert{antithetic} to $U_i$, and
     $$
     \Cov(U_i, 1-U_i) = -Var(U_i).
     $$
@@ -1038,7 +1042,7 @@ The Bayesian Approach to Parameter Estimation}
     $$
     \int_0^1 f(x) dx \approx \frac{1}{m}\sum_{i = 1}^m (f(u_i) + f(1-u_i))/2
     $$
-    
+
     \mode<article>{
     \begin{itemize}
     \item More generally, we don't necessarily need to use Monte-Carlo samples from the uniform distribution.
@@ -1046,9 +1050,9 @@ The Bayesian Approach to Parameter Estimation}
     $$
     X_i = F^{-1}(U_i).
     $$
-    
+
     TODO: There's a sign-error in the $\mu$ term. They should both be the same sign!
-    
+
     Similarly, if $U_i$ is uniform, then $1-U_i$ is also uniform, so
     $$
     X'_i = F^{-1}(1-U_1)
@@ -1064,9 +1068,9 @@ The Bayesian Approach to Parameter Estimation}
     $$
     \end{itemize}
     }
-    
+
   \end{block}
-  
+
 \end{frame}
 
 \section{Choice of Priors}
@@ -1089,7 +1093,7 @@ The Bayesian Approach to Parameter Estimation}
     \item In a pure Bayesian paradigm, if we don't know the value of $\theta_1$, then it is also a random variable $\Theta_1$, and we should put a prior on this as well!
     \item In some way, this allows us to be less-committal about the parameters in the prior model, and instead allow the data to inform our choice of priors (to some degree).
     \item Philosophically, this situation naturally arises if we want to pick a conjugate prior for $\Theta$, but are not committal about the \alert{hyperparameters} $\Theta_1$ that define the distribution of $\Theta$.
-  
+
     \item We could continue doing this many times if we wanted!
     \item The prior for $\Theta_1$ might depend on parameters $\theta_2$, which we model as a random variable $\Theta_2$, $\ldots$.
     \item This leads to a model for $(X, \Theta, \Theta_1, \ldots, \Theta_N)$.
@@ -1104,9 +1108,9 @@ The Bayesian Approach to Parameter Estimation}
     $$
     X | \Theta = \theta \sim f(x | \theta), \,\, \Theta | \Theta_1 = \theta_1 \sim \pi_{1}(\theta|\theta_1)\,\, \ldots \,\, \Theta_N \sim \pi_N(\theta_n).
     $$
-    
+
     \framebreak
-    
+
     \item Using rules of marginal probability and conditional probability, then
     \begin{align*}
       \pi(\theta) &= \int \pi(\theta, \theta_1, \ldots, \theta_N) \, d\theta_{1:N} \\
@@ -1115,7 +1119,7 @@ The Bayesian Approach to Parameter Estimation}
       &= \vdots \\
       &= \int \pi(\theta|\theta_1)\pi(\theta_1|\theta_2) \ldots, \pi(\theta_{N-1}|\theta_N)\pi(\theta_N) \, d\theta_{1:N}
     \end{align*}
-    
+
     \item Thus, the hierarchical model is functionally equivalent to the standard Bayesian model:
     $$
     X|\Theta = \theta \sim f(x|\theta)\quad \Theta \sim \pi(\theta),
@@ -1126,7 +1130,7 @@ The Bayesian Approach to Parameter Estimation}
     \begin{enumerate}
       \item Sometimes the data / problem give rise to a natural hierarchical structure, and this idea will be useful. Here, we might actually be interested in the hyperparameters $\theta_1, \ldots, \theta_N$.
       \item We can now be less committal about our priors, while still using desirable structures.
-      \item It can sometimes aid computations. 
+      \item It can sometimes aid computations.
     \end{enumerate}
 
   \end{itemize}
@@ -1160,11 +1164,11 @@ The Bayesian Approach to Parameter Estimation}
 \begin{exampleblock}{More realistic example: Coin-toss experiment}
   Suppose your friend gives you a coin from another country, and you want to estimate $\theta = p$, the probability of heads. Thus, in $N$ tosses, the natural model for $X$, the number of heads, $X \sim \text{Bin}(N, \theta)$. You're believe that the proportion is close to $1/2$, but not quite sure.
   A nice prior would be the Beta$(\alpha, \beta)$-distribution, since it is conjugate for the binomial family.
-  
-  
+
+
   If $\Theta \sim \text{Beta}(\alpha, \beta)$, then $E[\Theta] = \frac{\alpha}{\alpha + \beta}$. Thus, if I want a prior centered at $1/2$, I can pick: $\theta_1 = \alpha = \beta$, and $E[\Theta] = \theta_1 / 2\theta_1 = 1/2$.
   We can now give a prior for $\Theta_1$.
-  
+
 \end{exampleblock}
 
 \end{frame}
@@ -1173,7 +1177,7 @@ The Bayesian Approach to Parameter Estimation}
   \begin{itemize}
     \item For now, we will restrict our choices of $\Theta_1$ to be integers.
   \end{itemize}
-  
+
 
 \begin{knitrout}\small
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -1202,8 +1206,8 @@ The Bayesian Approach to Parameter Estimation}
 
 
 \framebreak
-  
-  
+
+
   \begin{itemize}
     \item As $\theta_1$ grows, the variance of $\Theta$ shrinks at a rate $O(\theta_1)$.
     \item Thus, to be noncommittal about our prior on $\Theta$, we will set a \alert{hyperprior} on $\Theta_1$ that has more weight on smaller values of $k$:
@@ -1211,7 +1215,7 @@ The Bayesian Approach to Parameter Estimation}
     \pi_{\Theta_1}(k) = \frac{1}{2\log (2) k(2k-1)},\, \quad k \in \{1, 2, \ldots\}
     $$
     \item This hyper-prior was selected somewhat out of convenience (The Catalan Numbers), which will allow us to get the marginal prior of $\Theta$:
-    
+
     $$
     \pi(\theta) = \sum_{k = 1}^\infty \pi_{\Theta|\Theta_1}(\theta | k)\pi_{\Theta_1}(k) = \frac{1 - |1 - 2\theta|}{4\log(2) \theta(1 - \theta)}, \quad 0<\theta<1
     $$
@@ -1222,13 +1226,13 @@ The Bayesian Approach to Parameter Estimation}
 
       \begin{proof}
         \item The proof relies primarily on the Binomial Theorem. Some algebraic manipulation has already been done for us in the derivation of the Catalan numbers \citep{wikiCatalan}.
-        
+
         \begin{align*}
           \pi(\theta) &= \sum_{k = 1}^\infty \pi_{\Theta|\Theta_1}(\theta | k)\pi_{\Theta_1}(k) \\
           &= \sum_{k = 1}^\infty \frac{\theta^{k-1}(1 - \theta)^{k-1}}{B(k, k)}\frac{1}{2\log(2)k(2k-1)}
         \end{align*}
-        
-        \item Since we picked $\theta_1 = k$ to be an integer (replacing with $k$ because the notation will be easier), 
+
+        \item Since we picked $\theta_1 = k$ to be an integer (replacing with $k$ because the notation will be easier),
         $$
         B(k, k) = \frac{\Gamma(k)\Gamma(k)}{\Gamma(2k)} = \frac{(k-1)!(k-1)!}{(2k-1)!}.
         $$
@@ -1255,12 +1259,12 @@ The Bayesian Approach to Parameter Estimation}
         $$
         \pi(\theta) = \frac{1-|1-2\theta|}{4\log(2) \theta(1-\theta)}, \quad 0 \leq \theta \leq 1.
         $$
-        
+
       \end{proof}
     }
     \item In this case, we can get a closed-form expression for $\pi(\theta)$, but as you can tell, it can often get very difficult to do this mathematically.
     \item Thus, while the hierarchical structure is equivalent to just setting $\pi(\theta)$ as our prior (and not worrying about hierarchical model), this additional structure can aid in computations.
-    
+
     \item If we are looking to estimate, for instance, the posterior mean:
     $$
     E_{\Theta|X}[\Theta],
@@ -1269,14 +1273,14 @@ The Bayesian Approach to Parameter Estimation}
     $$
     E_{\Theta|X}[\Theta|X] = E_{\Theta_1|X}\big[E_{\Theta|\Theta_1, X}[\Theta|\Theta_1, X]\big].
     $$
-    \item Thus, the calculation of the posterior mean of $\Theta|X$ can be done without needing explicit form of the posterior $\Theta|X$, which can simplify the problem. 
-    
+    \item Thus, the calculation of the posterior mean of $\Theta|X$ can be done without needing explicit form of the posterior $\Theta|X$, which can simplify the problem.
+
     \item Our particular choice of likelihood and prior makes it easy to calculate the marginal-likelihood of $\Theta_1 = k$:
     \begin{align*}
     \pi_{X|\Theta_1}(x|k) &= \int_0^1 f(x|\theta, k)\pi_{\Theta|\Theta_1}(\theta; k)\, d\theta \\
     &= \binom{N}{x}\frac{B(x + k, N - x + k)}{B(k, k)}.
     \end{align*}
-    
+
     \item Also, The Beta distribution was picked because it is conjugate, so the posterior mean $\Theta|\Theta_1 = k, X$ is readily available:
     $$
     E_{\Theta|\Theta_1 = k, X} = \mu_k = \frac{x + k}{N + 2k}.
@@ -1297,17 +1301,17 @@ The Bayesian Approach to Parameter Estimation}
     $$
     \item For this particular example, the sum can be calculated exactly. However, we can also approximate this using software by taking the first $K$ partial sums. Check out the provided HB-code R code.
   \end{itemize}
-  
-  
+
+
   % $$
   % \pi(p) = \sum_{k = 1}^\infty \frac{p^{k-1}(1 - p)^{k-1}}{B(k, k)}\frac{1}{2\log(2)k(2k-1)} = \frac{1 - |1 - 2p|}{4\log(2)p(1- p)}
   % $$
-  
+
 \end{frame}
 
 \begin{frame}[allowframebreaks]{Baseball statistics}
   \begin{itemize}
-    \item TODO: HB example of on-base percentages for base-ball players. Move to EB? 
+    \item TODO: HB example of on-base percentages for base-ball players. Move to EB?
   \end{itemize}
 \end{frame}
 
@@ -1330,7 +1334,7 @@ The Bayesian Approach to Parameter Estimation}
 
 \newcommand\acknowledgments{
 \begin{itemize}
-\item   Compiled on {\today} using \Rlanguage version 4.5.2.
+\item   Compiled on {\today} using \Rlanguage version 4.5.1.
 \item   \parbox[t]{0.75\textwidth}{Licensed under the \link{http://creativecommons.org/licenses/by-nc/4.0/}{Creative Commons Attribution-NonCommercial license}.
     Please share and remix non-commercially, mentioning its origin.}
     \parbox[c]{1.5cm}{\includegraphics[height=12pt]{../cc-by-nc}}
