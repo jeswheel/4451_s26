@@ -707,7 +707,7 @@ sd( (X^2) / (2 * X / 9) ) / sqrt(m)
 \end{frame}
 
 \begin{frame}[allowframebreaks,fragile]{Importance Sampling, Example II}
-  \begin{exampleblock}
+  \begin{exampleblock}{Importance Sampling: extreme events}
     If $Z \sim N(0, 1)$, approximate the probability:
     $$
     P(Z > 3) = I = \int_{3}^\infty \frac{1}{2\sqrt{\pi}}e^{-x^2/2}\, dx.
@@ -1227,7 +1227,88 @@ lines(x = Theta, y = B10, type = 'l', col = '#08519c')
 
 \begin{frame}[allowframebreaks]{Uncertainty in Bayes estimates}
   \begin{itemize}
-    \item TODO
+    \item Uncertainty quantification is very natural in Bayesian models.
+    \item We won't focus on too many examples, but will introduce the basic concepts.
+  \end{itemize}
+    
+    \begin{exampleblock}{Approach 1: Posterior variance}
+      Since our estimates correspond to an entire distribution of $\Theta | X = x^*$, one natural idea is to use the posterior variance to report uncertainty:
+      $$
+      \Var(\Theta | X = x^*).
+      $$
+      
+      \mode<article>{
+        This approach is often convenient, since we can approximate this variance even if we don't have a closed-form solution for the posterior, and instead just have samples from the distribution. However, variance is not a great measure of uncertainty for asymmetric distributions, which is often the case with our posterior distribution. It also doesn't make as much sense to use if we want our point estimate to correspond to the MAP instead of the posterior mean.
+      }
+      
+    \end{exampleblock}
+    
+    \framebreak
+    
+    \begin{exampleblock}{Approach 2: quantiles (credible intervals)}
+      Another common approach is the get desired percentiles / quantiles of the posterior. For instance, picking $\alpha = 0.05$, then we might want to select an interval of $I_\alpha = (\theta_{\alpha / 2}, \theta_{1-\alpha/2})$ to represent our confidence, where $\alpha_x$ corresponds to the $x$th percentile of the posterior. In this case, 
+      \begin{align*}
+      P(\Theta \in I_\alpha | X = x^*) &= P(\theta_{\alpha / 2} \leq \Theta \leq \theta_{1 - \alpha / 2} | X = x^*) \\
+      &= F_{\Theta | X}(\theta_{1 - \alpha / 2}) - F_{\Theta | X}(\theta_{\alpha / 2}) \\
+      &= \alpha
+      \end{align*}
+      
+      \mode<article>{
+      Note that this interval above closely corresponds to the frequentist ``Confidence Interval". In Bayesian analysis, we often call this a ``credible interval", and it often has very good frequentist properties.
+      Note a few key differences:
+      \begin{itemize}
+        \item In this interval, we are conditioning on the data $X = x^*$. Thus, the interval is fixed, and $\Theta$ is random. In the frequentist confidence interval, this is reversed! The parameter is fixed, and the interval is random. The Bayesian interpretation is more natural in this case, as it corresponds to the probability that $\Theta$ is in the given interval.
+        \item Note that really the probability should be written as:
+        $$
+        P(\Theta \in I_\alpha | X = x^*, M),
+        $$
+        where $M$ is the selected model, which depends of course on the prior. Thus, a different choice in prior will lead to a different interval; even though these intervals are more natural to interpret, one should be careful to not forget that this probability statement formally is a statement about \emph{belief} about a parameter, not long-term frequencies.
+        Thus, if our prior belief $M$ is wildly different than the real-situation, this probability may not correspond to the number of times this experiment will cover the truth. 
+      \end{itemize}
+      }
+      
+    \end{exampleblock}
+    
+    \framebreak
+
+    \begin{exampleblock}{Approach 3: high-density region (or high-posterior density)}
+      Also called credible intervals, but constructed in a different way, is the high-density-region (HDR) approach.
+      Here, we take as our set that measures uncertainty the set:
+      $$
+      R_\alpha(\Theta) = \{\Theta: \pi_{\Theta | X}(\theta|x^*) \geq 1-\alpha\}.
+      $$
+
+      \mode<article>{
+            This is similar to the previously proposed credible interval, and if the posterior is unimodal and symmetric, they give the same answer.
+            This is like a top-down approach: Starting from the MAP, you draw a horizontal line down until $(1-\alpha)\%$ of the posterior is above the line. This makes the biggest difference if the posterior is multi-modal, in which case $R_\alpha(\Theta)$ might not even be an interval, but rather the union of intervals.
+      }
+
+    \end{exampleblock}
+    
+\end{frame}
+
+\section{Conclusion}
+
+\begin{frame}[allowframebreaks]{Concluding Rermarks}
+  \begin{itemize}
+    \item Bayesian statistics in more than just a philosophy of what probability is, but also a useful way to solve hard problems.
+    \item At the earliest stages of the statistics discipline, most approaches were fundamentally Bayesian, until Fisher in the early 1900s
+    \item The approach lost some popularity until the late 1900s, do to the numeric difficulties that often arise.
+    \item Advances in hardware, software, and methodology caused an explosion of Bayesian statistics research, which continues today.
+    
+    \framebreak
+    
+    \item Some of the algorithms that led to this success include:
+    \item Markov-chain Monte Carlo (MCMC) algorithms. Importance sampling is hard in high-dimensions, and often fails in time-series / spatial statistics. Further, a good importance distribution is not always available. MCMC is a class of algorithms that largely solve this issue, by using \alert{dependent} samples; the next sample in a ``Chain" is a permutation of previous samples, guided by the likelihood function.
+    \item Sequential Monte Carlo (SMC) algorithms. In many time-series examples, even MCMC fails because of the unique dependence of the model. SMC addresses this by doing Monte-Carlo one step (observation) at a time. The most famous example of this is the \alert{particle filter}.
+    
+    \framebreak
+    
+    \item Despite some heated arguments on the topic, a well-done analysis with sufficient data usually result in the same practical solutions, whether a Bayes or Frequentist approach is taken.
+    \item There's somewhat of a general consensus that Bayesian methods are particularly useful when the sample size is small; here, the data alone might not have enough information to tell us about the model, and we benefit from using a prior belief.
+    \item Frequentist methods still dominate in the areas of hypothesis testing, mean comparison, etc.; this is where statistics is used most often by non-statisticians, so it remains the dominant approach in science. 
+    \item However, there are increasing complaints about the accepted approach (by statisticians and non-statisticians alike), and this has given rise to more Bayesian applications.
+    
   \end{itemize}
 \end{frame}
 
