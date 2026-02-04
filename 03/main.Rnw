@@ -557,7 +557,7 @@ NR_root <- function(theta0, fn, deriv, tol = 1e-8, maxiter = 1000) {
   while(abs(theta_old - theta_new) > tol && iter < maxiter) {
     iter <- iter + 1
     theta_old <- theta_new
-    theta_new <- theta_old - fn(theta_old) / deriv(theta_new)
+    theta_new <- theta_old - fn(theta_old) / deriv(theta_old)
   }
   cat("iters: ", iter, "\n")
   theta_new
