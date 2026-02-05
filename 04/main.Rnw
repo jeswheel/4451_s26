@@ -960,8 +960,6 @@ ggplot(all_vals |> dplyr::filter(m > 100), aes(x = m, y = val, col = method)) +
     X_i = F^{-1}(U_i).
     $$
 
-    TODO: There's a sign-error in the $\mu$ term. They should both be the same sign!
-
     Similarly, if $U_i$ is uniform, then $1-U_i$ is also uniform, so
     $$
     X'_i = F^{-1}(1-U_1)
@@ -986,8 +984,47 @@ ggplot(all_vals |> dplyr::filter(m > 100), aes(x = m, y = val, col = method)) +
 
 \begin{frame}[allowframebreaks]{Jeffrey's priors}
   \begin{itemize}
-    \item TODO
+    \item A common safe-choice for a prior distribution is a uniform prior.
+    \item However, there is some (not universal) belief that there is no such thing as a uniform prior.
+    \item Consider the Binomial$(N, p)$ data examples. A ``uniform" prior for $p$ might look like:
+    $$
+    \pi(p) = 1(0\leq p \leq 1).
+    $$
+    \item This Binomial model arises quite frequently in biomedical sciences. In this setting, we often are interested in the \alert{log-odds}:
+    $$
+    \theta = \log\Big(\frac{\theta}{1-\theta}\Big).
+    $$
+    \item If we pick a uniform prior for $p$, what does the prior for $\theta$ look like?
+    \mode<article>{
+      \item The transformation is $g(p) = \log\big(p/(1-p)\big)$. 
+      \item For $0\leq p \leq 1$, this transformation is monotonic. Thus, solving for $\theta$, we get the inverse function that matches the logistic-regression model:
+      $$
+      g^{-1}(\theta) = \frac{e^\theta}{1 + e^\theta},
+      $$
+      which, taking the derivative with respect to $\theta$ gives:
+      $$
+      \frac{d}{d\theta} g^{-1}(\theta) = \frac{e^\theta}{(1 + e^\theta)^2}.
+      $$
+      \item Thus, the change of variables theorem states:
+      \begin{align*}
+        \pi_\Theta(\theta) &= \pi_P\big(g^{-1}(\theta)\big)\big|\frac{d}{d\theta} g^{-1}(\theta)\big| \\
+        &= 1(0 \leq g^{-1}(\theta) \leq 1) \frac{e^\theta}{(1 + e^\theta)^2} \\
+        &= \frac{e^\theta}{(1 + e^\theta)^2}.
+      \end{align*}
+      \item Thus, picking a uniform prior for $p$ gives a non-uniform prior for the log-odds, $\theta = \log(p/1-p)$.
+      \item From a purely Bayesian perspective, this is interpreted by saying that: ``although we have no prior knowledge about $p$ (i.e., it could be anything between 0--1), we \emph{do} have some knowledge about the log-odds."
+      \item This calls to question the existence of a uniform prior; while it may be uniform for one parameterization, it is \emph{not} uniform for an alternative parameterization. In this sense, the choice of parameterization (which is independent of the model and data) has a direct impact on final conclusions.
+      \item Note that this breaks the principle of \emph{invariance} that we previously discussed. The estimate for $\hat{\theta} = \log(p/1-p)$ is \emph{not} the same as the estimate $\log(\hat{p} / (1-\hat{p}))$.
+    
+    \item Still, there is a very valid argument why this shouldn't even matter! Consider a binomial model, with parameter $p$. What about the transformation $p^{100}$? While we don't know anything about $p$, we \emph{do} have some valid prior belief about $p^{100}$ that isn't uniform. That is, I would believe that $p^{100}$ would be close to one, so a uniform prior for this transformation probably doesn't make much sense anyway.
+    \item Still we might desire to pick a prior such that for any parameterization $\theta$ or $\varphi$:
+    $$
+    \pi_{\Phi|X}(\varphi) = \pi_{\Theta|X}(\theta).
+    $$
+    \item We won't go into specific details, but there is such a prior distribution, known as the \emph{Jeffreys prior}.
+    }
   \end{itemize}
+      
 \end{frame}
 
 \section{Hierarchical Bayes}
