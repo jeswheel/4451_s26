@@ -718,8 +718,10 @@ uniroot(
       \item If possible, calculate the Hessian of the loss function with respect to $\theta$. If not, approximate numerically.
       \item Start with initial guess for $\theta$, take steps the size of the (approximate) hessian of $f(\theta)$, in the direction of the gradient $f(\theta)$.
     \end{itemize}
+    
+    \framebreak
 
-    \item Many optimization strategies are variants of this basic approach: In practice, Hessians / Gradients may be expensive to compute.
+    \item Many optimization strategies are variants of this basic approach: In practice, the Hessian / Gradients may be expensive to compute.
     \item We will primarily focus our attention on pre-existing solutions.
     \item In R, the function we will use is called \code{optim}.
     \item There are several optimization methods available within this function
@@ -1057,6 +1059,102 @@ exp(results$par)  # Theta
     }
 
   \end{exampleblock}
+  
+ \end{frame}
+  
+\begin{frame}[allowframebreaks]{Other multinomial with functional probabilities}
+    
+    \begin{exampleblock}{Example: Logistic Regression}
+      Suppose we observe binary data $Y_1, Y_2, \ldots, Y_n$, which we assume are independent.
+      We also have access to $p$-dimensional ``explanatory" variables, $X_i$, that are connected to $Y_i$ in some way.
+      
+      Propose a model for using $X_i$ to predict if $Y_1 = 0$ or $Y_i = 1$.
+      
+      \mode<article>{
+        \begin{itemize}
+          \item Though the data are independent, they are not identically distributed, conditioned on $X_i$.
+          \item Thus, we suppose that every $Y_i$ is independent Bernoulli, with probability $p_i(X_i)$, where $p_i(X_i)$ is some function of the data point $X_i$
+          $$
+          Y_i | X_i = x_i \sim \text{Bernoulli}\big(p_i(x_i)\big).
+          $$
+          \item Under this model, the likelihood of $Y_i$ is described as:
+          \begin{align*}
+          L(\theta) &= \prod_{i = 1}^n f_{Y_i|X_i}(y_i | x_i) \\
+                    &= \prod_{i = 1}^n p_i^{y_i}(x_i) \big(1 - p_i(x_i) \big)^{1-y_i}
+          \end{align*}
+          Here, our notation assumes that $p_i$ depends on some parameters $\theta$.
+          We will later implement the standard logistic-regression model later.
+          \item Now, taking derivatives gives the log-likelihood:
+          \begin{align*}
+          \ell(\theta) &= \sum_{i = 1}^n y_i\log\big(p_i(x_i; \theta)\big) + (1-y_i)\log\big(1 - p_i(x_i)\big)
+          \end{align*}
+          The (negative) function above is sometimes called the ``logistic loss" in ML / deep learning settings, but we recognize it as the log-likelihood of a binomial distribution.
+          
+          \item There is some simplifing to do, in particular:
+          \begin{align*}
+          \ell(\theta) &= \sum_{i = 1}^n y_i\log\big(p_i(x_i; \theta)\big) + (1-y_i)\log\big(1 - p_i(x_i)\big) \\
+          &= \sum_{i = 1}^n y_i\big(\log(p_i(x_i)) - \log(1-p_i(x_i))\big) + \log\big(1 - p_i(x_i)\big) \\
+          &= \sum_{i = 1}^n y_i \log\Big(\frac{p_i(x_i)}{1 - p_i(x_i)}\Big) + \log\big(1 - p_i(x_i)\big)
+          \end{align*}
+          \item What is left now is to pick a functional form for $p_i(x_i)$, which depends on some parameters $\theta$.
+          \item For improved interpretability and convenience, we might want to do some sort of linear function:
+          $$
+          p_i(x_i) \sim \beta_0 + \beta_1 x_{i, 1} + \ldots + \beta_p x_{i, p} = x_i^T\beta.
+          $$
+          However, we are constrained by the fact that $0 \leq p_i \leq 1$.
+          \item One extension of this idea is applying the logistic transformation transformation:
+          $$
+          f(z) = e^z / (1 + e^z)
+          $$
+          Here, $z$ can be any number, and the output $0 \leq f(z) \leq 1$.
+          \item Thus, a good option would be:
+          $$
+          p_i(x_i) = \frac{\exp(x_i^T\beta)}{1 + \exp(x_i^T\beta)}.
+          $$
+          \item In our log-likelihood, we get a few instances of $1 - p_i(x_i)$, and also the odds-ratios. We can simplify these expressions as:
+          $$
+          1 - p_i(x_i) = \frac{1}{1+\exp(x_i^T\beta)}
+          $$
+          and
+          $$
+          \frac{p_i}{1-p_i} = \frac{\big(1 + \exp (x_i^T\beta)\big)\exp(x_i^T\beta)}{1 + \exp (x_i^T\beta)} = \exp(x_i^T\beta)
+          $$
+          \item With this model in place, the log-likelihood simplifies to:
+          \begin{align*}
+            \ell(\theta) &= \sum_{i = 1}^n y_i \log\Big(\frac{p_i(x_i)}{1 - p_i(x_i)}\Big) + \log\big(1 - p_i(x_i)\big) \\
+            &= \sum_{i = 1}^n y_i x_i^T\beta - \log\big(1 + \exp(x_i^T\beta)\big)
+          \end{align*}
+          \item In the model above, our parameter vector $\theta = \beta$. To maximize, we want to compute the gradient of the log-likelihood with respect to $\beta$.
+          \item In this case, there is no closed form solution, but we can do Newton-Raphson.
+          \begin{align*}
+            \nabla_\beta \ell(\beta) &= \nabla_\beta \sum_{i = 1}^n y_i x_i^T\beta - \log\big(1 + \exp(x_i^T\beta)\big) \\
+            &= \sum_{i = 1}^n \nabla_\beta \Big(y_i x_i^T\beta - \log\big(1 + \exp(x_i^T\beta)\big)\Big) \\
+            &= \sum_{i = 1}^n y_ix_i - \frac{\exp(x_i^T\beta)}{1 + \exp(1 + \exp(x_i^T\beta))}x_i \\
+            &= \sum_{i = 1}^n y_ix_i - p_ix_i \\
+            &= X^Ty - X^Tp \\
+            &= X^T(y - p),
+          \end{align*}
+          where we have turned the sum into a matrix equation, and $p$ is the vector of probabilities $p = \big(p_1(x_1), \ldots, p_n(x_n)\big)$, and $y$ is the vector $y = (y_1, \ldots, y_n)$.
+          \item We can also get a closed-form expression of the Hessian in this case:
+          \begin{align*}
+          \nabla^2_\beta \ell(\beta) &= \nabla_\beta \big(\nabla_\beta \ell(\beta)\big) \\
+          &= \nabla_\beta X^T(y - p) \\
+          &= -X^T\Gamma X,
+          \end{align*}
+          where $\Gamma$ is the matrix of second derivatives, which can be shown to be the diagonal matrix: $\Gamma_{ii} = p_i(x_i)\big(1 - p_i(x_i)\big)$, and $\Gamma_{ij} = 0$ if $i \neq j$.
+          \item Thus, we have all the tools we need to do Newton-Raphson optimization.
+          \item We'll start with an estimate $\beta_{(0)}$, which a good start might be $\beta_0 = \sum_i Y_i$, and $\beta_{1:p} = 0$, which is equivalent to an IID binomial $n$, $p$ distribution, and setting $\hat{p}$ equal to the MLE.
+          \item Then, apply the iteration:
+          $$
+          \beta_{(n)} = \beta_{(n - 1)} - \big(-X^T\Gamma_{\beta_{(n)}} X\big)^{-1}X^T(y - p_{\beta_{(n)}})
+          $$
+          until convergence. Note in the notation we have $\Gamma_{\beta_{(n)}}$ and $p_{\beta_{(n)}}$, because these matrices and vectors depend on the value of $\beta$, which is the thing we are updating, so in each step the matrix and vector are calculated using the most recent value of $\beta$.
+          \item Note this is exactly what is done in logistic-regression software; the software may say that it's minimizing a logistic loss, but functionally that is the same as maximizing the log-likelihood of an independent Bernoulli$(p_i)$.
+          \item This function works and can be directly implement in R. It's a fun exercise, and you'll get some good practice in doing so. However, it's much slower than the pre-built methods for a few reasons. One being that these pre-built functions are usually implemented in C, which is faster. The second is that the matrix inversion can be sped up using more advanced ideas from linear algebra, which we won't cover here.
+        \end{itemize}
+      }
+      
+    \end{exampleblock}
   
 \end{frame}
 
