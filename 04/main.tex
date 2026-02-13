@@ -1104,7 +1104,7 @@ The Bayesian Approach to Parameter Estimation}
     $$
     \item This Binomial model arises quite frequently in biomedical sciences. In this setting, we often are interested in the \alert{log-odds}:
     $$
-    \theta = \log\Big(\frac{\theta}{1-\theta}\Big).
+    \theta = \log\Big(\frac{p}{1-p}\Big).
     $$
     \item If we pick a uniform prior for $p$, what does the prior for $\theta$ look like?
     \mode<article>{
@@ -1369,8 +1369,89 @@ The Bayesian Approach to Parameter Estimation}
 
 \begin{frame}[allowframebreaks]{Baseball statistics}
   \begin{itemize}
-    \item TODO: HB example of on-base percentages for base-ball players. Move to EB?
+    \item One place that Hierarchical Bayes is particularly useful is for grouped data:
+    \item Let $i = 1, 2, \ldots, k$ denote $k$ distinct groups, and $j = 1, 2, \ldots, n_i$ be the number of observations, per each group.
+    \item Then, the data look like:
+    $$
+    Y_{1, 1}, \ldots, Y_{1, n_1}, Y_{2, 1}, \ldots, Y_{2, n_2}, \ldots Y_{k, n_k}
+    $$
+    \item We then have a natural Hierarchical structure to our model, where within each group $i$, the observations $1, \ldots, n_i$ are iid:
+    $$
+    Y_{i, j} \overset{\text{iid}}{\sim} f(y; \theta_i)
+    $$
+    \item Then, we create a prior for the group-parameters:
+    $$
+    \Theta_i \overset{\text{iid}}{\sim} \pi(\theta).
+    $$
+    \item This approach is extremely useful as a form of regularlization
   \end{itemize}
+  
+
+
+
+  
+  \begin{exampleblock}{Baseball: Hitting Percentages}
+    Consider two baseball players, A and B. Player A has a career batting average of 0.353, whereas Player B as an average 0.400. Which do you prefer on your team?
+    
+    \mode<article>{
+      \begin{itemize}
+        \item From the percentages alone, Player B is a natural choice.
+        \item What if we were told, however, that Player A had 1000 at bats, with success rate 353/1000, and Player B only has 10 at bats (successful 4/10 times)?
+        \item From this example, there are two things to consider:
+        \begin{enumerate}
+          \item The best batting average of all time is: .3662 (Ty Cobb). Roughly only 200 players have hit over .3000 for their entire career, the average being somewhere closer to 0.2500. This information is very useful, and maybe should be accounted for.
+          \item If there are many observations within a group, we should highly value these data, but if there are not many observations, we should ``penalize" towards the prior distribution.
+        \end{enumerate}
+        
+        \item Continuing this example, we effectively have two binomial likelihoods. If $X_A$ and $X_B$ are the number of successful at-bats for players $A$ and $B$, respectively, then
+        $$
+        X_A \sim \text{Binom}(1000, p_A) \\
+        X_B \sim \text{Binom}(10, p_B)
+        $$
+        \item For the hyper-prior of $P_i$, we will use a Beta distribution, since it's a convenient conjugate prior:
+        $$
+        P_i \sim Beta(\alpha, \beta).
+        $$
+        \item Now we need to pick the values of $\alpha, \beta$. We want a Beta with mean around $0.25$. Since the expected value is $\alpha / (\alpha + \beta)$, setting this equal to $1/4$ gives the relation: $3\alpha = \beta$.
+        \item Using a simple normal approximation, we want roughly $0.25 + 2\sigma = 0.4$, so that the upper-end of this prior gives little-to-no weight for batting averages greater than $0.4$.
+        Thus, we want $\sigma \approx 15/200$, which we can approximate with $2/25$.
+        Using our relation $3\alpha = \beta$, this gives:
+        \begin{align*}
+          \Big(\frac{2}{25}\Big)^2 = \frac{\alpha\beta}{(\alpha+\beta)^(\alpha + \beta + 1)} = \frac{3\alpha^2}{16\alpha^2(4\alpha + 1)},
+        \end{align*}
+        which implies $\alpha \approx 7$.
+        \item Thus, the hyper-prior we will use is $\text{Beta}(7, 21)$, shown in Figure~\ref{fig:battingPrior}
+      \end{itemize}
+      
+      \begin{figure}[ht]
+        \includegraphics[width=\textwidth]{figures/beta_prior_plot.png}
+        \caption{\label{fig:battingPrior}Prior distribution, Beta$(7, 21)$ for the batting percentages.}
+      \end{figure}
+     
+     \begin{itemize}
+      \item Recall that for the Beta-Binomial conjugate distributions, the posterior for the probability of success is given by:
+      $$
+      P_i | X_i = x_i \sim \text{Beta}(\alpha + x_i, \beta + n_i - x_i).
+      $$
+     
+      \item For the current example, of the two-baseball players, we get posterior distributions:
+      \begin{align*}
+      P_A | X_A = x_A &\sim \text{Beta}(7 + 353, 21 + 647) \\
+      P_B | X_B = x_B &\sim \text{Beta}(7 + 4, 21 + 6).
+      \end{align*}
+      
+      The posterior means for each of these distributions are $0.350$ and $0.289$, respectively. The respective posteriors are plotted in Figure~\ref{fig:baseballPost}.
+      
+      \end{itemize}
+      \begin{figure}[ht]
+        \includegraphics[width=\textwidth]{figures/baseballPost.png}
+      \caption{\label{fig:baseballPost}Posterior distribution estimates for the estimated batting percentage of the two Baseball players. Player A is in blue, and Player B is in Red. For refefence, the prior distribution is given as a dashed black line.}
+      \end{figure}
+      
+    }
+    
+  \end{exampleblock}
+  
 \end{frame}
 
 \section{Empirical Bayes}
@@ -1380,6 +1461,13 @@ The Bayesian Approach to Parameter Estimation}
     \item The idea because Empirical Bayes is simple: Use the data to estimate the prior distribution for the parameters.
     \item This is a bit controversial, because we're ``double dipping". Often makes sense when used in conjunction with a hierarchical structure.
   \end{itemize}
+  
+  \framebreak
+  
+  \begin{exampleblock}{Baseball Players}
+    Let's revisit the Baseball-batting percentage problem. Now, we want to estimate the posterior via maximum likelihood of IID Beta distribution, using dataset of historic baseball-player data.
+  \end{exampleblock}
+  
 \end{frame}
 
 \section{Uncertainty quantification}
