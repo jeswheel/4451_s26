@@ -99,7 +99,8 @@
   The data you should estimate is called \texttt{mtcars}.
   It is pre-built in R and can be access simply by typing \texttt{mtcars}.
   A \texttt{.csv} will also be uploaded to Canvas.
-  Your task is to predict $Y_i = \texttt{am}$, a binary variable in the data indicating whether or not the car is an automatic (0) or manual (1) based on other car features, $X_i$.
+  Your task is to predict $Y_i = \texttt{am}$, a binary variable in the data indicating whether or not the car is an automatic (0) or manual (1) based on other car features, $X_i$: \texttt{mpg, wt, disp, cyl}.
+
 
   More information about the data can be found in R by running the command \texttt{?mtcars}.
 
