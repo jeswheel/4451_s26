@@ -14,6 +14,7 @@ We first will formally define the term likelihood, re-visiting the probability (
 | Lecture slides   | [pdf](slides.pdf) |
 | Lecture notes    | [pdf](notes.pdf) |
 | Annotated Slides | [pdf](annotatedSlides.pdf) |
+| Annotated Slides (Logistic Regression) | [pdf](LogisticSlides.pdf)
 <!-- | Discussion Problems | [pdf](discussionProbs.pdf) | -->
 ----------------------
 
