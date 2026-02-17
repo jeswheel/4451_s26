@@ -15,8 +15,8 @@ Furthermore, it serves as a nice introduction to measuring parameter uncertainty
 |:-----------------------|:------------------------:|
 | Lecture slides   | [pdf](slides.pdf) |
 | Lecture notes    | [pdf](notes.pdf) |
+| Annotated Slides | [pdf](annotatedSlides.pdf) |
 | Code Samples     | [HBcode](HBcode.R), [EBcode](EMBayesCode.R)
-<!-- | Annotated Slides | [pdf](annotatedSlides.pdf) | -->
 <!-- | Discussion Problems | [pdf](discussionProbs.pdf) | -->
 ----------------------
 
