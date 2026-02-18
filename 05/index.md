@@ -1,0 +1,26 @@
+---
+title: "Mathematical Statistics II<br>Math 4451.<br>Point Estimation: Principles and Theory"
+author: "Jesse Wheeler"
+output: html_document
+---
+
+----------------------
+
+| &nbsp;           | &nbsp;                          |
+|:-----------------------|:------------------------:|
+| Lecture slides   | [pdf](slides.pdf) |
+| Lecture notes    | [pdf](notes.pdf) |
+<!-- | Annotated Slides | [pdf](annotatedSlides.pdf) | -->
+<!-- | Discussion Problems | [pdf](discussionProbs.pdf) | -->
+----------------------
+
+
+
+----------------------
+
+[Back to course homepage](../index.html)  
+[Acknowledgements](../acknowledge.html)  
+[Source code for these notes](http://github.com/jeswheel/4451_f25/tree/main/05/)
+
+
+----------------------

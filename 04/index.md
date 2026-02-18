@@ -26,7 +26,7 @@ Furthermore, it serves as a nice introduction to measuring parameter uncertainty
 
 [Back to course homepage](../index.html)  
 [Acknowledgements](../acknowledge.html)  
-[Source code for these notes](http://github.com/jeswheel/4451_f25/tree/main/02/)
+[Source code for these notes](http://github.com/jeswheel/4451_f25/tree/main/04/)
 
 
 ----------------------
