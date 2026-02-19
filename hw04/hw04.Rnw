@@ -1,0 +1,100 @@
+\documentclass[10pt,twoside]{article}
+\usepackage[marginparsep=1em]{geometry}
+\geometry{lmargin=1.0in,rmargin=1.0in, bmargin=1.2in,  tmargin=1.2in}
+\usepackage[dvipsnames,svgnames,table]{xcolor}
+\usepackage{graphicx}
+\usepackage{amssymb}
+\usepackage{epstopdf}
+\usepackage{verbatim}
+\usepackage{enumerate}
+\usepackage{bm}
+\usepackage{amsthm}
+\usepackage{float}
+\usepackage{amsmath}
+\usepackage{fancyhdr}
+\usepackage{hyperref}
+\usepackage{mathtools}
+
+%%%%  SHORTCUT COMMANDS  %%%%
+\newcommand{\ds}{\displaystyle}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\T}{\mathcal{T}}
+\newcommand{\arc}{\rightarrow}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\RP}{\mathbb{R}(+)}
+\newcommand{\Rs}{\mathbb{R}^{**}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\B}{\mathcal{B}}
+\newcommand{\PX}{\mathcal{P}(X)}
+\newcommand*\rot{\rotatebox{90}}
+\newcommand*\OK{\ding{51}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\Answer}{\vspace{2mm}\textbf{\underline{Answer}}\\}
+\newcolumntype{L}{>{$}l<{$}}
+\newcolumntype{C}{>{$}c<{$}}
+\newcommand{\GL}{\text{GL}}
+\newcommand{\SL}{\text{SL}}
+
+\newcommand{\stirling}[2]{\genfrac{\{}{\}}{0pt}{}{#1}{#2}}
+
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\sectionmark}[1]{\markright{\thesection.\ #1}}
+\lhead{\fancyplain{}{}}
+\fancyhead[RE,RO]{Math 4451, Spring 2026}
+\fancyfoot[RE,RO]{\thepage}
+
+
+\begin{document}
+\begin{flushright}
+\begin{minipage}{.33\textwidth}
+\rightline{YOUR NAME}
+\rightline{\href{mailto:YOUR EMAIL}{YOUR EMAIL}}
+\rightline{\today}
+\end{minipage}
+\end{flushright}
+
+\begin{center}
+{\large{\textbf{Homework 4}}}
+\end{center}
+
+\begin{enumerate}
+
+    \item (from last HW 1+2, 4 points) Suppose that $X$ is a discrete random variable with:
+    $$
+    P(X = x) = \begin{cases} \frac{2}{3}\theta & x = 0 \\ \frac{1}{3}\theta & x = 1 \\ \frac{2}{3}(1 - \theta) & x = 2 \\ \frac{1}{3}(1 - \theta) & x = 3 \\\end{cases}
+    $$
+    where $0 \leq \theta \leq 1$. Suppose we observe 10 independent observations from such a distribution: $(3, 0, 2, 1, 3, 2, 1, 0, 2, 1)$.
+    (We'll return to this same distribution later)
+    \begin{itemize}
+      \item (2 points) Find a Bayesian posterior for the parameter value $\theta$ (Hint: Try uniform prior)
+      \item (1 point) Plot the posterior density.
+      \item (1 point) Report both the posterior mean and mode.
+    \end{itemize}
+    
+    \item (5 points) Suppose that 100 items are sampled from a manufacturing process, and 3 are found to be defective.
+    Assuming that each item status is independent, we will use a binomial model for this data.
+    
+    Consider using a Beta$(\alpha, \beta)$ prior for $\Theta$, the unknown proportion of defective items.
+    
+    \begin{enumerate}
+      \item (2 points) Use a Beta$(\alpha = 1, \beta = 1)$ prior, and find the posterior distribution. Plot the posterior distribution. What is the posterior mean? 
+      \item (2 points) Use a Beta$(\alpha = 0.5, \beta = 5)$ as the prior, and find the posterior distribution. Plot the posterior distribution. What is the posterior mean?
+      \item (1 point) Comment on the differences between the two posterior distributions and the posterior means.
+    \end{enumerate}
+
+  \item (6 points) Suppose that the waiting time $X_i$ in a queue is modeled as an exponential random variable with unknown parameter $\lambda$.
+  
+  \begin{enumerate}
+    \item (3 points) Assuming we can observe $n$ independent observations $X_1, X_2, \ldots, X_n$, use a Gamma$(\lambda, \alpha)$ as a prior distribution for $\Lambda$, the random variable denoting the rate $\lambda$ in the exponential model. \textbf{Derive the posterior distribution of} $\Lambda | X$ \textbf{under this model and prior.}
+    \item (1 point) Now suppose we observe an average waiting time of $5.1$ minutes for $20$ customers, and we use a Gamma prior that satisfies $E[\Lambda] = 10$ and $\text{Var}(\Lambda) = 20^2$. \textbf{What is the posterior distribution in this case? What about the posterior mean}?
+    \item (1 point) How does this compare if we get the same sample average, but there are only $n = 5$ total customers?
+    \item (1 point) Compare both posteriors to the shape of the likelihood function (create / draw a figure, or comment on the differences or similarities of the shapes.)
+  \end{enumerate}
+  
+\end{enumerate}
+
+
+\end{document}
