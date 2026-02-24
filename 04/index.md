@@ -16,7 +16,7 @@ Furthermore, it serves as a nice introduction to measuring parameter uncertainty
 | Lecture slides   | [pdf](slides.pdf) |
 | Lecture notes    | [pdf](notes.pdf) |
 | Annotated Slides | [pdf](annotatedSlides.pdf) |
-| Code Samples     | [HBcode](HBcode.R), [EBcode](EMBayesCode.R)
+| Code Samples     | [HBcode](HBcode.R), [EBcode](EMBayesCode.R), [Poisson Code](PoissonBayesLikelihood.R)
 <!-- | Discussion Problems | [pdf](discussionProbs.pdf) | -->
 ----------------------
 
