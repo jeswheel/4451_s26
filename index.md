@@ -119,6 +119,8 @@ Please read the [grading rubric](rubric_homework.html) before submitting homewor
 [mtcars csv](hw03/mtcars.csv)
 * [Homework 4](hw04/hw04.pdf), due Wed Feb 25, 11:59pm.
 [TeX file](hw04/hw04.tex)
+* [Homework 5](hw05/hw05.pdf), due Wed March 11, 11:59pm.
+[TeX file](hw05/hw05.tex)
 
 <!--- 
 

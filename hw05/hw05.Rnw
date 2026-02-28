@@ -1,0 +1,99 @@
+\documentclass[10pt,twoside]{article}
+\usepackage[marginparsep=1em]{geometry}
+\geometry{lmargin=1.0in,rmargin=1.0in, bmargin=1.2in,  tmargin=1.2in}
+\usepackage[dvipsnames,svgnames,table]{xcolor}
+\usepackage{graphicx}
+\usepackage{amssymb}
+\usepackage{epstopdf}
+\usepackage{verbatim}
+\usepackage{enumerate}
+\usepackage{bm}
+\usepackage{amsthm}
+\usepackage{float}
+\usepackage{amsmath}
+\usepackage{fancyhdr}
+\usepackage{hyperref}
+\usepackage{mathtools}
+
+%%%%  SHORTCUT COMMANDS  %%%%
+\newcommand{\ds}{\displaystyle}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\T}{\mathcal{T}}
+\newcommand{\arc}{\rightarrow}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\RP}{\mathbb{R}(+)}
+\newcommand{\Rs}{\mathbb{R}^{**}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\B}{\mathcal{B}}
+\newcommand{\PX}{\mathcal{P}(X)}
+\newcommand*\rot{\rotatebox{90}}
+\newcommand*\OK{\ding{51}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\Answer}{\vspace{2mm}\textbf{\underline{Answer}}\\}
+\newcolumntype{L}{>{$}l<{$}}
+\newcolumntype{C}{>{$}c<{$}}
+\newcommand{\GL}{\text{GL}}
+\newcommand{\SL}{\text{SL}}
+
+\newcommand{\stirling}[2]{\genfrac{\{}{\}}{0pt}{}{#1}{#2}}
+
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\sectionmark}[1]{\markright{\thesection.\ #1}}
+\lhead{\fancyplain{}{}}
+\fancyhead[RE,RO]{Math 4451, Spring 2026}
+\fancyfoot[RE,RO]{\thepage}
+
+
+\begin{document}
+\begin{flushright}
+\begin{minipage}{.33\textwidth}
+\rightline{YOUR NAME}
+\rightline{\href{mailto:YOUR EMAIL}{YOUR EMAIL}}
+\rightline{\today}
+\end{minipage}
+\end{flushright}
+
+\begin{center}
+{\large{\textbf{Homework 5}}}
+\end{center}
+
+\begin{enumerate}
+
+    \item (4 points) Beta-Binomial Conjugacy.
+    \begin{enumerate}
+      \item (3 points) Show that the Beta family of distributions is conjugate to the Binomial family of distributions (i.e., if the likelihood is Binomial$(n, p)$, then if the prior is $P \sim \text{Beta}(\alpha, \beta)$, then the posterior $P | X$ is a beta-distribution).
+      \item (1 point) Use the result above to argue why a Uniform$(0, 1)$ prior for $P$ results in a Beta-distriubted posterior.
+    \end{enumerate}
+
+    \item (6 points) Approximate the following integrals using some form of Monte-Carlo. Describe the distribution used and the overall approach you picked.
+    \begin{enumerate}
+      \item (2 points) $\int_0^1 \sin\big(e^{-x}\big)x^2 \, dx$
+      \item (2 points) $\int_0^2 e^{x^2}\, dx$
+      \item (2 points) $\int_0^\infty \frac{e^{-x}}{1 + x^2}\, dx$
+    \end{enumerate}
+
+    \item (6 points) In class, we calculated the posterior mean $\Lambda | X$, where $X \sim \text{Pois}(\lambda)$, and the prior distribution was $\Lambda \sim U(0, 100)$. This required calculating the following integral:
+    $$
+    E[\Lambda | X = x^*] = \frac{\int_0^{100} \tau \cdot \tau^{\sum_i x_i^*}e^{-n\tau}\, d\tau}{\int_0^{100} \tau^{\sum_i x_i^*}e^{-n\tau}\, d\tau}
+    $$
+    (recall the denominator is just a normalizing constant.)
+    To perform this calculation, it required making some transformations to avoid numeric overflow / underflow issues. In particular, we showed
+    $$
+    E[\Lambda | X = x^*] = \frac{\int_0^{100} \tau \cdot \tau^{\sum_i x_i^*}e^{-n\tau}\, d\tau}{\int_0^{100} \tau^{\sum_i x_i^*}e^{-n\tau}\, d\tau} = \frac{\int_0^{100} \lambda \exp\big\{g(\lambda) - g(\bar{x}^*)\big\}\, d\lambda}{\int_0^{100} \exp\big\{g(\lambda) - g(\bar{x}^*)\big\}\, d\lambda},
+    $$
+    where $g(\lambda) = \sum_i x_i^* \log \lambda - n\lambda$.
+
+    \begin{enumerate}
+      \item (3 points) In class, we used the \texttt{integrate} function in R to estimate the posterior mean. \textbf{Now, estimate the posterior mean using a Monte-Carlo method.} (The numerically-stable version will probably be easier).
+      \item (3 points) Approximate the posterior variance $\text{Var}(\Lambda | X = x^*)$ using Monte-Carlo (HINT: try finding $E[\Lambda^2 | X = x^*]$).
+
+    \end{enumerate}
+
+
+\end{enumerate}
+
+
+\end{document}
