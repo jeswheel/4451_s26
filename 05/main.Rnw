@@ -378,9 +378,25 @@ Point Estimation: Principles and Theory}
     $$
     \Var(\hat{\theta}) = \frac{1}{\mathcal{I}_n(\theta_0)}
     $$
-    \item In the IID case, these are the same since.
+    \item In the IID case, these are the same, as
+    \begin{align*}
+    \mathcal{I}_n(\theta) &= -E\Big[\frac{\partial^2}{\partial \theta^2} \sum_i \log f(X_i; \theta) \Big] \\
+    &= -\sum_{i} E\Big[\frac{\partial^2}{\partial \theta^2} \log f(X_i; \theta) \Big] = n \mathcal{I}(\theta).
+    \end{align*}
+
+  \framebreak
+  
+  \item Our derivation treated $\theta$ as univariate. The more common multivariate case has a similar result:
 
   \end{itemize}
+  
+  \begin{block}{Multivariate parameters}
+    If $\theta \in \R^d$ is multivariate, than using the matrix definition of $\mathcal{I}(\theta)$, then:
+    $$
+    \sqrt{n}\big(\hat{\theta} - \theta_0\big) \dlim Z_d \sim N_d\big(0_d, \mathcal{I}(\theta_0)^{-1}\big),
+    $$
+    where $\hat{\theta}$ is the MLE, $\theta_0$ is the true parameter value, and $N_d(\mu, \Sigma)$ is a $d$-dimensional multivariate normal distribution with mean vector $\mu$ and covariance matrix $\Sigma$. 
+  \end{block}
   
 \end{frame}
 
