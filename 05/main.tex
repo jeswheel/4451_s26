@@ -400,6 +400,22 @@ Point Estimation: Principles and Theory}
   
 \end{frame}
 
+\begin{frame}{Implications for estimating parameter uncertainty}
+  \begin{itemize}
+    \item This result gives us an immediate way to approximate the uncertainty associated with the MLE, for rather arbitrary models.
+    \item If $\hat{\theta}$ is the MLE, then:
+    $$
+    \Var\big(\hat{\theta}\big) \approx \frac{1}{n\mathcal{I}(\hat{\theta})}.
+    $$
+    \item \alert{There are two different approximations here}:
+    \begin{itemize}
+      \item Asymptotic normality.
+      \item $\hat{\theta} \plim \theta_0$. 
+    \end{itemize}
+    \item It is a good approximation for even moderate $n$, but exact calculations are preferred when possible.
+  \end{itemize}
+\end{frame}
+
 \section{Bias, MSE, and Consistency}
 
 \begin{frame}[allowframebreaks]{NAME}
