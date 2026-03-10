@@ -20,7 +20,7 @@ output: html_document
 
 [Back to course homepage](../index.html)  
 [Acknowledgements](../acknowledge.html)  
-[Source code for these notes](http://github.com/jeswheel/4451_f25/tree/main/05/)
+[Source code for these notes](http://github.com/jeswheel/4451_s26/tree/main/05/)
 
 
 ----------------------

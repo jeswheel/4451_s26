@@ -48,12 +48,359 @@ Point Estimation: Principles and Theory}
 \begin{frame}[allowframebreaks]{Introduction}
 
 \begin{itemize}
-  \item Much of this work is based on \citet[][Section~8.6]{rice07}. TODO: Update.
+  \item We now introduce principles of parameter estimation, as well as associated theory.
+  \item The three approaches we have considered thus far (MoM, MLE, Bayes) are great starting points, but we would like to study general properties of parameter estimations, and how these approaches align with these properties.
+  \item There is no ``correct" order in which these material are presented, so we deviate a bit from our textbooks.
+  \item This work is largely based on \citet[][Sections~8.5.2, 8.7--8.8]{rice07}, \citet[][Chapters~6, 7, 10]{casella24}, as well as some supplemental material from \citet{pawitan01}.
 \end{itemize}
 
 \end{frame}
 
+\section{Fisher's Information}
 
+\begin{frame}[allowframebreaks]{Curvature of the Likelihood Function}
+
+\begin{itemize}
+  \item Both the MLE and Bayesian estimates are forms of \alert{Likelihood based inference}.
+  \item For the MLE, we are interested in the maximum of the likelihood function.
+  \item For Bayesian inference, the posterior distribution is the (scaled) product of the likelihood and a prior distribution:
+  $$
+  \pi(\theta|x) \propto L(\theta) \times \pi(\theta).
+  $$
+  \item In both instances, the shape of the likelihood function $L(\theta)$ is of interest.
+  
+  \framebreak
+  
+  \begin{block}{Definition: The score function}
+    Let $L(\theta) = f(x^*;\theta)$ be the likelihood of some model, conditioned on the observed data ($x^*$ is assumed to be multi-variate). Then we define the score function $S(\theta)$ to be:
+    $$
+    S(\theta) = \frac{\partial}{\partial \theta} \log L(\theta).
+    $$
+  \end{block}
+  
+  \item Assuming the MLE $\hat{\theta}$ exists and is not a boundary point, then:
+  $$
+  S\big(\hat{\theta}\big) = 0.
+  $$
+  
+  \item As written, the score function is dependent on a fixed data set: $x^*$.
+  \item We could also expand this by considering it as a random function of any possible data $X$, which is random.
+  
+  \framebreak
+  
+  \item Since we are interested in the curvature of the likelihood function, we should also consider the second derivative.
+  \item At the MLE, the second derivative of the log-likelihood will be \emph{negative}, so it's natural to consider the negative second derivative of the log-likelihood:
+  $$
+  I(\theta) = -\frac{\partial^2}{\partial \theta^2} \log L(\theta).
+  $$
+  \item Again, we are treating the likelihood function $L(\theta)$ as a regular (non-random) function, fixed on $x^*$ (this is slightly different than many texts).
+  \item The curvature at the MLE is of particular interest.
+  
+  \framebreak
+  
+  \begin{block}{Definition: The Observed Fisher Information}
+    Let $L(\theta)$ be the likelihood function, fixed on the observed data $x^*$. The \alert{observed Fisher information} is the second derivative of $\log L(\theta)$, evaluated at the MLE:
+    $$
+    \mathcal{I}\big(\hat{\theta}\big) := I\big(\hat{\theta}\big) = -\frac{\partial^2}{\partial \theta^2} \log L\big(\hat{\theta}\big)
+    $$
+    Note that when $\theta$ is multi-variate, this is a matrix with entries:
+    $$
+    \Big[\mathcal{I}\big(\hat{\theta}\big)\Big]_{i, j} = -\frac{\partial^2}{\partial \theta_i \partial \theta_j} \log L(\theta),
+    $$
+    also denoted $\mathcal{I}\big(\hat{\theta}\big) = -\nabla^2 \log L\big(\hat{\theta}\big)$.
+  \end{block}
+  
+  \framebreak
+  
+  \item Note that large values of $\mathcal{I}\big(\hat{\theta}\big)$ in the univariate case (and large eigen-values / determinant in the multivariate case) indicate a ``tight peak" around the maximum, suggesting less uncertainty about the parameter $\theta$.
+  
+  
+  \begin{block}{Theorem: Expected Score}
+    Now consider treating the score function $S(\theta)$ as a random function, dependent on random input data $X$. That is:
+    $$
+    S(\theta) = \frac{\partial}{\partial \theta} \log f(X; \theta).
+    $$
+    Then, under mild regularity conditions, the expected score is zero:
+    $$
+    E\big[S(\theta)\big] = 0.
+    $$
+    
+    \mode<article>{
+      \begin{proof}
+        \begin{align*}
+          E\Big[\frac{\partial}{\partial \theta} \log f(X; \theta)\Big] &= \int_\mathcal{X} \frac{\partial}{\partial \theta} \log f(x; \theta) f(x; \theta) \, dx \\ \\
+          &= \int_\mathcal{X} \frac{f(x; \theta)}{f(x; \theta)} \frac{\partial}{\partial \theta}f(x; \theta) \, dx \\
+          &= \int_\mathcal{X} \frac{\partial}{\partial \theta}f(x; \theta) \\
+          &= \frac{\partial}{\partial \theta} \int_{\mathcal{X}} f(x; \theta)\, dx \\
+          &= \frac{\partial}{\partial \theta} 1 = 0.
+        \end{align*}
+        Note that the conditions needed for this is the ability to swap the integral with the derivative, which is a condition that we briefly discussed last semester (Dominated Convergence Theorem, for instance).
+      \end{proof}
+    }
+    
+  \end{block}
+  
+  \framebreak
+  
+  \begin{block}{Definition: Fisher's Information}
+    Continuing with the treatment of the score function as a random function of $X$, we will define Fisher's Information to be the following:
+    $$
+    \mathcal{I}(\theta) = E\Big[\Big(\frac{\partial}{\partial \theta}\log f(X;\theta)\Big)^2\Big] = E\Big[\big(S(\theta)\big)^2\Big].
+    $$
+  \end{block}
+  
+  \begin{block}{Proposition: Variance of the Score}
+    If the partial derivative and integral operations can be exchanged, then 
+    $$
+    \mathcal{I}(\theta) = \Var\big(S(\theta)\big) = -E\Big[\frac{\partial^2}{\partial \theta^2} \log f(X;\theta)\Big],
+    $$
+    where the score function is treated as random.
+    
+    \mode<article>{
+      \begin{proof}
+      
+          If we can exchange integration and derivation, then the first equality in the statement is trivial. Under these conditions, we showed:
+          $$
+          E\big[S(\theta)\big] = E\Big[\frac{\partial}{\partial \theta} \log f(X; \theta)\Big] = 0.
+          $$
+          
+      Therefore:
+      \begin{align*}
+        \Var\big(S(\theta)\big) &= E\Big[S(\theta)^2\Big] - \Big(E\big[S(\theta)\big]\Big)^2 \\
+        &= \mathcal{I}(\theta).
+      \end{align*}
+      
+        Now if the second derivatives exist, the same argument that used to show the equality above can be used to show:
+        $$
+        E\Big[\frac{\frac{\partial^2}{\partial\theta^2}f(X;\theta)}{f(X;\theta)}\Big] = \int_{\mathcal{X}} \frac{\partial^2}{\partial\theta^2}f(X;\theta) \, dx = 0.
+        $$
+        (To do this, we exchange partial derivatives with the integral, note the integral is equal to one, which has partial derivative zero).
+        
+        Building on these two results, note the following identity:
+        \begin{align*}
+          \frac{\partial^2}{\partial \theta^2} \log f(X;\theta) &= \frac{\partial}{\partial \theta}\Big(\frac{\frac{\partial}{\partial \theta} f(X;\theta)}{f(X;\theta)}\Big) \\
+          &= \frac{f(X;\theta) \frac{\partial^2}{\partial \theta^2}f(X; \theta) - \left(\frac{\partial}{\partial \theta} f(X; \theta)\right)^2}{\left(f(X; \theta)\right)^2}\\
+          &= \frac{\frac{\partial^2}{\partial \theta^2}f(X;\theta)}{f(X;\theta)} - \Big(\frac{\frac{\partial}{\partial \theta}f(X; \theta)}{f(X;\theta)}\Big)^2 \\
+          &= \frac{\frac{\partial^2}{\partial \theta^2}f(X;\theta)}{f(X;\theta)} - \Big(\frac{\partial}{\partial \theta} \log f(X; \theta)\Big)^2
+        \end{align*}
+        
+        Taking expectation of both sides of this equation yields:
+        
+        \begin{align*}
+          E\Big[\frac{\partial^2}{\partial \theta^2} \log f(X;\theta)\Big] &= E\Big[\frac{\frac{\partial^2}{\partial \theta^2}f(X;\theta)}{f(X;\theta)}\Big] - E\Big[\Big(\frac{\partial}{\partial \theta} \log f(X; \theta)\Big)^2\Big] \\
+          &= - E\Big[\Big(\frac{\partial}{\partial \theta} \log f(X; \theta)\Big)^2\Big],
+        \end{align*}
+        where the last inequality is a result of the previously derived identity
+        $$
+        E\Big[\frac{\frac{\partial^2}{\partial\theta^2}f(X;\theta)}{f(X;\theta)}\Big] = 0.
+        $$
+        Thus, we have proven the statement
+        $$
+        \mathcal{I}(\theta) = \Var\big(S(\theta)\big) = -E\Big[\frac{\partial^2}{\partial \theta^2} \log f(X;\theta)\Big].
+        $$
+      \end{proof}
+    }
+    
+  \end{block}
+  
+  \framebreak 
+  
+  \item This proposition is useful because:
+  \begin{itemize}
+    \item If the log-likelihood is differentiable, the first definition $\mathcal{I}(\theta) = E[S(\theta)^2]$ always exists.
+    \item Typically, we can express this as $\mathcal{I}(\theta) = \Var(S(\theta))$, which is a nice interpretable quantity.
+    \item The final expression $\mathcal{I}(\theta) = -E\Big[\frac{\partial^2}{\partial \theta^2} \log f(X;\theta)\Big]$ is usually the easiest to calculate.
+  \end{itemize}
+  
+  \item For the multivariate case, this is equivalent to writing:
+      \begin{align*}
+      \big[\mathcal{I}(\theta)\big]_{i,j} &:= E_\theta\Big[\frac{\partial \log f(X; \theta)}{\partial \theta_i}\frac{\partial \log f(X; \theta)}{\partial \theta_j}\Big] \\
+      &= \Cov\Big(\frac{\partial \log f(X; \theta)}{\partial \theta_i}, \frac{\partial \log f(X; \theta)}{\partial \theta_j}\Big) \\
+      &= -E\Big[\frac{\partial^2}{\partial \theta_i \partial \theta_j} \log f(X;\theta)\Big]
+      \end{align*}
+      
+  \framebreak 
+  % \item Many texts do not consider $I(\theta)$, but instead jump straight to $\mathcal{I}(\theta)$.
+  \item Note that the curvature $I(\theta)$, defined as the second derivative of $L(\theta)$ (fixed function), exists for all points $\theta$.
+  \item However, we're primarily only interested in this function at the MLE, \emph{or} when we regard $S(\theta)$ as a random function of arbitrary $X$ (not fixed on $x^*$).
+  \item Thus, it's fairly uncommon to discuss both $I(\theta)$ and $\mathcal{I}(\theta)$ (formally in), and most texts just discuss $\mathcal{I}(\theta)$.
+  
+  \begin{exampleblock}{Note on observed fisher information}
+    We defined the observed fisher information as:
+    $$
+    \mathcal{I}\big(\hat{\theta}\big) := I\big(\hat{\theta}\big) = -\frac{\partial^2}{\partial \theta^2} \log L\big(\hat{\theta}\big).
+    $$
+    This matches the definition of fisher's information, because in the observed case the data $X=x^*$ is not random, and the expectation is a constant; thus, the notation is consistent.
+  \end{exampleblock}
+  
+\end{itemize}
+
+\framebreak
+
+\begin{exampleblock}{Comment on numeric optimization}
+  If numeric optimization is used to find the MLE, many approaches estimate the Hessian of the loss-function. If the negative log-likelihood is used, setting \texttt{optim(..., hessian = TRUE)} can be used to compute the Observed Fisher's Information (don't forget to adjust for variable transformations!)
+\end{exampleblock}
+
+\end{frame}
+
+\section{Asymptotic proprties of the MLE and Bayesian estimators}
+
+\begin{frame}[allowframebreaks]{Normality of MLE}
+  
+  \begin{itemize}
+    \item Under weak regularity conditions, both the MLE and Bayesian posterior converge to a Normal distribution, centered at the true value.
+    \item We'll begin with a sketch proof of the distribution of the MLE.
+  \end{itemize}
+  
+  \begin{block}{Theorem: Asymptotic distribution of the MLE}
+    Let $x^*_1, x^*_2, \ldots, x^*_n$ come from a family of distributions with density $f(x;\theta)$.
+    If the true value of $\theta$ is $\theta_0$, i.e., $X_i \overset{iid}{\sim} f(x; \theta_0)$, and we denote $\hat{\theta}$ as the MLE of $\theta$, then
+    $$
+    \sqrt{n\mathcal{I}(\theta_0)}\big(\hat{\theta} - \theta_0\big) \dlim Z
+    $$
+    where $Z\sim N(0, 1)$.
+    
+    \mode<article>{
+    \begin{proof}
+      Recall in this setup, we have $X$ being multivariate. Thus, the likelihood function is
+      $$
+      L(\theta) := \prod_{i = 1}^n f(X_i; \theta).
+      $$
+      Note that here, we are considering the long-run distribution of the MLE estimator, so $X_i$ is treated as random, not fixed. 
+      
+      The theorem statement depends on $\mathcal{I}(\theta_0)$, which is defined as the (expectation of the) negative second derivative of the log-likelihood, evaluated at $\theta_0$.
+      $$
+      \ell(\theta) = \sum_{i = 1}^n \log f(X_i; \theta).
+      $$
+      By definition,
+      $$
+      \hat{\theta} = \argmax_\theta \ell(\theta),
+      $$
+      for any fixed $X = x^*$.
+      Thus, if the MLE is not a boundary point, and the likelihood function is differentiable, then
+      $$
+      \ell'(\hat{\theta}) = 0.
+      $$
+      
+      Now consider a Taylor-series expansion of $\ell'(\hat{\theta})$ around the point $\theta_0$:
+      $$
+      0 = \ell'(\hat{\theta}) = \ell'(\theta_0) + \big(\hat{\theta} - \theta_0\big)\ell''(\theta_0) + \frac{1}{2}\big(\hat{\theta} - \theta_0\big)^2 \ell'''(\theta^*),
+      $$
+      where $\theta^*$ is some point between $\hat{\theta}$ and $\theta_0$.
+      
+      Now we want to rearrange so that on the left hand side, we get the expression that we are looking for: $\sqrt{nI(\theta_0)}\big(\hat{\theta} - \theta_0\big)$.
+      Subtracting away terms involving $\big(\hat{\theta} - \theta_0\big)$,
+      $$
+      -\big(\hat{\theta} - \theta_0\big)\Big(\ell''(\theta_0) + \frac{1}{2}\big(\hat{\theta} - \theta_0\big)\ell'''(\theta^*)\Big) = \ell'(\theta_0),
+      $$
+      and multiplying by $\sqrt{n}$, we have:
+      \begin{align*}
+        \sqrt{n}\big(\hat{\theta} - \theta_0) &= \frac{\sqrt{n}\ell'(\theta_0)}{-\ell''(\theta_0) - \frac{1}{2}\big(\hat{\theta} - \theta_0\big)\ell'''(\theta^*)} \\
+        &= \frac{\frac{1}{\sqrt{n}}\ell'(\theta_0)}{-\frac{1}{n}\ell''(\theta_0) - \frac{1}{2n}\big(\hat{\theta} - \theta_0\big)\ell'''(\theta^*)}.
+      \end{align*}
+      The last step seems a bit odd, but it will be used to apply Slutsky's Theorem (covered last semester) to finish the proof.
+      As a reminder, if $W_n$ is a sequence of random variables that converges in \emph{distribution} to $W$, and $Y_n$ is a sequence of random variables that convergence in \emph{probability} to a constant $c$, then $W_n/Y_n \dlim W/c$.
+      Thus, we want something like:
+      $$
+      \sqrt{n}\big(\hat{\theta} - \theta_0) = W_n / Y_n,
+      $$
+      where $W_n$ converges in distribution to some normally distributed random variable, and $Y_n$ converges to a constant.
+      
+      We have expressed the numerator such that:
+      
+      $$
+      \frac{1}{\sqrt{n}}\ell'(\theta_0) = \frac{1}{\sqrt{n}} \sum_{i = 1}^n \frac{\partial}{\partial \theta} \log f(X_i; \theta_0).
+      $$
+      
+      Since $E[\ell'(\theta_0)] = E[S(\theta)] = 0$, the central limit theorem states:
+      
+      $$
+      \frac{1}{\sqrt{n}}\ell'(\theta_0) \dlim N(0, \mathcal{I}(\theta_0)).
+      $$
+      
+      In the denominator, the leading term converges in probability to $I(\theta_0)$ by the weak law of large numbers:
+      
+      $$
+      -\frac{1}{n}\ell''(\theta_0) \plim E\Big[-\frac{\partial^2}{\partial\theta^2} \log f(X_i;\theta_0)\Big] = I(\theta_0).
+      $$
+      
+      Now we need to be a bit careful with the remainder term. The argument follows closely that which was used to prove the CLT last semester. This does involve a few ``regularity" conditions, under which we can show that the remainder term converges to zero in probability. In this case, the entire denominator converges to zero in probability. The additional conditions needed are:
+      \begin{itemize}
+        \item bounded third derivative: $|\ell'''(\theta)| \leq M(X)$ for all $\theta$, where $E[M(X)] < \infty$.
+      \end{itemize}
+      This last identity is needed because the remainder is:
+      $$
+      R_n = \frac{1}{2n}\big(\hat{\theta} - \theta_0\big)\sum_{i = 1}^n \ell'''(X_i; \theta^*).
+      $$
+      Later in the semester we will formally show that $\big(\hat{\theta} - \theta_0\big)\plim 0$. If the third derivative is bounded by $M(X)$, which has finite expectation, the strong law of large numbers implies that $\frac{1}{2n}\sum_i \ell'''(X_i;\theta^*)$ is bounded, and because $\big(\hat{\theta} - \theta_0\big)\plim 0$, the entire remainder term $R_n \plim 0$.
+      
+      Finally, this combined work shows that the denominator in the expression for $\sqrt{n}\big(\hat{\theta} - \theta_0\big)$ is:
+      $$
+      Y_n = -\frac{1}{n}\ell''(\theta_0) - \frac{1}{2n} \big(\hat{\theta} - \theta_0\big) \ell'''(\theta^*) \plim \mathcal{I}(\theta_0),
+      $$
+      and therefore:
+      $$
+      \sqrt{n}\big(\hat{\theta} - \theta_0\big) = W_n / Y_n \plim W/\mathcal{I}(\theta_0) \overset{d}{=} N(0, 1/\sqrt{\mathcal{I}(\theta_0)}),
+      $$
+      or by multiplying by $\sqrt{\mathcal{I}(\theta_0)}$, we get the theorem statement:
+      $$
+      \sqrt{n\mathcal{I}(\theta_0)}\big(\hat{\theta} - \theta_0) \dlim Z,
+      $$
+      where $Z \sim N(0, 1)$. 
+    \end{proof}
+    }
+    
+  \end{block}
+  
+  \framebreak
+  
+  \begin{itemize}
+    \item How do we interpret / use the result above?
+    \item \alert{For large iid samples:} the MLE $\hat{\theta}$ is approximately normally distributed, centered at the \alert{true} value $\theta_0$, with shrinking variance:
+    $$
+    \Var(\hat{\theta}) = \frac{1}{n\mathcal{I}(\theta_0)}.
+    $$
+    \item \alert{Note} that there is sometimes some confusion regarding whether or not $\mathcal{I}$ is the information from \emph{a single} observation, or \emph{all observations}.
+    \item Because the data are IID, it's really just a difference in scaling constants.
+    \item In our definition and proof, we let $\mathcal{I}(\theta_0)$ be the information from a single observation:
+    $$
+    \mathcal{I}(\theta_0) = E\Big[\Big(\frac{\partial}{\partial \theta} \log f(X_i; \theta)\Big)^2\Big].
+    $$
+    \item We could have instead considered the likelihood / information using all of the data points:
+    $$
+    \mathcal{I}_n(\theta_0) = E\Big[\Big(\frac{\partial}{\partial \theta} \log f_{X_1:X_n}(X_1, \ldots, X_n; \theta)\Big)^2\Big].
+    $$
+    \item In the later case, the theorem would have stated:
+    $$
+    \sqrt{\mathcal{I}_n}\big(\hat{\theta} - \theta_0) \dlim Z \sim N(0, 1),
+    $$
+    or that
+    $$
+    \Var(\hat{\theta}) = \frac{1}{\mathcal{I}_n(\theta_0)}
+    $$
+    \item In the IID case, these are the same since.
+
+  \end{itemize}
+  
+\end{frame}
+
+\section{Bias, MSE, and Consistency}
+
+\begin{frame}[allowframebreaks]{NAME}
+
+\end{frame}
+
+\section{Sufficiency}
+
+\begin{frame}[allowframebreaks]{NAME}
+
+\end{frame}
+
+\section{Efficiency}
+
+\begin{frame}[allowframebreaks]{NAME}
+
+\end{frame}
 
 \newcommand\acknowledgments{
 \begin{itemize}
