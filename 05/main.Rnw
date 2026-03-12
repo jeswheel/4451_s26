@@ -556,7 +556,7 @@ Point Estimation: Principles and Theory}
     
     Let the collection of observations be denoted $X$, and the parameter of interest $\theta$. Then:
     \begin{align*}
-    \pi_{\Theta|X}(\theta | x) \propto \pi_\Theta(\theta) f_{X|\Theta}(x|\theta) \\
+    \pi_{\Theta|X}(\theta | x) &\propto \pi_\Theta(\theta) f_{X|\Theta}(x|\theta) \\
     &= \exp\big[\log \pi_\Theta(\theta)\big]\exp\big[\log f_{X|\Theta}(x|\theta)\big] \\
     &= \exp\big[\log \pi_\Theta(\theta)\big]\exp\big[\ell (\theta)\big]
     \end{align*}
