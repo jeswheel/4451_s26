@@ -68,6 +68,8 @@ Point Estimation: Principles and Theory}
   \pi(\theta|x) \propto L(\theta) \times \pi(\theta).
   $$
   \item In both instances, the shape of the likelihood function $L(\theta)$ is of interest.
+ 
+  \item \alert{Coming up:} We'll introduce the \emph{score} function, and \emph{Fisher's Information}. The latter can be used to obtain uncertainty estimates for \emph{any} parameter estimated using the MLE technique.
   
   \framebreak
   
@@ -94,26 +96,139 @@ Point Estimation: Principles and Theory}
   I(\theta) = -\frac{\partial^2}{\partial \theta^2} \log L(\theta).
   $$
   \item Again, we are treating the likelihood function $L(\theta)$ as a regular (non-random) function, fixed on $x^*$ (this is slightly different than many texts).
+  \item In this case, we call $I(\theta)$ the \alert{observed Fisher's Information}, at the point $\theta$.
+  
+  \framebreak
+  
+  \begin{exampleblock}{Comment: joint information}
+    We can define the information for just a single point $X_i = x^*_i$,
+    $$
+    I_i(\theta) = -\frac{\partial^2}{\partial \theta^2} \log f_{X_i}(x^*_i; \theta),
+    $$
+    or for the entire collection: $X_{1:n} = x^*_{1:n}$:
+    $$
+    I(\theta) = -\frac{\partial^2}{\partial \theta^2} \sum_i \log f_{X_i}(x^*_i; \theta) = \sum_i I_i(\theta).
+    $$
+    % This notation is often confused. We will use $I(\theta)$ to denote the observed information of all observations, unless otherwise specified. This is the most common notation, but it may lead to some confusion later on.
+  \end{exampleblock}
+  
   \item The curvature at the MLE is of particular interest.
   
   \framebreak
   
   \begin{block}{Definition: The Observed Fisher Information}
-    Let $L(\theta)$ be the likelihood function, fixed on the observed data $x^*$. The \alert{observed Fisher information} is the second derivative of $\log L(\theta)$, evaluated at the MLE:
+    Let $L(\theta)$ be the likelihood function, fixed on the observed data $x^*$. Unless otherwise specified, the \alert{observed Fisher information} is understood to be the negative second derivative of $\log L(\theta)$, evaluated at the MLE:
     $$
-    \mathcal{I}\big(\hat{\theta}\big) := I\big(\hat{\theta}\big) = -\frac{\partial^2}{\partial \theta^2} \log L\big(\hat{\theta}\big)
+    I\big(\hat{\theta}\big) = -\frac{\partial^2}{\partial \theta^2} \log L\big(\theta\big)\Big|_{\theta = \hat{\theta}}
     $$
     Note that when $\theta$ is multi-variate, this is a matrix with entries:
     $$
-    \Big[\mathcal{I}\big(\hat{\theta}\big)\Big]_{i, j} = -\frac{\partial^2}{\partial \theta_i \partial \theta_j} \log L(\theta),
+    \Big[I\big(\hat{\theta}\big)\Big]_{i, j} = -\frac{\partial^2}{\partial \theta_i \partial \theta_j} \log L(\theta)\Big|_{\theta = \hat{\theta}},
     $$
-    also denoted $\mathcal{I}\big(\hat{\theta}\big) = -\nabla^2 \log L\big(\hat{\theta}\big)$.
+    also denoted $I\big(\hat{\theta}\big) = -\nabla^2 \log L\big(\hat{\theta}\big)$.
   \end{block}
   
   \framebreak
   
-  \item Note that large values of $\mathcal{I}\big(\hat{\theta}\big)$ in the univariate case (and large eigen-values / determinant in the multivariate case) indicate a ``tight peak" around the maximum, suggesting less uncertainty about the parameter $\theta$.
+  \item Note that large values of $I\big(\hat{\theta}\big)$ in the univariate case (and large eigen-values / determinant in the multivariate case) indicate a ``tight peak" around the maximum, suggesting less uncertainty about the parameter $\theta$.
   
+  \begin{exampleblock}{Observed Fisher's information, Binomial Distribution}
+  Let $X\sim \text{Binom}(n, \theta)$. Find the MLE by setting the score function equal to zero, and then use that to compute the observed Fisher's information.
+  
+  \mode<article>{
+    \begin{proof}
+      The likelihood function for the Binomial model is:
+      $$
+      L(\theta) = f(X; \theta) = \binom{n}{X}\theta^X(1-\theta)^{n-X}.
+      $$
+      The binomial coefficient in front is only a multiplicative constant, and doesn't change the overall shape or maximum of the likelihood function $L(\theta)$.
+      
+      Taking the logarithm, we have:
+      $$
+      \ell(\theta) = C + X\log(\theta) + (n-X) \log(1 - \theta).
+      $$
+      The \alert{score function} is the partial derivative of $\ell$, with respect to $\theta$:
+      $$
+      S(\theta) = \frac{\partial}{\partial \theta} \ell(\theta) = \frac{X}{\theta} - \frac{n-X}{1-\theta}.
+      $$
+      Setting equal to zero, we can solve for the mle:
+      $$
+      \hat{\theta} = \frac{X}{n}.
+      $$
+      Now to compute the observed Fisher's information, we take the second derivative:
+      $$
+      I(\theta) = -\frac{\partial^2}{\partial \theta^2} \ell(\theta) = \frac{X}{\theta^2} + \frac{n - X}{(1-\theta)^2}
+      $$
+      Plugging in the MLE $\hat{\theta} = X/n$, and some simplification gives: 
+      $$
+      I(\hat{\theta}) = \frac{N}{\hat{\theta}\big(1 - \hat{\theta}\big)}.
+      $$
+      % \alert{NOTE:} This is not the same as the Fisher's information, $\mathcal{I}(\theta) = E[I(\theta)]$. As written here, $I(\theta)$ is random, and the real Fisher's information is the expectation. However, note that once we plug in the MLE: $\mathcal{I}(\hat{\theta}) = E[I(\hat{\theta})] = I(\hat{\theta})$. Thus, the \alert{observed} Fisher's information doesn't require taking the expectation.
+      
+    \end{proof}
+  }
+  
+  
+\end{exampleblock}
+
+\framebreak
+
+\begin{exampleblock}{Observed Fisher's information, Normal Distribution}
+  Suppose $X_1, \ldots, X_n$ are iid from $N(\theta, \sigma^2)$, with known $\sigma^2$. Find the MLE by setting the score function to zero, and then calculate the joint information, $I_n(\theta)$ at the MLE.
+  
+  \mode<article>{
+  \begin{proof}
+    Under the IID assumption, we have the likelihood function (joint distribution of the $X$, evaluated at $x^*$):
+    \begin{align*}
+    L(\theta) = f(x^*; \theta) &= \prod_{i = 1}^n \frac{1}{\sigma\sqrt{2\pi}} \exp\Big\{-\frac{1}{2\sigma^2}\big(x_i^* - \theta\big)^2\Big\} \\
+    &= C \exp\Big\{-\frac{1}{2\sigma^2}\sum_{i = 1}^n\big(x_i^* - \theta\big)^2\Big\}.
+    \end{align*}
+    Here, we just note that $C$ is some constant that does not depend on the parameter of interest, $\theta$. Taking logarithms:
+    $$
+    \ell(\theta) = C' -\frac{1}{2\sigma^2}\sum_{i = 1}^n\big(x_i^* - \theta\big)^2.
+    $$
+    
+    The score function is the partial derivative of $\ell(\theta)$, with respect to $\theta$:
+    $$
+    S(\theta) = \frac{\partial}{\partial \theta} \ell(\theta) = \frac{1}{\sigma^2}\sum_{i = 1}^n (x_i^* - \theta).
+    $$
+
+    Setting equal to zero, solving for $\theta$, results in the MLE:
+    $$
+    \hat{\theta} = \bar{x}^*_n.
+    $$
+
+    Taking the negative second derivative gives the observed Fisher information:
+    $$
+    I(\theta) = \frac{n}{\sigma^2}.
+    $$
+
+    Note that this is a constant with respect to $\theta$, so we have:
+    $$
+    I(\hat{\theta}) = I(\theta) = \frac{n}{\sigma^2}.
+    $$
+    \alert{Note:} In this example, note the relationship between $I(\hat{\theta})$ and $\Var(\hat{\theta})$, where we treat the data $X$ as random.
+    This will come into play later:
+    \begin{align*}
+    \Var(\hat{\theta}) &= \Var(\bar{X}_n) \\
+    &= \frac{1}{n^2}\Var\Big(\sum_{i = 1}^n X_i\Big) \\
+    &= \frac{\sigma^2}{n} \\
+    &= \frac{1}{I(\hat{\theta})}.
+    \end{align*}
+    Later, we'll show that for any general MLE estimator:
+    $$
+    \Var(\hat{\theta}) \approx \frac{1}{I(\hat{\theta})}.
+    $$
+    This is a common theme: something that is exactly true in the normal case is approximately elsewhere. This is particularly true if the estimates are ``regular", meaning they behave approximately like a normal distribution.
+  \end{proof}
+  }
+  
+\end{exampleblock}
+  
+  \framebreak
+  
+  \item Calculating the observed Fisher's Information at any given point is rather simple: Find the likelihood, take second derivative(s), plug in desired point.
+  \item However, because data are random, we may want to consider the \alert{expected} Fisher's information.
   
   \begin{block}{Theorem: Expected Score}
     Now consider treating the score function $S(\theta)$ as a random function, dependent on random input data $X$. That is:
@@ -140,13 +255,18 @@ Point Estimation: Principles and Theory}
     
   \end{block}
   
+  \begin{itemize}
+    \item \alert{NOTE:} This is the most common way to define the score (and later, information). Note that this is the expected information a single observation $X$, not the entire collection!
+  \end{itemize}
+  
   \framebreak
   
   \begin{block}{Definition: Fisher's Information}
-    Continuing with the treatment of the score function as a random function of $X$, we will define Fisher's Information to be the following:
+    Continuing with the treatment of the score function as a random function of $X$, we will define the Expected Fisher's Information to be the following:
     $$
     \mathcal{I}(\theta) = E\Big[\Big(\frac{\partial}{\partial \theta}\log f(X;\theta)\Big)^2\Big] = E\Big[\big(S(\theta)\big)^2\Big].
     $$
+    This is often referred to as just Fisher's Information.
   \end{block}
   
   \begin{block}{Proposition: Variance of the Score}
@@ -221,21 +341,18 @@ Point Estimation: Principles and Theory}
       
   \framebreak 
   % \item Many texts do not consider $I(\theta)$, but instead jump straight to $\mathcal{I}(\theta)$.
-  \item Note that the curvature $I(\theta)$, defined as the second derivative of $L(\theta)$ (fixed function), exists for all points $\theta$.
+  \item Note that the curvature $I(\theta)$, defined as the second derivative of $L(\theta)$ (fixed function based on the observed data), exists for all points $\theta$.
+  \item Many theorem's instead rely on $\mathcal{I}(\theta)$, which is the \alert{expected} Fisher's information. This later quantity ``integrates out" the effect of the randomness in the data.
+  \item In practice, the expected information is often hard to find, while the observed information is easy to calculate. For instance, in cases where the expected information is available, we might be able to get \alert{exact} confidence intervals, which are preferred.
+  \item In practice, we often replace $\mathcal{I}(\hat{\theta})$ in theory with $I(\hat{\theta})$. 
   \item However, we're primarily only interested in this function at the MLE, \emph{or} when we regard $S(\theta)$ as a random function of arbitrary $X$ (not fixed on $x^*$).
-  \item Thus, it's fairly uncommon to discuss both $I(\theta)$ and $\mathcal{I}(\theta)$ (formally in), and most texts just discuss $\mathcal{I}(\theta)$.
+
   
-  \begin{exampleblock}{Note on observed fisher information}
-    We defined the observed fisher information as:
-    $$
-    \mathcal{I}\big(\hat{\theta}\big) := I\big(\hat{\theta}\big) = -\frac{\partial^2}{\partial \theta^2} \log L\big(\hat{\theta}\big).
-    $$
-    This matches the definition of fisher's information, because in the observed case the data $X=x^*$ is not random, and the expectation is a constant; thus, the notation is consistent.
-  \end{exampleblock}
   
 \end{itemize}
 
 \framebreak
+
 
 \begin{exampleblock}{Comment on numeric optimization}
   If numeric optimization is used to find the MLE, many approaches estimate the Hessian of the loss-function. If the negative log-likelihood is used, setting \texttt{optim(..., hessian = TRUE)} can be used to compute the Observed Fisher's Information (don't forget to adjust for variable transformations!)
@@ -321,7 +438,7 @@ Point Estimation: Principles and Theory}
       In the denominator, the leading term converges in probability to $I(\theta_0)$ by the weak law of large numbers:
       
       $$
-      -\frac{1}{n}\ell''(\theta_0) \plim E\Big[-\frac{\partial^2}{\partial\theta^2} \log f(X_i;\theta_0)\Big] = I(\theta_0).
+      -\frac{1}{n}\ell''(\theta_0) \plim E\Big[-\frac{\partial^2}{\partial\theta^2} \log f(X_i;\theta_0)\Big] = \mathcal{I}(\theta_0).
       $$
       
       Now we need to be a bit careful with the remainder term. The argument follows closely that which was used to prove the CLT last semester. This does involve a few ``regularity" conditions, under which we can show that the remainder term converges to zero in probability. In this case, the entire denominator converges to zero in probability. The additional conditions needed are:
@@ -386,7 +503,7 @@ Point Estimation: Principles and Theory}
 
   \framebreak
   
-  \item Our derivation treated $\theta$ as univariate. The more common multivariate case has a similar result:
+  \item Our derivation treated $\theta$ as univariate. The more common multivariate case has a similar result.
 
   \end{itemize}
   
@@ -400,20 +517,62 @@ Point Estimation: Principles and Theory}
   
 \end{frame}
 
-\begin{frame}{Implications for estimating parameter uncertainty}
+\begin{frame}[allowframebreaks]{Implications for estimating parameter uncertainty}
   \begin{itemize}
     \item This result gives us an immediate way to approximate the uncertainty associated with the MLE, for rather arbitrary models.
     \item If $\hat{\theta}$ is the MLE, then:
     $$
-    \Var\big(\hat{\theta}\big) \approx \frac{1}{n\mathcal{I}(\hat{\theta})}.
+    \Var\big(\hat{\theta}\big) \approx \frac{1}{n\mathcal{I}(\hat{\theta})} = \frac{1}{\mathcal{I}_n(\hat{\theta})}.
     $$
     \item \alert{There are two different approximations here}:
     \begin{itemize}
       \item Asymptotic normality.
-      \item $\hat{\theta} \plim \theta_0$. 
+      \item $\hat{\theta} \plim \theta_0$ (Slutksy's Theorem). 
     \end{itemize}
     \item It is a good approximation for even moderate $n$, but exact calculations are preferred when possible.
+    \item Finally, recall that $\mathcal{I}(\hat{\theta})$ is an \alert{expectation}.
+    \item When an exact calculation is not readily available, calculating the expectation $\mathcal{I}(\hat{\theta})$ usually isn't either!
+    \item In practice, we often replace the Fisher's Information with the Observed Fisher's information:
+    $$
+    \Var\big(\hat{\theta}\big) \approx \frac{1}{I_n(\hat{\theta})},
+    $$
+    where $I_n$ is the information provided by all $n$ data points.
+    \item The details justifying this final approximation are a bit tricky. See \citet[][Chapter~9]{keener10} for more details.
+    \item In short, for many distributions (regular exponential families), $\mathcal{I}(\hat{\theta}) = I(\hat{\theta})$. In other cases, suitable conditions imply that $I(\hat{\theta}) \plim \mathcal{I}(\hat{\theta})$.
   \end{itemize}
+\end{frame}
+
+\begin{frame}{Asymptotic results for Bayesian posteriors}
+  \begin{itemize}
+    \item Similar results hold for Bayesian estimates.
+  \end{itemize}
+  
+  \begin{block}{Bernstein–von Mises Theorem}
+    We are not ready to state the full Theorem, so we'll just provide a heuristic approach: under suitable conditions, the posterior distribution behaves asymptotically like a normal distribution with mean $\hat{\theta}_{MLE}$, and variance $1/\mathcal{I}(\theta_0)$.
+    
+    \mode<article>{
+    \begin{proof} 
+    (Sketch, not a formal proof). 
+    
+    Let the collection of observations be denoted $X$, and the parameter of interest $\theta$. Then:
+    \begin{align*}
+    \pi_{\Theta|X}(\theta | x) \propto \pi_\Theta(\theta) f_{X|\Theta}(x|\theta) \\
+    &= \exp\big[\log \pi_\Theta(\theta)\big]\exp\big[\log f_{X|\Theta}(x|\theta)\big] \\
+    &= \exp\big[\log \pi_\Theta(\theta)\big]\exp\big[\ell (\theta)\big]
+    \end{align*}
+    We will now again perform a Taylor-Series expansion of the log-likelihood, about the MLE $\hat{\theta}$. With enough observations, this expansion will be very accurate. In the case where we have large ammounts of data, the likelihood ``dominates" over the prior, negating the effect of the prior distribution. Thus:
+    \begin{align*}
+      \pi_{\Theta|X}(\theta | x) &\propto \exp\big[\log \pi_\Theta(\theta)\big]\exp\big[\ell (\theta)\big] \\
+      &\approx \exp\big[\ell (\theta)\big] \\
+      &\approx \exp\Big[\ell(\hat{\theta}) + (\theta - \hat{\theta})\ell'(\hat{\theta}) + \frac{1}{2}(\theta - \hat{\theta})^2\ell''(\hat{\theta})\Big]\\
+      &\propto \exp\Big[\frac{1}{2}(\theta - \hat{\theta})^2 \ell''(\hat{\theta})\Big].
+    \end{align*}
+    In this last expression, we get what looks like the density of a normal distribution, centered at $\hat{\theta}$, with variance $-[\ell''(\hat{\theta})]^{-1} = 1/I(\hat{\theta})$.
+    \end{proof}
+    }
+    
+  \end{block}
+  
 \end{frame}
 
 \section{Bias, MSE, and Consistency}
