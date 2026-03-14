@@ -161,7 +161,7 @@ Point Estimation: Principles and Theory}
       $$
       Plugging in the MLE $\hat{\theta} = X/n$, and some simplification gives: 
       $$
-      I(\hat{\theta}) = \frac{N}{\hat{\theta}\big(1 - \hat{\theta}\big)}.
+      I(\hat{\theta}) = \frac{n}{\hat{\theta}\big(1 - \hat{\theta}\big)}.
       $$
       % \alert{NOTE:} This is not the same as the Fisher's information, $\mathcal{I}(\theta) = E[I(\theta)]$. As written here, $I(\theta)$ is random, and the real Fisher's information is the expectation. However, note that once we plug in the MLE: $\mathcal{I}(\hat{\theta}) = E[I(\hat{\theta})] = I(\hat{\theta})$. Thus, the \alert{observed} Fisher's information doesn't require taking the expectation.
       
@@ -256,7 +256,7 @@ Point Estimation: Principles and Theory}
   \end{block}
   
   \begin{itemize}
-    \item \alert{NOTE:} This is the most common way to define the score (and later, information). Note that this is the expected information a single observation $X$, not the entire collection!
+    \item \alert{NOTE:} This is the most common way to define the score (and later, information). This holds for either a single observation, or the entire collection of data.
   \end{itemize}
   
   \framebreak
@@ -577,8 +577,88 @@ Point Estimation: Principles and Theory}
 
 \section{Bias, MSE, and Consistency}
 
-\begin{frame}[allowframebreaks]{NAME}
+\begin{frame}[allowframebreaks]{Bias}
 
+\begin{itemize}
+  \item We have already talked a little about bias last semester.
+  \item It's an important concept / principle for point-estimates.
+
+\begin{block}{Definition: Bias of an estimator}
+  The \alert{bias} of a point estimator $\hat{\theta}$ of a parameter $\theta$ is the difference between the expected value of $\hat{\theta}$ and $\theta$; that is, 
+  $$\text{Bias}_\theta\big[\hat{\theta}\big] = E_\theta\big[\hat{\theta}\big] - \theta$$
+\end{block}
+  
+ \item If $\text{Bias}_\theta\big[\hat{\theta}\big] = 0$, then $\hat{\theta}$ is an \alert{unbiased} estimator of $\theta$, and $E_\theta\big[\hat{\theta}\big] = 0$.
+
+\framebreak
+  \item \alert{unbiasedness} is a nice property, but alone does not mean we have a good estimator.
+  \item Another thing that needs to be considered is the \alert{variance} of an estimator.
+  \item We encountered this with Monte-Carlo methods: many approaches converge to the true value, but lower variance estimates are generally preferred among unbiased methods.
+\end{itemize}
+
+\begin{exampleblock}{Unbiased estimators for normal distribution}
+  Let $X_1, X_2, \ldots, X_n$ be iid from $N(\mu, \sigma^2)$. Consider two estimates of the parameter $\theta = \mu$:
+  $$
+  \hat{\theta}_1 = \bar{X}_n, \quad\quad \hat{\theta}_2 = X_1.
+  $$
+  Show that both are unbiased estimators, but that $\hat{\theta}_1$ has lower variance.
+\end{exampleblock}
+
+\end{frame}
+
+\begin{frame}[allowframebreaks]{MSE}
+  \begin{itemize}
+    \item The mean square error (MSE) describes the expected squared difference between an estimator and the true parameter value.
+    \item Often, attempts as lowering the \emph{variance} results in increasing the \emph{variance}.
+    \item It can be used to balance the bias-variance tradeoff. 
+  \end{itemize}
+  
+  \begin{block}{Definition + Theorem: MSE}
+    Let $\hat{\theta}$ be an estimator of $\theta$. The MSE of $\hat{\theta}$ is defined as:
+    $$
+    \text{MSE}_\theta\big(\hat{\theta}\big) := E\big[(\hat{\theta} - \theta)^2\big].
+    $$
+    Furthermore, $\text{MSE}_\theta\big(\hat{\theta}\big) = \Var_\theta\big(\hat{\theta}\big) + \big(\text{Bias}_\theta(\hat{\theta})\big)^2$.
+    
+    \mode<article>{
+      \begin{proof}
+        \begin{align*}
+          \text{MSE}_\theta\big(\hat{\theta}\big) &= E\big[(\hat{\theta} - \theta)^2\big] \\
+          &= E\big[(\hat{\theta} - E[\hat{\theta}] + E[\hat{\theta}] - \theta)^2\big] \\
+          &= E\big[(\hat{\theta} - E[\hat{\theta}])^2 + 2(\hat{\theta} - E[\hat{\theta}])(E[\hat{\theta}] - \theta) + (E[\hat{\theta}] - \theta)^2\big] \\
+          &= E\big[(\hat{\theta} - E[\hat{\theta}])^2\big] + 2E\big[(\hat{\theta} - E[\hat{\theta}])(E[\hat{\theta}] - \theta)\big] + E\big[(E[\hat{\theta}] - \theta)^2\big] \\
+          &= E\big[(\hat{\theta} - E[\hat{\theta}])^2\big] + 2E\big[(\hat{\theta} - E[\hat{\theta}])\big](E[\hat{\theta}] - \theta) + (E[\hat{\theta}] - \theta)^2 \\
+          &= E\big[(\hat{\theta} - E[\hat{\theta}])^2\big] + 2(E[\hat{\theta}] - E[\hat{\theta}])(E[\hat{\theta}] - \theta) + (E[\hat{\theta}] - \theta)^2 \\
+          &= E\big[(\hat{\theta} - E[\hat{\theta}])^2\big] + (E[\hat{\theta}] - \theta)^2 \\
+          &= \Var_\theta\big(\hat{\theta}\big) + \big(\text{Bias}_\theta(\hat{\theta})\big)^2
+        \end{align*}
+      \end{proof}
+    }
+    
+  \end{block}
+  
+  \framebreak
+  
+  \begin{exampleblock}{Example: Variance of MLE}
+    TODO: Finish example 7.3.3, Casella + Berger
+  \end{exampleblock}
+  
+  \framebreak
+  
+    \begin{exampleblock}{Example: Sample variance estimator}
+    TODO: Finish example 7.3.4, Casella + Berger.
+  \end{exampleblock}
+  
+  \framebreak
+  
+  \begin{itemize}
+    \item Based on the examples above, should $\hat{\sigma^2}$ be used instead of $S^2$?
+    \item TODO: See text on 332, Casella + Berger.
+    \item Also, TODO: 7.3.5 is kind of a cool example... Include it? 
+  \end{itemize}
+  
+  
+  
 \end{frame}
 
 \section{Sufficiency}
