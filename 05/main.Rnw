@@ -640,37 +640,443 @@ Point Estimation: Principles and Theory}
   \framebreak
   
   \begin{exampleblock}{Example: Variance of MLE}
-    TODO: Finish example 7.3.3, Casella + Berger
+    Let $X_i$ be iid from $N(\mu, \sigma^2)$, and consider estimating $\theta = (\mu, \sigma^2)$ in two ways:
+    $$
+    \hat{\theta}_{MLE} = \Big(\bar{X}_n, \hat{\sigma}^2_{MLE} = \frac{1}{n}\sum_{i = 1}^n \big(\bar{X} - \sigma^2\big)^2\Big),
+    $$
+    $$
+    \hat{\theta}_1 = \Big(\bar{X}_n, S^2 = \frac{1}{n-1}\sum_{i = 1}^n \big(\bar{X} - \sigma^2\big)^2\Big).
+    $$
+    What is the MSE of $\hat{\mu}_{MLE}$? What about the bias and MSE of $S^2$ and $\hat{\sigma}^2$?
+    
+    \mode<article>{
+    We will use the Bias-Variance characterization of MSE. First, consider the estimate $\hat{\mu} = \bar{X}_n$, which is the same for both of the proposed methods. First, we will show it is an unbiased estimator for $\mu$, and then find the variance of this estimator.
+    \begin{align*}
+      E\big[\bar{X}_n\big] &= E\Big[\frac{1}{n}\sum_i X_i\Big] \\
+      &= \frac{1}{n} \sum_i E[X_i] \\
+      &= \frac{n}{\mu n} = \mu.
+    \end{align*}
+    Thus, $E\big[\hat{\mu} - \mu\big] = 0$, and $\hat{\mu}$ is an unbiased estimator. Thus,
+    \begin{align*}
+      \text{MSE}_\mu\big(\hat{\mu}\big) &= \Var\big(\hat{\mu}\big) - \Big(\text{Bias}_\mu\big(\hat{\mu}\big)\Big)^2 \\
+      &= \Var\big(\hat{\mu}\big) \\
+      &= \Var\Big(\frac{1}{n}\sum_i X_i\Big)\\
+      &= \frac{1}{n^2}\sum_i \Var(X_i) \\
+      &= \frac{\sigma^2}{n}
+    \end{align*}
+    
+    Now consider the two different estimates for $\sigma^2$, either the MLE $\hat{\sigma}^2_{MLE}$, and the sample variance $S^2$.
+    From Homework 7, Problem 5 of last semester, you showed:
+    \begin{align*}
+      E\big[\hat{\sigma^2}_{MLE}\big] &= E\Big[\frac{1}{n}\sum_{i = 1}^n (X_i - \bar{X})^2\Big] \\
+      &= \frac{n-1}{n}\sigma^2,
+    \end{align*}
+    and, by extension, you derived the estimator:
+    \begin{align*}
+      E\big[S^2\big] = E\Big[\frac{n}{n-1}\hat{\sigma}^2_{MLE}\Big] = \frac{n}{n-1}\frac{n-1}{n}\sigma^2 = \sigma^2
+    \end{align*}
+    Thus, we see that $\hat{\sigma}^2_{MLE}$ is a \emph{biased} estimator, while $S^2$ is unbiased. The bias of the MLE can be found as:
+    $$
+    E\big[\hat{\sigma^2}_{MLE} - \sigma^2\big] = \Big(\frac{n-1}{n}\sigma^2 - \sigma^2\Big).
+    $$
+    
+    From Chapter~6 last semester, we proved that if $X_i$ are iid normal, then $(n-1)S^2/\sigma^2 \sim \chi^2_{n-1}$. This was used to show that $(\bar{X} - \mu) / (S / \sqrt{n})$ has a $t$-distribution.
+    Thus:
+    $$
+    \Var\big((n-1)S^2/\sigma^2\big) = \Var(Z) = 2(n-1),
+    $$
+    where $Z = (n-1)S^2/\sigma^2$ follows a chi-square distribution. 
+    Therefore
+    $$
+    \Var\big(S^2\big) = \Var\Big(\frac{\sigma^2}{n-1}Z\Big) = \frac{\sigma^4}{(n-1)^2}2(n-1) = \frac{2\sigma^4}{n-1}.
+    $$
+    Since $S^2$ is an unbiased estimator of $\sigma^2$, we have:
+    $$
+    \text{MSE}_{\sigma^2}\big(S^2\big) = \Var\big(S^2\big) = \frac{2\sigma^4}{n-1}.
+    $$
+    
+    We can extend this result to find the variance and MSE of $\hat{\sigma}^2_{MLE}$. First, the variance:
+    $$
+    \Var\big(\hat{\sigma}^2_{MLE}\big) = \Var\Big(\frac{n-1}{n}S^2\Big) = \Big(\frac{n-1}{n}\Big)^2\Var\big(S^2\big) = \frac{2(n-1)\sigma^4}{n^2}.
+    $$
+    The MSE is then given by:
+    \begin{align*}
+      \text{MSE}_{\sigma^2}\big(\hat{\sigma}_{MLE}^2\big) &= \frac{2(n-1)\sigma^4}{n^2} + \Big(\frac{n-1}{n}\sigma^2 - \sigma^2\Big)^2 \\
+      &= \Big(\frac{2n-1}{n^2}\Big)\sigma^2.
+    \end{align*}
+    Comparing this MSE to the MSE of $S^2$, it can be shown that for all $n$, 
+    $$
+    \text{MSE}_{\sigma^2}\big(\hat{\sigma}_{MLE}^2\big) < \text{MSE}_{\sigma^2}\big(S^2\big),
+    $$
+    or that although the MLE is biased for $\sigma^2$, it has a lower MSE than $S^2$.
+    }
+    
+    
   \end{exampleblock}
   
   \framebreak
   
-    \begin{exampleblock}{Example: Sample variance estimator}
-    TODO: Finish example 7.3.4, Casella + Berger.
+  
+  \begin{itemize}
+    \item Based on the examples above, should $\hat{\sigma^2}$ be used instead of $S^2$? The argument above proves that, on average, $\hat{\sigma}^2_{MLE}$ will be closer to $\sigma^2$ than $S^2$.
+    \item \alert{However}: statisticians generally agree that $S^2$ is a better estimate. Why?
+    \item Though it has lower MSE, \alert{on average}, $\hat{\sigma}^2_{MLE}$ will be \emph{smaller} than $\sigma^2$ (biased low).
+    \item There's also some agreement that MSE is \emph{not} a reasonable criterion for \emph{scale} parameters, like the variance.
+    \item The reason is that the MSE is a symmetric criterion: both small and large errors are penalized the same.
+    \item However, scale parameters like $\sigma^2$ must be positive, so they have a natural lower bound $\sigma^2 > 0$, so the estimation problem is \emph{not} symmetric.
+    
+    \framebreak
+    
+    \item The $\text{MSE}_\theta$ uses the subscript $\theta$ to denote that it is a function of $\theta$.
+    \item Often, there is not a \alert{uniformly best} estimator for $\theta$, and some estimators will perform better for some values of $\theta$ and worse for others.
+  \end{itemize}
+  
+  \begin{exampleblock}{MSE of MLE and Bayes: Binomial Model}
+    \citep[Example~7.3.5][]{casella24} Let $X_i$ be iid Bernoulli$(p)$, such that $X = \sum_i X_i$ is Binomial$(n, p)$. The MLE $\hat{p} = X/n$ is unbiased for $p$, and has MSE:
+    $$
+    \text{MSE}_p\big(\hat{p}\big) = \Var_p\big(\hat{p}\big) = \frac{p(1-p)}{n}.
+    $$
+    Compare this to the posterior mean estimate, where the prior $P \sim U(0, 1)$.
+    
+    \mode<article>{
+      The posterior distribution is:
+      $$
+      P|X \sim \text{Beta}\big(X + 1, n - X + 1\big),
+      $$
+      which has posterior mean:
+      $$
+      \hat{p}_B = E[P|X] = \frac{X+1}{n+2},
+      $$
+      The MSE of this estimate is:
+      \begin{align*}
+      \text{MSE}_p\big(\hat{p}_B\big) &= \Var_{p}\big(\hat{p}_B\big) + \Big(\text{Bias}_p\big(\hat{p}_B\big)\Big)^2 \\
+      &= \frac{np(1-p)}{(n + 2)^2} + \Big(\frac{np + 1}{n + 2} - p\Big)^2
+      \end{align*}
+      We may want to consider plotting the MSE, as a function of $p$, for fixed values of $n$.
+      Below are two plots for $n = 4$ and $n = 400$:
+      \begin{itemize}
+        \item \url{https://www.desmos.com/calculator/j2hjnqnqpc}
+        \item \url{https://www.desmos.com/calculator/skeej4pndh}
+      \end{itemize}
+      Interestingly, at $n = 4$, the MSE of $\hat{p}_B$ is constant. In both figures, we see that if the true value of $p$ is close to $0.5$, then the MSE of $\hat{p}_B$ is lower. However, for values of $p$ close to 0 or 1, the MSE of $\hat{p}_{MLE}$ is lower. Neither estimate is \alert{uniformly} better in terms of MSE. Note that for all values of $p$ and $n$, $\hat{p}_B$ is biased.
+    }
+    
   \end{exampleblock}
+  
+\end{frame}
+
+\begin{frame}[allowframebreaks]{Uniformly Best Unbiased Estimators}
+  \begin{itemize}
+    \item As the previous example demonstrates, there is almost \emph{never} a uniformly best estimate in terms of MSE.
+    \item This is because the class of estimators is ``too large".
+    \item Example: consider estimating $\theta$, using $\hat{\theta} = 17$. If $\theta = 17$, this will always beat any other estimator. However, it's a very poor estimate if $\theta \neq 17$.
+    \item This leads us to thinking of ways of limiting the possible estimators to certain classes of estimators.
+    \item A natural constraint to consider is the class of \alert{unbiased estimators}. In this class, the MSE = Variance of the estimator.
+  \end{itemize}
+  
+  \framebreak
+  
+  \begin{block}{Definition: Uniformly best unbiased estimators}
+    An estimator $\theta^*$ is called the \emph{best unbiased estimator} of $\theta$ if $E[\theta^*] = \theta$, for any other estimator $\tilde{\theta}$ such that $E[\tilde{\theta}] = \theta$, then $\Var_\theta\big(\theta^*\big) \leq \Var_\theta\big(\tilde{\theta}\big)$ for all $\theta$.
+    
+    $\theta^*$ is also called a \alert{uniform minimum variance unbiased estimator} (UMVUE) of $\theta$.
+  \end{block}
+  
+  \begin{itemize}
+    \item Initially, it can be extremely difficult to find a UMVUE estimator without adidtional supporting theory.
+  \end{itemize}
+  
+  \framebreak
+  
+  \begin{exampleblock}{Poisson unbiased estimation}
+    Let $X_i$ be iid Poisson$(\lambda)$ random variables, and let $\bar{X}$ and $S^2$ be the sample mean and variance, respectively.
+    Since $E[X_i] = \Var(X_i) = \lambda$, it can be shown that $E[\bar{X}] = E[S^2] = \lambda$, and therefore both $\bar{X}$ and $S^2$ are unbiased estimators of $\lambda$. Which is a better estimate?
+  \end{exampleblock}
+    
+    \begin{itemize}
+    
+    \item Since they are unbiased, we just need to find the lower variance of the two. Evaluating $\Var_\lambda\big(S^2\big)$ is actually a very lengthy calculation. 
+    \item However, even if we do the calculation and find $\Var_\lambda(\bar{X}) \leq \Var_\lambda(S^2)$, this doesn't immediately imply that $\bar{X}$ is the UMVUE. Consider for instance:
+    $$
+    \hat{\lambda} = a\bar{X} + (1-a)S^2.
+    $$
+    
+    \item This estimate is also unbiased, so from this alone we have an infinite number of unbiased estimators to consider.
+    \item The next Theorem provides a \alert{lower bound} on the variance of an unbiased estimator.
+    \end{itemize}
+
+  \framebreak
+  
+  \begin{block}{Theorem: Cram\'er-Rao Inequality}
+    Let $X_1, \ldots, X_n$ be a sample with joint pdf $f_\theta(X;\theta)$, and let $\theta^*$ be any estimator of $\theta$ (biased or unbiased), that satisfies the smoothness condition
+    $$
+    \frac{d}{d\theta} E_\theta\big[\theta^*\big] = \int_{\mathcal{X}} \frac{\partial}{\partial \theta} \theta^*f_\theta(X;\theta)\, dx.
+    $$
+    Then,
+    $$
+    \Var_\theta\big(\theta^*\big) \geq \frac{\big(\frac{d}{d\theta}E_\theta[\theta^*]\big)^2}{E_\theta\Big[\big(\frac{\partial}{\partial \theta} \log f(x; \theta)\big)^2\Big]} = \frac{\big(\frac{d}{d\theta}E_\theta[\theta^*]\big)^2}{\mathcal{I}(\theta)}.
+    $$
+    
+    \mode<article>{
+    \begin{proof}
+      The proof relies on the Cauchy-Schwarz inequality for random variables $X$ and $Y$:
+      $$
+      \big(\Cov(Z, Y)\big)^2 \leq \big(\Var(Z)\big)\big(\Var(Y)\big),
+      $$
+      which implies:
+      $$
+      \Var(Z) \geq \frac{\big(\Cov(Z, Y)\big)^2}{\Var(Y)}.
+      $$
+      Then, we'll substitute $Z = \theta^*$ and $Y = \frac{\partial}{\partial \theta} \log f(X; \theta)$.
+      First, using the condition in the Theorem that we can exchange the derivative with the integral:
+      
+      \begin{align*}
+        \frac{d}{d\theta} E_\theta\big[\theta^*\big] &= \int_\mathcal{X} \theta^* \frac{\partial}{\partial \theta} f(x; \theta)\, dx \\
+        &= \int_{\mathcal{X}} \theta^* \frac{\frac{\partial}{\partial \theta} f(x; \theta)}{f(x; \theta)}f(x; \theta)\, dx \\
+        &=  \int_{\mathcal{X}} \theta^* \frac{\partial}{\partial \theta} \log f(x; \theta) f(x;\theta)\, dx \\
+        &= E_\theta\Big[\theta^* \frac{\partial}{\partial \theta} \log f(X; \theta)\Big].
+      \end{align*}
+      Now since $E\Big[\frac{\partial}{\partial \theta} \log f(X; \theta)\Big] = 0$ (see theorem about expected score), we now make the substitution $Z = \theta^*$ and $Y = \frac{\partial}{\partial \theta} \log f(X; \theta)$.
+      
+      Under these assumptions, the expected score is $E[Y] = 0$, and therefore $\Cov(Z, Y) = E[XY]$. Similarly, these same conditions imply $\Var(Y) = E_\theta\Big[\big(\frac{\partial}{\partial \theta} \log f(x; \theta)\big)^2\Big] = \mathcal{I}(\theta)$.
+      
+       Thus, using the Cauchy-Schwarz inequality, and noticing:
+      $$
+      \frac{d}{d\theta} E_\theta\big[\theta^*\big] = \Cov(Z, Y)
+      $$
+      \begin{align*}
+        \Var(Z) = \Var(\theta^*) \geq \frac{\Cov(Z, Y)}{\Var(Y)} = \frac{\big(\frac{d}{d\theta}E_\theta[\theta^*]\big)^2}{E_\theta\Big[\big(\frac{\partial}{\partial \theta} \log f(x; \theta)\big)^2\Big]} = \frac{\big(\frac{d}{d\theta}E_\theta[\theta^*]\big)^2}{\mathcal{I}(\theta)}
+      \end{align*}
+      
+    \end{proof}
+    }
+    
+  \end{block}
+
+  \framebreak
+  
+    \begin{itemize}
+      \item In the Cram\'er-Rao inequality, consider what happens if $\theta^*$ is an unbiased estimator of $\theta$:
+      $$
+      \Big(\frac{d}{d\theta}E_\theta[\theta^*]\Big)^2 = \Big(\frac{d}{d\theta}\theta\Big)^2 = 1.
+      $$
+      \item This leads to the common ``Cram\'er-Rao lower bound", for unbiased estimators:
+      $$
+      \text{MSE}_\theta\big(\theta^*\big) = \Var_\theta\big(\theta^*\big) \geq \frac{1}{\mathcal{I}(\theta)}.
+      $$
+    \end{itemize}
   
   \framebreak
   
   \begin{itemize}
-    \item Based on the examples above, should $\hat{\sigma^2}$ be used instead of $S^2$?
-    \item TODO: See text on 332, Casella + Berger.
-    \item Also, TODO: 7.3.5 is kind of a cool example... Include it? 
+    \item The Cram\'er-Rao Inequality can at times be used to find UMVUEs (which are not necessarily unique).
   \end{itemize}
   
+  \begin{exampleblock}{Example: UMVUE for Poisson model}
+    Let $X_i$ be iid from a Poisson$(\lambda)$ distribution. Both $\bar{X}$ and $S^2$ (the sample mean and variance, respectively) are unbiased estimators of $\lambda$.
+    This implies that any estimator $a\bar{X} + (1-a)S^2$ with $a \in [0, 1]$ is an unbiased estimator, among other possibilities.
+    
+    If $\theta^*$ is \emph{some} unbiased estimator, find the minimal possible variance of $\theta^*$, and use that to find a UMVUE estimator of $\theta$.
+    
+    \mode<article>{
+      First we need to find the expected Fisher's information. Since the data are iid, we have $\mathcal{I}_n(\theta)$, denoting the information for the entire collection of observations $X_1, X_2, \ldots, X_n$, is equal to:
+      $$
+      \mathcal{I}_n(\theta) = n\mathcal{I}(\theta)
+      $$
+      where $\mathcal{I}(\theta)$ is the information for a single observation.
+      Using the second characterization of Fisher's Information (i.e., using the fact that we can exchange derivative and integral for this family):
+      \begin{align*}
+        \mathcal{I}(\theta) &= -E\Big[\frac{\partial^2}{\partial \theta^2} \log f(X_i; \theta)\Big] \\
+        &= -E\Big[\frac{\partial^2}{\partial \theta^2} \log \frac{e^{-\lambda}\lambda^X_i}{X_i!}\Big] \\
+        &= -E\Big[\frac{\partial^2}{\partial \theta^2} \big(-\lambda + X_i \log \lambda - \log X_i!\big)\Big] \\ 
+        &= -E\Big[\frac{\partial^2}{\partial \theta^2} \big(-1 + X_i/\lambda\big)\Big] \\
+        &= -E\Big[-\frac{X_i}{\lambda^2}\Big] \\
+        &= \frac{1}{\lambda^2}E[X_i] \\
+        &= \frac{1}{\lambda}.
+      \end{align*}
+      Thus, for all of the observations, the Fisher's information is given by:
+      $$
+      \mathcal{I}_n(\theta) = \frac{n}{\lambda}.
+      $$
+      
+      Therefore, for every possible unbiased estimator $\lambda^*$, the Cram\'er-Rao inequality states that:
+      $$
+      \Var(\lambda^*) \geq \frac{\lambda}{n}.
+      $$
+      
+      Notice that $\hat{\lambda} = \bar{X}_n$, the MLE of $\lambda$, is unbiased:
+      $$
+      E\big[\hat{\lambda}\big] = E\big[\bar{X}_n\big] = \lambda,
+      $$
+      and
+      $$
+      \Var\big(\hat{\lambda}\big) = \frac{1}{n^2} \sum_{i = 1}^{n} \Var(X_i) = \frac{\lambda}{n},
+      $$
+      which is equal to the Cram\'er-Rao lower bound! This implies that for \emph{any} unbiased estimator $\lambda^*$, we have:
+      $$
+      \Var(\lambda^*) \geq \Var(\hat{\lambda}).
+      $$
+      Therefore, for the iid Poisson$(\lambda)$ model, the MLE $\hat{\lambda} = \bar{X}_n$ is a UMVUE of $\lambda$. 
+    }
+    
+  \end{exampleblock}
+    
+  \framebreak
   
+  \begin{itemize}
+    \item One weakness of the Cram\'er-Rao inequality is that the lower bound, $\frac{1}{\mathcal{I}(\theta)}$, \alert{might not be tight}.
+    \item That is, it gives us a minimum quantity to compare to, but there may not exist an unbiased estimator that \alert{attains} the lower-bound.
+    \item There are attainment theorems, stating when the Cram\'er-Rao inequality is attainable and when it is not. We won't present any of these in this class, but it's closely related to \emph{exponential families}.
+    \item Instead, we can use some of our existing theorems to provide asymptotic results.
+  \end{itemize}
+  
+  \end{frame}
+  
+  \begin{frame}[allowframebreaks]{Consistency}
+  
+  \begin{itemize}
+    \item Before continuing our discussion about asymptotic results, we will introduce a few new definitions and principles of point estimation.
+  \end{itemize}
+  
+  \begin{block}{Definition: Consistency}
+    Estimators of $\theta$ are really sequences of random variables: $\theta^*_n$. Example: estimate $E[X_i] = \mu$ with $\bar{X}_n = \frac{1}{n}\sum_i X_i$.
+    
+    One desirable feature of a sequence of estimators $\theta^*_n$ is that as $n$ grows large, $\theta^*_n$ converges in some way to the truth $\theta$.
+    
+    We say that an estimator $\theta^*_n$ is \alert{consistent} if it converges in probability to the true value $\theta$:
+    $$
+    \lim_{n\rightarrow \infty} P_\theta\big(|\theta^*_n - \theta| \geq \epsilon \big) = 0.
+    $$
+  \end{block}
+  
+  \begin{itemize}
+    \item When trying to show convergence in probability last semester, we often used Chebychev's inequality:
+    $$
+    P_\theta\big(|\theta^*_n - \theta| \geq \epsilon \big) \leq \frac{E_\theta\Big[(\theta_n^* - \theta)^2\Big]}{\epsilon^2}.
+    $$
+    \item Thus, if for every value of $\theta$, we have:
+    $$
+    \lim_{n \rightarrow \infty} E_\theta\Big[(\theta_n^* - \theta)^2\Big] = 0,
+    $$
+    then we know that $\theta_n^*$ is a consistent estimator of $\theta$.
+    \item Note that this condition is our definition of MSE!
+    $$
+    \text{MSE}_\theta\big(\theta^*_n\big) =  E_\theta\Big[(\theta_n^* - \theta)^2\Big] = \Var_\theta\big(\theta_n^*\big) + \Big(\text{Bias}_\theta\big(\theta_n^*\big)\Big)^2.
+    $$
+    \item From this, we get an immediate result:
+  \end{itemize}
+  
+  \begin{block}{Theorem: Convergence in MSE}
+    If $\theta^*_n$ is a sequence of estimators for $\theta$, then if for every value of $\theta$, 
+    \begin{enumerate}
+      \item $\lim_{n \rightarrow \infty} \Var_\theta\big(\theta^*_n\big) = 0$
+      \item $\lim_{n \rightarrow \infty} \text{Bias}_\theta\big(\theta^*_n\big) = 0$
+    \end{enumerate}
+    then $\theta^*_n$ is a consistent estimator for $\theta$. 
+  \end{block}
+  
+  \framebreak
+  
+  \begin{block}{Consistency of the MLE}
+    Under suitable conditions on the likelihood function, the MLE $\hat{\theta}$ is a consistent estimator of $\theta$.
+    
+    A simple application of the Bernstein-von Misses Theorem implies that the Bayesian posterior mean is also a consistent estimator of $\theta$. 
+    
+    \mode<article>{
+    (Proof sketch)
+    
+    We previously showed that, asymptotically, the MLE satisfies:
+    $$
+    \hat{\theta} \approx N\Big(\theta, \frac{1}{n\mathcal{I}(\theta)}\Big),
+    $$
+    where $\mathcal{I}(\theta)$ is the Fisher's information for a single observation. This is a fixed quantity, and thus we see that the limiting expectation $\lim_{n \rightarrow \infty} E[\hat{\theta}] = \theta$, so the $\text{Bias}_\theta(\hat{\theta}) \rightarrow 0$.
+    Similarly, 
+    $$
+    \Var(\hat{\theta}) \approx \frac{1}{nI(\theta)} \rightarrow 0.
+    $$
+    }
+    
+  \end{block}
+  
+  \end{frame}
+  
+  \begin{frame}[allowframebreaks]{Efficiency}
+  
+  \begin{block}{Definition: relative efficiency}
+    If $\theta^*$ and $\tilde{\theta}$ are two estimators of $\theta$, then the \alert{relative efficiency} of $\theta^*$ with respect to $\tilde{\theta}$ is defined as:
+    $$
+    \text{RE}\big(\theta^*, \tilde{\theta}\big) = \frac{\Var\big(\tilde{\theta}\big)}{\Var\big(\theta^*\big)}.
+    $$
+  \end{block}
+  
+  \begin{itemize}
+    \item If RE $> 1$, then $\theta^*$ is said to be a more efficient estimator than $\tilde{\theta}$
+    \item If RE $< 1$, then $\theta^*$ is said to be less efficient than $\tilde{\theta}$.
+    \item If $\theta^*$ is more efficient than any other estimator, we call $\theta^*$ an \alert{efficient estimator}.
+  \end{itemize}
+  
+  \framebreak
+  
+  \begin{block}{Definition: Limiting variance and relative efficiency}
+    An estimator $\theta_n^*$ of $\theta$ depends on the data, and the number of observations. If $\lim_{n \rightarrow \infty} k_n \theta^* = \sigma^2$ for some sequence $k_n$ and constant $\sigma^2$, then $\sigma^2$ is called the \alert{limiting variance of the estimator} $\theta^*$.
+    
+    If $\tilde{\theta}_n^*$ is a different estimate of $\theta$ with limiting variance $\tau^2$, then the \alert{relative asymptotic efficiency} of $\theta^*_n$ with respect to $\tilde{\theta_n}$ is defined as:
+    $$
+    \text{ARE}\big(\theta^*_n, \tilde{\theta}\big) = \frac{\tau^2}{\sigma^2}
+    $$
+    
+  \end{block}
+  
+  \framebreak
+  
+  \begin{block}{Theorem: asymptotic efficiency of MLE and posterior mean}
+    Under suitable regularity conditions, MLE $\hat{\theta}$ for parameter vector $\theta$ is \alert{asymptotically efficient}, achieving the Cram\'er-Rao lower bound $\mathcal{I}(\theta)$.
+    
+    By the Bernstein-von Misses Theorem, posterior distribution in a Bayesian analysis asymptotically converges to a normal distribution with mean $\hat{\theta}$, and variance $1/\mathcal{I}(\theta)$. Consequently, the posterior mean is also asymptotically efficient.
+    
+    \mode<article>{
+      \begin{proof}
+        This Theorem is an immediate consequence of the asymptotic normality characterization of the MLE. Specifically, if the likelihood is twice differentiable and we can exchange the order of integration and derivative, then
+        $$
+        \sqrt{n}\big(\hat{\theta}_{MLE} - \theta\big) \dlim Z \sim N\Big(0, \frac{1}{\mathcal{I}(\theta)}\Big).
+        $$
+        The statement regarding the Bayesian posterior mean is similarly trivial given the Bernstein-von Misses Theorem.
+      \end{proof}
+    }
+    
+  \end{block}
+  
+  \framebreak
+  
+  \begin{itemize}
+    \item \alert{Brief Summary}:
+    \item We have argued that under very mild conditions, the MLE and Bayesian posterior mean are both \alert{consistent} (i.e., converges in probability to the true parameter value), \textbf{and} \alert{asymptotically efficient}.
+    \item This largely explains why these two approaches dominate the literature on parameter estimation: 
+    \item even if closed-form expressions for the sampling distributions of parameter estimates are unavailable, we are effectively guaranteed to have well-behaved estimates if we estimate using the MLE or Bayesian Posterior, and we have sufficient data.
+  \end{itemize}
+  
+  \framebreak
+  
+  \begin{itemize}
+    \item Much of the statistical theory of the 19/20th centuries was focused on finding UMVUE estimators. This includes our discussion on consistency and asymptotic efficiency.
+    \item Unbiasedness is nice feature, but strictly requiring unbiasedness sometimes results in a few issues \citep[Chapter~5,][]{pawitan01}.
+    \begin{itemize}
+      \item Finding an unbiased estimate can be extremely difficult.
+      \item Not all parameter \emph{have} an unbiased estimator.
+      \item Requiring unbiasedness can produce terrible estimates. 
+      \item Regardless of the prior and likelihood, all estimates using the posterior means are biased \citep[Section~7.5.2,][]{casella24}.
+      \item The bias of good estimators (like the MLE) typically shrinks at a rate $O(n)$, where the variance typically shrinks at a rate $O(n^{1/2})$ \citep[Chapter~5,][]{pawitan01}, meaning the variance usually is the cause for poor estimates, not the bias.
+    \end{itemize}
+  \end{itemize}
   
 \end{frame}
 
 \section{Sufficiency}
 
-\begin{frame}[allowframebreaks]{NAME}
-
-\end{frame}
-
-\section{Efficiency}
-
-\begin{frame}[allowframebreaks]{NAME}
-
+\begin{frame}[allowframebreaks]{Sufficiency}
+  \begin{itemize}
+    \item Test
+  \end{itemize}
 \end{frame}
 
 \newcommand\acknowledgments{
