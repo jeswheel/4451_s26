@@ -26,6 +26,8 @@ See [Section on planned topics](#planned-topics-spring-2026) for more details
 4. [Bayesian approach to parameter estimation](04/index.html)
 5. [Point Estimation: Principles and Theory](05/index.html)
 
+[Midterm II Review](midterm02/Midterm2Review.pdf)
+
 ------
 
 ### Planned topics (Spring 2026)
