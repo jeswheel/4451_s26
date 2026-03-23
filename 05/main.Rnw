@@ -360,7 +360,7 @@ Point Estimation: Principles and Theory}
 
 \end{frame}
 
-\section{Asymptotic proprties of the MLE and Bayesian estimators}
+\section{Asymptotic properties of the MLE and Bayesian estimators}
 
 \begin{frame}[allowframebreaks]{Normality of MLE}
   
@@ -1075,8 +1075,23 @@ Point Estimation: Principles and Theory}
 
 \begin{frame}[allowframebreaks]{Sufficiency}
   \begin{itemize}
-    \item Test
+    \item One desirable trait of an estimator $\theta^*$ is that it it captures all of the information available in the data $X$ about the parameter $\theta$.
+    \item Example: estimating $E[X_i] = \mu$, using: $\theta^*_1 = X_1$, vs $\theta^*_2 = \bar{X}_n$.
+    \item We argued that both $\theta^*_1$ and $\theta^*_2$ are unbiased estimators, and that $\Var(\theta^*_2) < \Var(\theta^*_1)$. An additional way of viewing this, however, is that $\theta^*_1$ is \emph{not capturing all of the information available for $\theta$}
+    \item This idea is known as the principle of \alert{sufficiency}. This will be formally defined on the next slide.
   \end{itemize}
+  
+  \framebreak
+  
+  \begin{block}{Definition: Sufficiency}
+    A statistic $T(X_1, \ldots, X_n)$ is said to be \alert{sufficient} for $\theta$ if the conditional distribution of $X_1, \ldots, X_n$, given $T = t$, does not depend on $\theta$ for any value of $t$.
+  \end{block}
+  
+  \begin{itemize}
+    \item If we take some statistic sufficient $T$ (could be an estimator), then after accounting for $T$, there is no more information available about $\theta$ in the available data.
+    \item Formally, a sufficient statistic suggests that we could throw away all of the data, except the sufficient statistic, and not lose any information about the parameter $\theta$. 
+  \end{itemize}
+  
 \end{frame}
 
 \newcommand\acknowledgments{
