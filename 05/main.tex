@@ -68,28 +68,28 @@ Point Estimation: Principles and Theory}
   \pi(\theta|x) \propto L(\theta) \times \pi(\theta).
   $$
   \item In both instances, the shape of the likelihood function $L(\theta)$ is of interest.
- 
+
   \item \alert{Coming up:} We'll introduce the \emph{score} function, and \emph{Fisher's Information}. The latter can be used to obtain uncertainty estimates for \emph{any} parameter estimated using the MLE technique.
-  
+
   \framebreak
-  
+
   \begin{block}{Definition: The score function}
     Let $L(\theta) = f(x^*;\theta)$ be the likelihood of some model, conditioned on the observed data ($x^*$ is assumed to be multi-variate). Then we define the score function $S(\theta)$ to be:
     $$
     S(\theta) = \frac{\partial}{\partial \theta} \log L(\theta).
     $$
   \end{block}
-  
+
   \item Assuming the MLE $\hat{\theta}$ exists and is not a boundary point, then:
   $$
   S\big(\hat{\theta}\big) = 0.
   $$
-  
+
   \item As written, the score function is dependent on a fixed data set: $x^*$.
   \item We could also expand this by considering it as a random function of any possible data $X$, which is random.
-  
+
   \framebreak
-  
+
   \item Since we are interested in the curvature of the likelihood function, we should also consider the second derivative.
   \item At the MLE, the second derivative of the log-likelihood will be \emph{negative}, so it's natural to consider the negative second derivative of the log-likelihood:
   $$
@@ -97,9 +97,9 @@ Point Estimation: Principles and Theory}
   $$
   \item Again, we are treating the likelihood function $L(\theta)$ as a regular (non-random) function, fixed on $x^*$ (this is slightly different than many texts).
   \item In this case, we call $I(\theta)$ the \alert{observed Fisher's Information}, at the point $\theta$.
-  
+
   \framebreak
-  
+
   \begin{exampleblock}{Comment: joint information}
     We can define the information for just a single point $X_i = x^*_i$,
     $$
@@ -111,11 +111,11 @@ Point Estimation: Principles and Theory}
     $$
     % This notation is often confused. We will use $I(\theta)$ to denote the observed information of all observations, unless otherwise specified. This is the most common notation, but it may lead to some confusion later on.
   \end{exampleblock}
-  
+
   \item The curvature at the MLE is of particular interest.
-  
+
   \framebreak
-  
+
   \begin{block}{Definition: The Observed Fisher Information}
     Let $L(\theta)$ be the likelihood function, fixed on the observed data $x^*$. Unless otherwise specified, the \alert{observed Fisher information} is understood to be the negative second derivative of $\log L(\theta)$, evaluated at the MLE:
     $$
@@ -127,14 +127,14 @@ Point Estimation: Principles and Theory}
     $$
     also denoted $I\big(\hat{\theta}\big) = -\nabla^2 \log L\big(\hat{\theta}\big)$.
   \end{block}
-  
+
   \framebreak
-  
+
   \item Note that large values of $I\big(\hat{\theta}\big)$ in the univariate case (and large eigen-values / determinant in the multivariate case) indicate a ``tight peak" around the maximum, suggesting less uncertainty about the parameter $\theta$.
-  
+
   \begin{exampleblock}{Observed Fisher's information, Binomial Distribution}
   Let $X\sim \text{Binom}(n, \theta)$. Find the MLE by setting the score function equal to zero, and then use that to compute the observed Fisher's information.
-  
+
   \mode<article>{
     \begin{proof}
       The likelihood function for the Binomial model is:
@@ -142,7 +142,7 @@ Point Estimation: Principles and Theory}
       L(\theta) = f(X; \theta) = \binom{n}{X}\theta^X(1-\theta)^{n-X}.
       $$
       The binomial coefficient in front is only a multiplicative constant, and doesn't change the overall shape or maximum of the likelihood function $L(\theta)$.
-      
+
       Taking the logarithm, we have:
       $$
       \ell(\theta) = C + X\log(\theta) + (n-X) \log(1 - \theta).
@@ -159,23 +159,23 @@ Point Estimation: Principles and Theory}
       $$
       I(\theta) = -\frac{\partial^2}{\partial \theta^2} \ell(\theta) = \frac{X}{\theta^2} + \frac{n - X}{(1-\theta)^2}
       $$
-      Plugging in the MLE $\hat{\theta} = X/n$, and some simplification gives: 
+      Plugging in the MLE $\hat{\theta} = X/n$, and some simplification gives:
       $$
       I(\hat{\theta}) = \frac{n}{\hat{\theta}\big(1 - \hat{\theta}\big)}.
       $$
       % \alert{NOTE:} This is not the same as the Fisher's information, $\mathcal{I}(\theta) = E[I(\theta)]$. As written here, $I(\theta)$ is random, and the real Fisher's information is the expectation. However, note that once we plug in the MLE: $\mathcal{I}(\hat{\theta}) = E[I(\hat{\theta})] = I(\hat{\theta})$. Thus, the \alert{observed} Fisher's information doesn't require taking the expectation.
-      
+
     \end{proof}
   }
-  
-  
+
+
 \end{exampleblock}
 
 \framebreak
 
 \begin{exampleblock}{Observed Fisher's information, Normal Distribution}
   Suppose $X_1, \ldots, X_n$ are iid from $N(\theta, \sigma^2)$, with known $\sigma^2$. Find the MLE by setting the score function to zero, and then calculate the joint information, $I_n(\theta)$ at the MLE.
-  
+
   \mode<article>{
   \begin{proof}
     Under the IID assumption, we have the likelihood function (joint distribution of the $X$, evaluated at $x^*$):
@@ -187,7 +187,7 @@ Point Estimation: Principles and Theory}
     $$
     \ell(\theta) = C' -\frac{1}{2\sigma^2}\sum_{i = 1}^n\big(x_i^* - \theta\big)^2.
     $$
-    
+
     The score function is the partial derivative of $\ell(\theta)$, with respect to $\theta$:
     $$
     S(\theta) = \frac{\partial}{\partial \theta} \ell(\theta) = \frac{1}{\sigma^2}\sum_{i = 1}^n (x_i^* - \theta).
@@ -222,14 +222,14 @@ Point Estimation: Principles and Theory}
     This is a common theme: something that is exactly true in the normal case is approximately elsewhere. This is particularly true if the estimates are ``regular", meaning they behave approximately like a normal distribution.
   \end{proof}
   }
-  
+
 \end{exampleblock}
-  
+
   \framebreak
-  
+
   \item Calculating the observed Fisher's Information at any given point is rather simple: Find the likelihood, take second derivative(s), plug in desired point.
   \item However, because data are random, we may want to consider the \alert{expected} Fisher's information.
-  
+
   \begin{block}{Theorem: Expected Score}
     Now consider treating the score function $S(\theta)$ as a random function, dependent on random input data $X$. That is:
     $$
@@ -239,7 +239,7 @@ Point Estimation: Principles and Theory}
     $$
     E\big[S(\theta)\big] = 0.
     $$
-    
+
     \mode<article>{
       \begin{proof}
         \begin{align*}
@@ -252,15 +252,15 @@ Point Estimation: Principles and Theory}
         Note that the conditions needed for this is the ability to swap the integral with the derivative, which is a condition that we briefly discussed last semester (Dominated Convergence Theorem, for instance).
       \end{proof}
     }
-    
+
   \end{block}
-  
+
   \begin{itemize}
     \item \alert{NOTE:} This is the most common way to define the score (and later, information). This holds for either a single observation, or the entire collection of data.
   \end{itemize}
-  
+
   \framebreak
-  
+
   \begin{block}{Definition: Fisher's Information}
     Continuing with the treatment of the score function as a random function of $X$, we will define the Expected Fisher's Information to be the following:
     $$
@@ -268,34 +268,34 @@ Point Estimation: Principles and Theory}
     $$
     This is often referred to as just Fisher's Information.
   \end{block}
-  
+
   \begin{block}{Proposition: Variance of the Score}
-    If the partial derivative and integral operations can be exchanged, then 
+    If the partial derivative and integral operations can be exchanged, then
     $$
     \mathcal{I}(\theta) = \Var\big(S(\theta)\big) = -E\Big[\frac{\partial^2}{\partial \theta^2} \log f(X;\theta)\Big],
     $$
     where the score function is treated as random.
-    
+
     \mode<article>{
       \begin{proof}
-      
+
           If we can exchange integration and derivation, then the first equality in the statement is trivial. Under these conditions, we showed:
           $$
           E\big[S(\theta)\big] = E\Big[\frac{\partial}{\partial \theta} \log f(X; \theta)\Big] = 0.
           $$
-          
+
       Therefore:
       \begin{align*}
         \Var\big(S(\theta)\big) &= E\Big[S(\theta)^2\Big] - \Big(E\big[S(\theta)\big]\Big)^2 \\
         &= \mathcal{I}(\theta).
       \end{align*}
-      
+
         Now if the second derivatives exist, the same argument that used to show the equality above can be used to show:
         $$
         E\Big[\frac{\frac{\partial^2}{\partial\theta^2}f(X;\theta)}{f(X;\theta)}\Big] = \int_{\mathcal{X}} \frac{\partial^2}{\partial\theta^2}f(X;\theta) \, dx = 0.
         $$
         (To do this, we exchange partial derivatives with the integral, note the integral is equal to one, which has partial derivative zero).
-        
+
         Building on these two results, note the following identity:
         \begin{align*}
           \frac{\partial^2}{\partial \theta^2} \log f(X;\theta) &= \frac{\partial}{\partial \theta}\Big(\frac{\frac{\partial}{\partial \theta} f(X;\theta)}{f(X;\theta)}\Big) \\
@@ -303,9 +303,9 @@ Point Estimation: Principles and Theory}
           &= \frac{\frac{\partial^2}{\partial \theta^2}f(X;\theta)}{f(X;\theta)} - \Big(\frac{\frac{\partial}{\partial \theta}f(X; \theta)}{f(X;\theta)}\Big)^2 \\
           &= \frac{\frac{\partial^2}{\partial \theta^2}f(X;\theta)}{f(X;\theta)} - \Big(\frac{\partial}{\partial \theta} \log f(X; \theta)\Big)^2
         \end{align*}
-        
+
         Taking expectation of both sides of this equation yields:
-        
+
         \begin{align*}
           E\Big[\frac{\partial^2}{\partial \theta^2} \log f(X;\theta)\Big] &= E\Big[\frac{\frac{\partial^2}{\partial \theta^2}f(X;\theta)}{f(X;\theta)}\Big] - E\Big[\Big(\frac{\partial}{\partial \theta} \log f(X; \theta)\Big)^2\Big] \\
           &= - E\Big[\Big(\frac{\partial}{\partial \theta} \log f(X; \theta)\Big)^2\Big],
@@ -320,35 +320,35 @@ Point Estimation: Principles and Theory}
         $$
       \end{proof}
     }
-    
+
   \end{block}
-  
-  \framebreak 
-  
+
+  \framebreak
+
   \item This proposition is useful because:
   \begin{itemize}
     \item If the log-likelihood is differentiable, the first definition $\mathcal{I}(\theta) = E[S(\theta)^2]$ always exists.
     \item Typically, we can express this as $\mathcal{I}(\theta) = \Var(S(\theta))$, which is a nice interpretable quantity.
     \item The final expression $\mathcal{I}(\theta) = -E\Big[\frac{\partial^2}{\partial \theta^2} \log f(X;\theta)\Big]$ is usually the easiest to calculate.
   \end{itemize}
-  
+
   \item For the multivariate case, this is equivalent to writing:
       \begin{align*}
       \big[\mathcal{I}(\theta)\big]_{i,j} &:= E_\theta\Big[\frac{\partial \log f(X; \theta)}{\partial \theta_i}\frac{\partial \log f(X; \theta)}{\partial \theta_j}\Big] \\
       &= \Cov\Big(\frac{\partial \log f(X; \theta)}{\partial \theta_i}, \frac{\partial \log f(X; \theta)}{\partial \theta_j}\Big) \\
       &= -E\Big[\frac{\partial^2}{\partial \theta_i \partial \theta_j} \log f(X;\theta)\Big]
       \end{align*}
-      
-  \framebreak 
+
+  \framebreak
   % \item Many texts do not consider $I(\theta)$, but instead jump straight to $\mathcal{I}(\theta)$.
   \item Note that the curvature $I(\theta)$, defined as the second derivative of $L(\theta)$ (fixed function based on the observed data), exists for all points $\theta$.
   \item Many theorem's instead rely on $\mathcal{I}(\theta)$, which is the \alert{expected} Fisher's information. This later quantity ``integrates out" the effect of the randomness in the data.
   \item In practice, the expected information is often hard to find, while the observed information is easy to calculate. For instance, in cases where the expected information is available, we might be able to get \alert{exact} confidence intervals, which are preferred.
-  \item In practice, we often replace $\mathcal{I}(\hat{\theta})$ in theory with $I(\hat{\theta})$. 
+  \item In practice, we often replace $\mathcal{I}(\hat{\theta})$ in theory with $I(\hat{\theta})$.
   \item However, we're primarily only interested in this function at the MLE, \emph{or} when we regard $S(\theta)$ as a random function of arbitrary $X$ (not fixed on $x^*$).
 
-  
-  
+
+
 \end{itemize}
 
 \framebreak
@@ -360,15 +360,15 @@ Point Estimation: Principles and Theory}
 
 \end{frame}
 
-\section{Asymptotic proprties of the MLE and Bayesian estimators}
+\section{Asymptotic properties of the MLE and Bayesian estimators}
 
 \begin{frame}[allowframebreaks]{Normality of MLE}
-  
+
   \begin{itemize}
     \item Under weak regularity conditions, both the MLE and Bayesian posterior converge to a Normal distribution, centered at the true value.
     \item We'll begin with a sketch proof of the distribution of the MLE.
   \end{itemize}
-  
+
   \begin{block}{Theorem: Asymptotic distribution of the MLE}
     Let $x^*_1, x^*_2, \ldots, x^*_n$ come from a family of distributions with density $f(x;\theta)$.
     If the true value of $\theta$ is $\theta_0$, i.e., $X_i \overset{iid}{\sim} f(x; \theta_0)$, and we denote $\hat{\theta}$ as the MLE of $\theta$, then
@@ -376,15 +376,15 @@ Point Estimation: Principles and Theory}
     \sqrt{n\mathcal{I}(\theta_0)}\big(\hat{\theta} - \theta_0\big) \dlim Z
     $$
     where $Z\sim N(0, 1)$.
-    
+
     \mode<article>{
     \begin{proof}
       Recall in this setup, we have $X$ being multivariate. Thus, the likelihood function is
       $$
       L(\theta) := \prod_{i = 1}^n f(X_i; \theta).
       $$
-      Note that here, we are considering the long-run distribution of the MLE estimator, so $X_i$ is treated as random, not fixed. 
-      
+      Note that here, we are considering the long-run distribution of the MLE estimator, so $X_i$ is treated as random, not fixed.
+
       The theorem statement depends on $\mathcal{I}(\theta_0)$, which is defined as the (expectation of the) negative second derivative of the log-likelihood, evaluated at $\theta_0$.
       $$
       \ell(\theta) = \sum_{i = 1}^n \log f(X_i; \theta).
@@ -398,13 +398,13 @@ Point Estimation: Principles and Theory}
       $$
       \ell'(\hat{\theta}) = 0.
       $$
-      
+
       Now consider a Taylor-series expansion of $\ell'(\hat{\theta})$ around the point $\theta_0$:
       $$
       0 = \ell'(\hat{\theta}) = \ell'(\theta_0) + \big(\hat{\theta} - \theta_0\big)\ell''(\theta_0) + \frac{1}{2}\big(\hat{\theta} - \theta_0\big)^2 \ell'''(\theta^*),
       $$
       where $\theta^*$ is some point between $\hat{\theta}$ and $\theta_0$.
-      
+
       Now we want to rearrange so that on the left hand side, we get the expression that we are looking for: $\sqrt{nI(\theta_0)}\big(\hat{\theta} - \theta_0\big)$.
       Subtracting away terms involving $\big(\hat{\theta} - \theta_0\big)$,
       $$
@@ -422,25 +422,25 @@ Point Estimation: Principles and Theory}
       \sqrt{n}\big(\hat{\theta} - \theta_0) = W_n / Y_n,
       $$
       where $W_n$ converges in distribution to some normally distributed random variable, and $Y_n$ converges to a constant.
-      
+
       We have expressed the numerator such that:
-      
+
       $$
       \frac{1}{\sqrt{n}}\ell'(\theta_0) = \frac{1}{\sqrt{n}} \sum_{i = 1}^n \frac{\partial}{\partial \theta} \log f(X_i; \theta_0).
       $$
-      
+
       Since $E[\ell'(\theta_0)] = E[S(\theta)] = 0$, the central limit theorem states:
-      
+
       $$
       \frac{1}{\sqrt{n}}\ell'(\theta_0) \dlim N(0, \mathcal{I}(\theta_0)).
       $$
-      
+
       In the denominator, the leading term converges in probability to $I(\theta_0)$ by the weak law of large numbers:
-      
+
       $$
       -\frac{1}{n}\ell''(\theta_0) \plim E\Big[-\frac{\partial^2}{\partial\theta^2} \log f(X_i;\theta_0)\Big] = \mathcal{I}(\theta_0).
       $$
-      
+
       Now we need to be a bit careful with the remainder term. The argument follows closely that which was used to prove the CLT last semester. This does involve a few ``regularity" conditions, under which we can show that the remainder term converges to zero in probability. In this case, the entire denominator converges to zero in probability. The additional conditions needed are:
       \begin{itemize}
         \item bounded third derivative: $|\ell'''(\theta)| \leq M(X)$ for all $\theta$, where $E[M(X)] < \infty$.
@@ -450,7 +450,7 @@ Point Estimation: Principles and Theory}
       R_n = \frac{1}{2n}\big(\hat{\theta} - \theta_0\big)\sum_{i = 1}^n \ell'''(X_i; \theta^*).
       $$
       Later in the semester we will formally show that $\big(\hat{\theta} - \theta_0\big)\plim 0$. If the third derivative is bounded by $M(X)$, which has finite expectation, the strong law of large numbers implies that $\frac{1}{2n}\sum_i \ell'''(X_i;\theta^*)$ is bounded, and because $\big(\hat{\theta} - \theta_0\big)\plim 0$, the entire remainder term $R_n \plim 0$.
-      
+
       Finally, this combined work shows that the denominator in the expression for $\sqrt{n}\big(\hat{\theta} - \theta_0\big)$ is:
       $$
       Y_n = -\frac{1}{n}\ell''(\theta_0) - \frac{1}{2n} \big(\hat{\theta} - \theta_0\big) \ell'''(\theta^*) \plim \mathcal{I}(\theta_0),
@@ -463,14 +463,14 @@ Point Estimation: Principles and Theory}
       $$
       \sqrt{n\mathcal{I}(\theta_0)}\big(\hat{\theta} - \theta_0) \dlim Z,
       $$
-      where $Z \sim N(0, 1)$. 
+      where $Z \sim N(0, 1)$.
     \end{proof}
     }
-    
+
   \end{block}
-  
+
   \framebreak
-  
+
   \begin{itemize}
     \item How do we interpret / use the result above?
     \item \alert{For large iid samples:} the MLE $\hat{\theta}$ is approximately normally distributed, centered at the \alert{true} value $\theta_0$, with shrinking variance:
@@ -502,19 +502,19 @@ Point Estimation: Principles and Theory}
     \end{align*}
 
   \framebreak
-  
+
   \item Our derivation treated $\theta$ as univariate. The more common multivariate case has a similar result.
 
   \end{itemize}
-  
+
   \begin{block}{Multivariate parameters}
     If $\theta \in \R^d$ is multivariate, than using the matrix definition of $\mathcal{I}(\theta)$, then:
     $$
     \sqrt{n}\big(\hat{\theta} - \theta_0\big) \dlim Z_d \sim N_d\big(0_d, \mathcal{I}(\theta_0)^{-1}\big),
     $$
-    where $\hat{\theta}$ is the MLE, $\theta_0$ is the true parameter value, and $N_d(\mu, \Sigma)$ is a $d$-dimensional multivariate normal distribution with mean vector $\mu$ and covariance matrix $\Sigma$. 
+    where $\hat{\theta}$ is the MLE, $\theta_0$ is the true parameter value, and $N_d(\mu, \Sigma)$ is a $d$-dimensional multivariate normal distribution with mean vector $\mu$ and covariance matrix $\Sigma$.
   \end{block}
-  
+
 \end{frame}
 
 \begin{frame}[allowframebreaks]{Implications for estimating parameter uncertainty}
@@ -527,7 +527,7 @@ Point Estimation: Principles and Theory}
     \item \alert{There are two different approximations here}:
     \begin{itemize}
       \item Asymptotic normality.
-      \item $\hat{\theta} \plim \theta_0$ (Slutksy's Theorem). 
+      \item $\hat{\theta} \plim \theta_0$ (Slutksy's Theorem).
     \end{itemize}
     \item It is a good approximation for even moderate $n$, but exact calculations are preferred when possible.
     \item Finally, recall that $\mathcal{I}(\hat{\theta})$ is an \alert{expectation}.
@@ -546,14 +546,14 @@ Point Estimation: Principles and Theory}
   \begin{itemize}
     \item Similar results hold for Bayesian estimates.
   \end{itemize}
-  
+
   \begin{block}{Bernstein–von Mises Theorem}
     We are not ready to state the full Theorem, so we'll just provide a heuristic approach: under suitable conditions, the posterior distribution behaves asymptotically like a normal distribution with mean $\hat{\theta}_{MLE}$, and variance $1/\mathcal{I}(\theta_0)$.
-    
+
     \mode<article>{
-    \begin{proof} 
-    (Sketch, not a formal proof). 
-    
+    \begin{proof}
+    (Sketch, not a formal proof).
+
     Let the collection of observations be denoted $X$, and the parameter of interest $\theta$. Then:
     \begin{align*}
     \pi_{\Theta|X}(\theta | x) &\propto \pi_\Theta(\theta) f_{X|\Theta}(x|\theta) \\
@@ -570,9 +570,9 @@ Point Estimation: Principles and Theory}
     In this last expression, we get what looks like the density of a normal distribution, centered at $\hat{\theta}$, with variance $-[\ell''(\hat{\theta})]^{-1} = 1/I(\hat{\theta})$.
     \end{proof}
     }
-    
+
   \end{block}
-  
+
 \end{frame}
 
 \section{Bias, MSE, and Consistency}
@@ -584,10 +584,10 @@ Point Estimation: Principles and Theory}
   \item It's an important concept / principle for point-estimates.
 
 \begin{block}{Definition: Bias of an estimator}
-  The \alert{bias} of a point estimator $\hat{\theta}$ of a parameter $\theta$ is the difference between the expected value of $\hat{\theta}$ and $\theta$; that is, 
+  The \alert{bias} of a point estimator $\hat{\theta}$ of a parameter $\theta$ is the difference between the expected value of $\hat{\theta}$ and $\theta$; that is,
   $$\text{Bias}_\theta\big[\hat{\theta}\big] = E_\theta\big[\hat{\theta}\big] - \theta$$
 \end{block}
-  
+
  \item If $\text{Bias}_\theta\big[\hat{\theta}\big] = 0$, then $\hat{\theta}$ is an \alert{unbiased} estimator of $\theta$, and $E_\theta\big[\hat{\theta}\big] = 0$.
 
 \framebreak
@@ -610,16 +610,16 @@ Point Estimation: Principles and Theory}
   \begin{itemize}
     \item The mean square error (MSE) describes the expected squared difference between an estimator and the true parameter value.
     \item Often, attempts as lowering the \emph{variance} results in increasing the \emph{variance}.
-    \item It can be used to balance the bias-variance tradeoff. 
+    \item It can be used to balance the bias-variance tradeoff.
   \end{itemize}
-  
+
   \begin{block}{Definition + Theorem: MSE}
     Let $\hat{\theta}$ be an estimator of $\theta$. The MSE of $\hat{\theta}$ is defined as:
     $$
     \text{MSE}_\theta\big(\hat{\theta}\big) := E\big[(\hat{\theta} - \theta)^2\big].
     $$
     Furthermore, $\text{MSE}_\theta\big(\hat{\theta}\big) = \Var_\theta\big(\hat{\theta}\big) + \big(\text{Bias}_\theta(\hat{\theta})\big)^2$.
-    
+
     \mode<article>{
       \begin{proof}
         \begin{align*}
@@ -634,11 +634,11 @@ Point Estimation: Principles and Theory}
         \end{align*}
       \end{proof}
     }
-    
+
   \end{block}
-  
+
   \framebreak
-  
+
   \begin{exampleblock}{Example: Variance of MLE}
     Let $X_i$ be iid from $N(\mu, \sigma^2)$, and consider estimating $\theta = (\mu, \sigma^2)$ in two ways:
     $$
@@ -648,7 +648,7 @@ Point Estimation: Principles and Theory}
     \hat{\theta}_1 = \Big(\bar{X}_n, S^2 = \frac{1}{n-1}\sum_{i = 1}^n \big(\bar{X} - \sigma^2\big)^2\Big).
     $$
     What is the MSE of $\hat{\mu}_{MLE}$? What about the bias and MSE of $S^2$ and $\hat{\sigma}^2$?
-    
+
     \mode<article>{
     We will use the Bias-Variance characterization of MSE. First, consider the estimate $\hat{\mu} = \bar{X}_n$, which is the same for both of the proposed methods. First, we will show it is an unbiased estimator for $\mu$, and then find the variance of this estimator.
     \begin{align*}
@@ -664,7 +664,7 @@ Point Estimation: Principles and Theory}
       &= \frac{1}{n^2}\sum_i \Var(X_i) \\
       &= \frac{\sigma^2}{n}
     \end{align*}
-    
+
     Now consider the two different estimates for $\sigma^2$, either the MLE $\hat{\sigma}^2_{MLE}$, and the sample variance $S^2$.
     From Homework 7, Problem 5 of last semester, you showed:
     \begin{align*}
@@ -679,13 +679,13 @@ Point Estimation: Principles and Theory}
     $$
     E\big[\hat{\sigma^2}_{MLE} - \sigma^2\big] = \Big(\frac{n-1}{n}\sigma^2 - \sigma^2\Big).
     $$
-    
+
     From Chapter~6 last semester, we proved that if $X_i$ are iid normal, then $(n-1)S^2/\sigma^2 \sim \chi^2_{n-1}$. This was used to show that $(\bar{X} - \mu) / (S / \sqrt{n})$ has a $t$-distribution.
     Thus:
     $$
     \Var\big((n-1)S^2/\sigma^2\big) = \Var(Z) = 2(n-1),
     $$
-    where $Z = (n-1)S^2/\sigma^2$ follows a chi-square distribution. 
+    where $Z = (n-1)S^2/\sigma^2$ follows a chi-square distribution.
     Therefore
     $$
     \Var\big(S^2\big) = \Var\Big(\frac{\sigma^2}{n-1}Z\Big) = \frac{\sigma^4}{(n-1)^2}2(n-1) = \frac{2\sigma^4}{n-1}.
@@ -694,7 +694,7 @@ Point Estimation: Principles and Theory}
     $$
     \text{MSE}_{\sigma^2}\big(S^2\big) = \Var\big(S^2\big) = \frac{2\sigma^4}{n-1}.
     $$
-    
+
     We can extend this result to find the variance and MSE of $\hat{\sigma}^2_{MLE}$. First, the variance:
     $$
     \Var\big(\hat{\sigma}^2_{MLE}\big) = \Var\Big(\frac{n-1}{n}S^2\Big) = \Big(\frac{n-1}{n}\Big)^2\Var\big(S^2\big) = \frac{2(n-1)\sigma^4}{n^2}.
@@ -704,19 +704,19 @@ Point Estimation: Principles and Theory}
       \text{MSE}_{\sigma^2}\big(\hat{\sigma}_{MLE}^2\big) &= \frac{2(n-1)\sigma^4}{n^2} + \Big(\frac{n-1}{n}\sigma^2 - \sigma^2\Big)^2 \\
       &= \Big(\frac{2n-1}{n^2}\Big)\sigma^2.
     \end{align*}
-    Comparing this MSE to the MSE of $S^2$, it can be shown that for all $n$, 
+    Comparing this MSE to the MSE of $S^2$, it can be shown that for all $n$,
     $$
     \text{MSE}_{\sigma^2}\big(\hat{\sigma}_{MLE}^2\big) < \text{MSE}_{\sigma^2}\big(S^2\big),
     $$
     or that although the MLE is biased for $\sigma^2$, it has a lower MSE than $S^2$.
     }
-    
-    
+
+
   \end{exampleblock}
-  
+
   \framebreak
-  
-  
+
+
   \begin{itemize}
     \item Based on the examples above, should $\hat{\sigma^2}$ be used instead of $S^2$? The argument above proves that, on average, $\hat{\sigma}^2_{MLE}$ will be closer to $\sigma^2$ than $S^2$.
     \item \alert{However}: statisticians generally agree that $S^2$ is a better estimate. Why?
@@ -724,20 +724,20 @@ Point Estimation: Principles and Theory}
     \item There's also some agreement that MSE is \emph{not} a reasonable criterion for \emph{scale} parameters, like the variance.
     \item The reason is that the MSE is a symmetric criterion: both small and large errors are penalized the same.
     \item However, scale parameters like $\sigma^2$ must be positive, so they have a natural lower bound $\sigma^2 > 0$, so the estimation problem is \emph{not} symmetric.
-    
+
     \framebreak
-    
+
     \item The $\text{MSE}_\theta$ uses the subscript $\theta$ to denote that it is a function of $\theta$.
     \item Often, there is not a \alert{uniformly best} estimator for $\theta$, and some estimators will perform better for some values of $\theta$ and worse for others.
   \end{itemize}
-  
+
   \begin{exampleblock}{MSE of MLE and Bayes: Binomial Model}
     \citep[Example~7.3.5][]{casella24} Let $X_i$ be iid Bernoulli$(p)$, such that $X = \sum_i X_i$ is Binomial$(n, p)$. The MLE $\hat{p} = X/n$ is unbiased for $p$, and has MSE:
     $$
     \text{MSE}_p\big(\hat{p}\big) = \Var_p\big(\hat{p}\big) = \frac{p(1-p)}{n}.
     $$
     Compare this to the posterior mean estimate, where the prior $P \sim U(0, 1)$.
-    
+
     \mode<article>{
       The posterior distribution is:
       $$
@@ -760,9 +760,9 @@ Point Estimation: Principles and Theory}
       \end{itemize}
       Interestingly, at $n = 4$, the MSE of $\hat{p}_B$ is constant. In both figures, we see that if the true value of $p$ is close to $0.5$, then the MSE of $\hat{p}_B$ is lower. However, for values of $p$ close to 0 or 1, the MSE of $\hat{p}_{MLE}$ is lower. Neither estimate is \alert{uniformly} better in terms of MSE. Note that for all values of $p$ and $n$, $\hat{p}_B$ is biased.
     }
-    
+
   \end{exampleblock}
-  
+
 \end{frame}
 
 \begin{frame}[allowframebreaks]{Uniformly Best Unbiased Estimators}
@@ -773,40 +773,40 @@ Point Estimation: Principles and Theory}
     \item This leads us to thinking of ways of limiting the possible estimators to certain classes of estimators.
     \item A natural constraint to consider is the class of \alert{unbiased estimators}. In this class, the MSE = Variance of the estimator.
   \end{itemize}
-  
+
   \framebreak
-  
+
   \begin{block}{Definition: Uniformly best unbiased estimators}
     An estimator $\theta^*$ is called the \emph{best unbiased estimator} of $\theta$ if $E[\theta^*] = \theta$, for any other estimator $\tilde{\theta}$ such that $E[\tilde{\theta}] = \theta$, then $\Var_\theta\big(\theta^*\big) \leq \Var_\theta\big(\tilde{\theta}\big)$ for all $\theta$.
-    
+
     $\theta^*$ is also called a \alert{uniform minimum variance unbiased estimator} (UMVUE) of $\theta$.
   \end{block}
-  
+
   \begin{itemize}
     \item Initially, it can be extremely difficult to find a UMVUE estimator without adidtional supporting theory.
   \end{itemize}
-  
+
   \framebreak
-  
+
   \begin{exampleblock}{Poisson unbiased estimation}
     Let $X_i$ be iid Poisson$(\lambda)$ random variables, and let $\bar{X}$ and $S^2$ be the sample mean and variance, respectively.
     Since $E[X_i] = \Var(X_i) = \lambda$, it can be shown that $E[\bar{X}] = E[S^2] = \lambda$, and therefore both $\bar{X}$ and $S^2$ are unbiased estimators of $\lambda$. Which is a better estimate?
   \end{exampleblock}
-    
+
     \begin{itemize}
-    
-    \item Since they are unbiased, we just need to find the lower variance of the two. Evaluating $\Var_\lambda\big(S^2\big)$ is actually a very lengthy calculation. 
+
+    \item Since they are unbiased, we just need to find the lower variance of the two. Evaluating $\Var_\lambda\big(S^2\big)$ is actually a very lengthy calculation.
     \item However, even if we do the calculation and find $\Var_\lambda(\bar{X}) \leq \Var_\lambda(S^2)$, this doesn't immediately imply that $\bar{X}$ is the UMVUE. Consider for instance:
     $$
     \hat{\lambda} = a\bar{X} + (1-a)S^2.
     $$
-    
+
     \item This estimate is also unbiased, so from this alone we have an infinite number of unbiased estimators to consider.
     \item The next Theorem provides a \alert{lower bound} on the variance of an unbiased estimator.
     \end{itemize}
 
   \framebreak
-  
+
   \begin{block}{Theorem: Cram\'er-Rao Inequality}
     Let $X_1, \ldots, X_n$ be a sample with joint pdf $f_\theta(X;\theta)$, and let $\theta^*$ be any estimator of $\theta$ (biased or unbiased), that satisfies the smoothness condition
     $$
@@ -816,7 +816,7 @@ Point Estimation: Principles and Theory}
     $$
     \Var_\theta\big(\theta^*\big) \geq \frac{\big(\frac{d}{d\theta}E_\theta[\theta^*]\big)^2}{E_\theta\Big[\big(\frac{\partial}{\partial \theta} \log f(x; \theta)\big)^2\Big]} = \frac{\big(\frac{d}{d\theta}E_\theta[\theta^*]\big)^2}{\mathcal{I}(\theta)}.
     $$
-    
+
     \mode<article>{
     \begin{proof}
       The proof relies on the Cauchy-Schwarz inequality for random variables $X$ and $Y$:
@@ -829,7 +829,7 @@ Point Estimation: Principles and Theory}
       $$
       Then, we'll substitute $Z = \theta^*$ and $Y = \frac{\partial}{\partial \theta} \log f(X; \theta)$.
       First, using the condition in the Theorem that we can exchange the derivative with the integral:
-      
+
       \begin{align*}
         \frac{d}{d\theta} E_\theta\big[\theta^*\big] &= \int_\mathcal{X} \theta^* \frac{\partial}{\partial \theta} f(x; \theta)\, dx \\
         &= \int_{\mathcal{X}} \theta^* \frac{\frac{\partial}{\partial \theta} f(x; \theta)}{f(x; \theta)}f(x; \theta)\, dx \\
@@ -837,9 +837,9 @@ Point Estimation: Principles and Theory}
         &= E_\theta\Big[\theta^* \frac{\partial}{\partial \theta} \log f(X; \theta)\Big].
       \end{align*}
       Now since $E\Big[\frac{\partial}{\partial \theta} \log f(X; \theta)\Big] = 0$ (see theorem about expected score), we now make the substitution $Z = \theta^*$ and $Y = \frac{\partial}{\partial \theta} \log f(X; \theta)$.
-      
+
       Under these assumptions, the expected score is $E[Y] = 0$, and therefore $\Cov(Z, Y) = E[XY]$. Similarly, these same conditions imply $\Var(Y) = E_\theta\Big[\big(\frac{\partial}{\partial \theta} \log f(x; \theta)\big)^2\Big] = \mathcal{I}(\theta)$.
-      
+
        Thus, using the Cauchy-Schwarz inequality, and noticing:
       $$
       \frac{d}{d\theta} E_\theta\big[\theta^*\big] = \Cov(Z, Y)
@@ -847,14 +847,14 @@ Point Estimation: Principles and Theory}
       \begin{align*}
         \Var(Z) = \Var(\theta^*) \geq \frac{\Cov(Z, Y)}{\Var(Y)} = \frac{\big(\frac{d}{d\theta}E_\theta[\theta^*]\big)^2}{E_\theta\Big[\big(\frac{\partial}{\partial \theta} \log f(x; \theta)\big)^2\Big]} = \frac{\big(\frac{d}{d\theta}E_\theta[\theta^*]\big)^2}{\mathcal{I}(\theta)}
       \end{align*}
-      
+
     \end{proof}
     }
-    
+
   \end{block}
 
   \framebreak
-  
+
     \begin{itemize}
       \item In the Cram\'er-Rao inequality, consider what happens if $\theta^*$ is an unbiased estimator of $\theta$:
       $$
@@ -865,19 +865,19 @@ Point Estimation: Principles and Theory}
       \text{MSE}_\theta\big(\theta^*\big) = \Var_\theta\big(\theta^*\big) \geq \frac{1}{\mathcal{I}(\theta)}.
       $$
     \end{itemize}
-  
+
   \framebreak
-  
+
   \begin{itemize}
     \item The Cram\'er-Rao Inequality can at times be used to find UMVUEs (which are not necessarily unique).
   \end{itemize}
-  
+
   \begin{exampleblock}{Example: UMVUE for Poisson model}
     Let $X_i$ be iid from a Poisson$(\lambda)$ distribution. Both $\bar{X}$ and $S^2$ (the sample mean and variance, respectively) are unbiased estimators of $\lambda$.
     This implies that any estimator $a\bar{X} + (1-a)S^2$ with $a \in [0, 1]$ is an unbiased estimator, among other possibilities.
-    
+
     If $\theta^*$ is \emph{some} unbiased estimator, find the minimal possible variance of $\theta^*$, and use that to find a UMVUE estimator of $\theta$.
-    
+
     \mode<article>{
       First we need to find the expected Fisher's information. Since the data are iid, we have $\mathcal{I}_n(\theta)$, denoting the information for the entire collection of observations $X_1, X_2, \ldots, X_n$, is equal to:
       $$
@@ -888,7 +888,7 @@ Point Estimation: Principles and Theory}
       \begin{align*}
         \mathcal{I}(\theta) &= -E\Big[\frac{\partial^2}{\partial \theta^2} \log f(X_i; \theta)\Big] \\
         &= -E\Big[\frac{\partial^2}{\partial \theta^2} \log \frac{e^{-\lambda}\lambda^X_i}{X_i!}\Big] \\
-        &= -E\Big[\frac{\partial^2}{\partial \theta^2} \big(-\lambda + X_i \log \lambda - \log X_i!\big)\Big] \\ 
+        &= -E\Big[\frac{\partial^2}{\partial \theta^2} \big(-\lambda + X_i \log \lambda - \log X_i!\big)\Big] \\
         &= -E\Big[\frac{\partial^2}{\partial \theta^2} \big(-1 + X_i/\lambda\big)\Big] \\
         &= -E\Big[-\frac{X_i}{\lambda^2}\Big] \\
         &= \frac{1}{\lambda^2}E[X_i] \\
@@ -898,12 +898,12 @@ Point Estimation: Principles and Theory}
       $$
       \mathcal{I}_n(\theta) = \frac{n}{\lambda}.
       $$
-      
+
       Therefore, for every possible unbiased estimator $\lambda^*$, the Cram\'er-Rao inequality states that:
       $$
       \Var(\lambda^*) \geq \frac{\lambda}{n}.
       $$
-      
+
       Notice that $\hat{\lambda} = \bar{X}_n$, the MLE of $\lambda$, is unbiased:
       $$
       E\big[\hat{\lambda}\big] = E\big[\bar{X}_n\big] = \lambda,
@@ -916,39 +916,39 @@ Point Estimation: Principles and Theory}
       $$
       \Var(\lambda^*) \geq \Var(\hat{\lambda}).
       $$
-      Therefore, for the iid Poisson$(\lambda)$ model, the MLE $\hat{\lambda} = \bar{X}_n$ is a UMVUE of $\lambda$. 
+      Therefore, for the iid Poisson$(\lambda)$ model, the MLE $\hat{\lambda} = \bar{X}_n$ is a UMVUE of $\lambda$.
     }
-    
+
   \end{exampleblock}
-    
+
   \framebreak
-  
+
   \begin{itemize}
     \item One weakness of the Cram\'er-Rao inequality is that the lower bound, $\frac{1}{\mathcal{I}(\theta)}$, \alert{might not be tight}.
     \item That is, it gives us a minimum quantity to compare to, but there may not exist an unbiased estimator that \alert{attains} the lower-bound.
     \item There are attainment theorems, stating when the Cram\'er-Rao inequality is attainable and when it is not. We won't present any of these in this class, but it's closely related to \emph{exponential families}.
     \item Instead, we can use some of our existing theorems to provide asymptotic results.
   \end{itemize}
-  
+
   \end{frame}
-  
+
   \begin{frame}[allowframebreaks]{Consistency}
-  
+
   \begin{itemize}
     \item Before continuing our discussion about asymptotic results, we will introduce a few new definitions and principles of point estimation.
   \end{itemize}
-  
+
   \begin{block}{Definition: Consistency}
     Estimators of $\theta$ are really sequences of random variables: $\theta^*_n$. Example: estimate $E[X_i] = \mu$ with $\bar{X}_n = \frac{1}{n}\sum_i X_i$.
-    
+
     One desirable feature of a sequence of estimators $\theta^*_n$ is that as $n$ grows large, $\theta^*_n$ converges in some way to the truth $\theta$.
-    
+
     We say that an estimator $\theta^*_n$ is \alert{consistent} if it converges in probability to the true value $\theta$:
     $$
     \lim_{n\rightarrow \infty} P_\theta\big(|\theta^*_n - \theta| \geq \epsilon \big) = 0.
     $$
   \end{block}
-  
+
   \begin{itemize}
     \item When trying to show convergence in probability last semester, we often used Chebychev's inequality:
     $$
@@ -965,75 +965,75 @@ Point Estimation: Principles and Theory}
     $$
     \item From this, we get an immediate result:
   \end{itemize}
-  
+
   \begin{block}{Theorem: Convergence in MSE}
-    If $\theta^*_n$ is a sequence of estimators for $\theta$, then if for every value of $\theta$, 
+    If $\theta^*_n$ is a sequence of estimators for $\theta$, then if for every value of $\theta$,
     \begin{enumerate}
       \item $\lim_{n \rightarrow \infty} \Var_\theta\big(\theta^*_n\big) = 0$
       \item $\lim_{n \rightarrow \infty} \text{Bias}_\theta\big(\theta^*_n\big) = 0$
     \end{enumerate}
-    then $\theta^*_n$ is a consistent estimator for $\theta$. 
+    then $\theta^*_n$ is a consistent estimator for $\theta$.
   \end{block}
-  
+
   \framebreak
-  
+
   \begin{block}{Consistency of the MLE}
     Under suitable conditions on the likelihood function, the MLE $\hat{\theta}$ is a consistent estimator of $\theta$.
-    
-    A simple application of the Bernstein-von Misses Theorem implies that the Bayesian posterior mean is also a consistent estimator of $\theta$. 
-    
+
+    A simple application of the Bernstein-von Misses Theorem implies that the Bayesian posterior mean is also a consistent estimator of $\theta$.
+
     \mode<article>{
     (Proof sketch)
-    
+
     We previously showed that, asymptotically, the MLE satisfies:
     $$
     \hat{\theta} \approx N\Big(\theta, \frac{1}{n\mathcal{I}(\theta)}\Big),
     $$
     where $\mathcal{I}(\theta)$ is the Fisher's information for a single observation. This is a fixed quantity, and thus we see that the limiting expectation $\lim_{n \rightarrow \infty} E[\hat{\theta}] = \theta$, so the $\text{Bias}_\theta(\hat{\theta}) \rightarrow 0$.
-    Similarly, 
+    Similarly,
     $$
     \Var(\hat{\theta}) \approx \frac{1}{nI(\theta)} \rightarrow 0.
     $$
     }
-    
+
   \end{block}
-  
+
   \end{frame}
-  
+
   \begin{frame}[allowframebreaks]{Efficiency}
-  
+
   \begin{block}{Definition: relative efficiency}
     If $\theta^*$ and $\tilde{\theta}$ are two estimators of $\theta$, then the \alert{relative efficiency} of $\theta^*$ with respect to $\tilde{\theta}$ is defined as:
     $$
     \text{RE}\big(\theta^*, \tilde{\theta}\big) = \frac{\Var\big(\tilde{\theta}\big)}{\Var\big(\theta^*\big)}.
     $$
   \end{block}
-  
+
   \begin{itemize}
     \item If RE $> 1$, then $\theta^*$ is said to be a more efficient estimator than $\tilde{\theta}$
     \item If RE $< 1$, then $\theta^*$ is said to be less efficient than $\tilde{\theta}$.
     \item If $\theta^*$ is more efficient than any other estimator, we call $\theta^*$ an \alert{efficient estimator}.
   \end{itemize}
-  
+
   \framebreak
-  
+
   \begin{block}{Definition: Limiting variance and relative efficiency}
     An estimator $\theta_n^*$ of $\theta$ depends on the data, and the number of observations. If $\lim_{n \rightarrow \infty} k_n \theta^* = \sigma^2$ for some sequence $k_n$ and constant $\sigma^2$, then $\sigma^2$ is called the \alert{limiting variance of the estimator} $\theta^*$.
-    
+
     If $\tilde{\theta}_n^*$ is a different estimate of $\theta$ with limiting variance $\tau^2$, then the \alert{relative asymptotic efficiency} of $\theta^*_n$ with respect to $\tilde{\theta_n}$ is defined as:
     $$
     \text{ARE}\big(\theta^*_n, \tilde{\theta}\big) = \frac{\tau^2}{\sigma^2}
     $$
-    
+
   \end{block}
-  
+
   \framebreak
-  
+
   \begin{block}{Theorem: asymptotic efficiency of MLE and posterior mean}
     Under suitable regularity conditions, MLE $\hat{\theta}$ for parameter vector $\theta$ is \alert{asymptotically efficient}, achieving the Cram\'er-Rao lower bound $\mathcal{I}(\theta)$.
-    
+
     By the Bernstein-von Misses Theorem, posterior distribution in a Bayesian analysis asymptotically converges to a normal distribution with mean $\hat{\theta}$, and variance $1/\mathcal{I}(\theta)$. Consequently, the posterior mean is also asymptotically efficient.
-    
+
     \mode<article>{
       \begin{proof}
         This Theorem is an immediate consequence of the asymptotic normality characterization of the MLE. Specifically, if the likelihood is twice differentiable and we can exchange the order of integration and derivative, then
@@ -1043,32 +1043,32 @@ Point Estimation: Principles and Theory}
         The statement regarding the Bayesian posterior mean is similarly trivial given the Bernstein-von Misses Theorem.
       \end{proof}
     }
-    
+
   \end{block}
-  
+
   \framebreak
-  
+
   \begin{itemize}
     \item \alert{Brief Summary}:
     \item We have argued that under very mild conditions, the MLE and Bayesian posterior mean are both \alert{consistent} (i.e., converges in probability to the true parameter value), \textbf{and} \alert{asymptotically efficient}.
-    \item This largely explains why these two approaches dominate the literature on parameter estimation: 
+    \item This largely explains why these two approaches dominate the literature on parameter estimation:
     \item even if closed-form expressions for the sampling distributions of parameter estimates are unavailable, we are effectively guaranteed to have well-behaved estimates if we estimate using the MLE or Bayesian Posterior, and we have sufficient data.
   \end{itemize}
-  
+
   \framebreak
-  
+
   \begin{itemize}
     \item Much of the statistical theory of the 19/20th centuries was focused on finding UMVUE estimators. This includes our discussion on consistency and asymptotic efficiency.
     \item Unbiasedness is nice feature, but strictly requiring unbiasedness sometimes results in a few issues \citep[Chapter~5,][]{pawitan01}.
     \begin{itemize}
       \item Finding an unbiased estimate can be extremely difficult.
       \item Not all parameter \emph{have} an unbiased estimator.
-      \item Requiring unbiasedness can produce terrible estimates. 
+      \item Requiring unbiasedness can produce terrible estimates.
       \item Regardless of the prior and likelihood, all estimates using the posterior means are biased \citep[Section~7.5.2,][]{casella24}.
       \item The bias of good estimators (like the MLE) typically shrinks at a rate $O(n)$, where the variance typically shrinks at a rate $O(n^{1/2})$ \citep[Chapter~5,][]{pawitan01}, meaning the variance usually is the cause for poor estimates, not the bias.
     \end{itemize}
   \end{itemize}
-  
+
 \end{frame}
 
 \section{Sufficiency}
@@ -1080,23 +1080,247 @@ Point Estimation: Principles and Theory}
     \item We argued that both $\theta^*_1$ and $\theta^*_2$ are unbiased estimators, and that $\Var(\theta^*_2) < \Var(\theta^*_1)$. An additional way of viewing this, however, is that $\theta^*_1$ is \emph{not capturing all of the information available for $\theta$}
     \item This idea is known as the principle of \alert{sufficiency}. This will be formally defined on the next slide.
   \end{itemize}
-  
+
   \framebreak
-  
+
   \begin{block}{Definition: Sufficiency}
-    A statistic $T(X_1, \ldots, X_n)$ is said to be \alert{sufficient} for $\theta$ if the conditional distribution of $X_1, \ldots, X_n$, given $T = t$, does not depend on $\theta$ for any value of $t$.
+    A statistic $T(X) = T(X_1, \ldots, X_n)$ is said to be \alert{sufficient} for $\theta$ if the conditional distribution of $X_1, \ldots, X_n$, given $T = t$, does not depend on $\theta$ for any value of $t$.
   \end{block}
-  
+
   \begin{itemize}
     \item If we take some statistic sufficient $T$ (could be an estimator), then after accounting for $T$, there is no more information available about $\theta$ in the available data.
-    \item Formally, a sufficient statistic suggests that we could throw away all of the data, except the sufficient statistic, and not lose any information about the parameter $\theta$. 
+    \item Formally, a sufficient statistic suggests that we could throw away all of the data, except the sufficient statistic, and not lose any information about the parameter $\theta$.
   \end{itemize}
-  
+
+  \framebreak
+
+  \begin{exampleblock}{Binomial sufficient statistic}
+    Let $X_1, \ldots, X_n$ be iid Bernoulli random variables with parameter $\theta$. Show that $T(X) = \sum_i X_i$ is a \alert{sufficient statistic} for $\theta$.
+
+    \mode<article>{
+      \begin{proof}
+        $T(X)$ is the number of ``successes", and therefore $T(X)$ follows a Binomial($n, \theta$) distribution. We want to calculate the conditional probability function of $X = (X_1, \ldots, X_n)$, conditioned on $T(X)$.
+        Both are discrete random variables, so we calculate the pmf as:
+        \begin{align*}
+        f_{X|T_{X}}(x_1, \ldots, x_n | T(X) = t) &= \frac{\prod_{i = 1}^n \theta^{x_i} (1 - \theta)^{1 - x_i}}{\binom{n}{t} \theta^t (1 - \theta)^{n - t}} \\
+        &= \frac{\theta^{\sum_i x_i}(1 - \theta)^{\sum_i (1 - x_i)}}{\binom{n}{t} \theta^t (1 - \theta)^{n - t}} \\
+        &= \frac{\theta^{t}(1 - \theta)^{n-t}}{\binom{n}{t} \theta^t (1 - \theta)^{n - t}} \\
+        &= \frac{1}{\binom{n}{t}}. \\
+        \end{align*}
+        Note that this result does not contain $\theta$. That means, conditioned on $T(X) = t$, the remaining randomness in the data $X$ has no relation to the parameter $\theta$.
+        That is, the total number of 1s in this sample contains all of the information about $\theta$ that is available in the data. After accounting for this, other features (such as the exact value of $X_3$) contains no information about $\theta$.
+
+        In short, $T(X)$ is a sufficient statistic for $\theta$.
+      \end{proof}
+    }
+
+  \end{exampleblock}
+
+\framebreak
+
+\begin{exampleblock}{Normal sufficient statistic}
+  Let $X = X_1, \ldots, X_n$ be iid $N(\mu, \sigma^2)$, where $\sigma^2$ is known.
+  Show that the mean, $T(X) = \bar{X}_n$ is a sufficient statistic for $\mu$.
+
+  \mode<article>{
+    \begin{proof}
+      First, recall that we showed last semester that $\bar{X}_n \sim N\Big(\mu, \frac{\sigma^2}{n}\Big)$. Thus,
+      $$
+      f_{T(X)}(t) = \frac{1}{\sqrt{2\pi \sigma^2/n}} \exp\Big(-\frac{n}{2\sigma^2}\big(t - \mu)^2\big)\Big).
+      $$
+      Now, we want to find the pdf that corresponds to the conditional distribution $X | T(X)$.
+      To do this, we will first simplify the joint distribution of $X$:
+      \begin{align*}
+        f_{X}(x_1, \ldots, x_n) &= \prod_{i = 1}^n (2 \pi \sigma^2)^{-1/2} \exp\Big(-\frac{1}{2\sigma^2} (x_i - \mu)^2\Big) \\
+        &= \frac{1}{\sqrt{2\pi \sigma^2}} \exp\Big(-\frac{1}{2\sigma^2}\sum_{i=1}^n\big(x_i - \mu)^2\big)\Big)
+      \end{align*}
+      In order to simplify the conditional distribution, we will introduce $t = \sum_{i} x_i / n$ into the equation:
+      \begin{align*}
+        f_{X}(x_1, \ldots, x_n) &= \frac{1}{\sqrt{2\pi \sigma^2}} \exp\Big(-\frac{1}{2\sigma^2}\sum_{i=1}^n\big(x_i - t + t - \mu)^2\big)\Big) \\
+        &= \frac{1}{\sqrt{2\pi \sigma^2}} \exp\Big(-\frac{1}{2\sigma^2}\big[  \sum_{i=1}^n\big(x_i - t)^2 + n(t - \mu)^2\big]\Big),
+      \end{align*}
+      where the last expression results because the cross-product term involves $\sum_i (x_i - t) = 0$.
+    \end{proof}
+
+    With this, we can now compute the pdf of the conditional distribution $X|T(X)$:
+    \begin{align*}
+      f_{X|T(X)}(x | t) &= \frac{f_{X}(x)}{f_{T(X)}(t)} \\
+      &= \frac{\sqrt{2\pi \sigma^2/n}}{\sqrt{2\pi \sigma^2}}\frac{\exp\Big(-\frac{1}{2\sigma^2}\big[  \sum_{i=1}^n\big(x_i - t)^2 + n(t - \mu)^2\big]\Big)}{\exp\Big(-\frac{n}{2\sigma^2}\big(t - \mu)^2\big)\Big)} \\
+      &= n^{-1/2} (2\pi \sigma^2)^{-(n-1)/2}\exp\Big(-\frac{1}{2\sigma^2}\sum_{i = 1}^n(x_i - t)^2\Big).
+    \end{align*}
+
+  This conditional distribution does not involve $\mu$, showing that $T(X) = \bar{X}_n$ is a sufficient statistic for $\mu$.
+
+  }
+
+\end{exampleblock}
+
+\framebreak
+
+\begin{itemize}
+  \item Using the definition to find a sufficient statistic is inconvenient. It requires knowing a candidate $T(X)$ ahead of time, knowing the distribution of the statistic, and computing conditional pmf / pdf.
+  \item The following theorem provides us a way of finding sufficient statistics.
+\end{itemize}
+
+\begin{block}{The Factorization Theorem}
+  Let $f_{X}(x; \theta)$ be the joint pdf or pmf of a sample $X$. A statistic $T(X)$ is a sufficient statistic for $\theta$ if and only if there exist functions $g(t; \theta)$ and $h(x)$ such that, for all sample points $x$ and parameter values $\theta$,
+  $$
+  f_{X}(x; \theta) = g\big(T(X) ; \theta\big)h(x).
+  $$
+
+  \mode<article>{
+    The proof will only be for discrete distributions, though the proof for continuous distributions is similar.
+
+    First, we'll suppose that $T(X)$ is a sufficient statistic. Let $g(t ; \theta) = P_\theta(T(X) = t)$, and $h(x) = P(X = x | T(X) = T(x))$. Note that, by definition of sufficiency, the conditional distribution $h(x)$ does not depend on $\theta$. Thus, we have:
+    \begin{align*}
+      f_X(x; \theta) &= P_\theta(X = x) \\
+      &= P_\theta\big(X = x \text{ and } T(X) = t(x)\big)\\
+      &= P\big(X = x | T(X) = t(x)\big)P_\theta\big(T(X) = t(x)\big) \\
+      &= g\big(T(X) ; \theta \big)h(x),
+    \end{align*}
+    Giving the desired factorization.
+
+    We now assume that the factorization exists. Let $q(t ; \theta)$ be the pmf of $T(X)$.
+    Note that there are many possible sets for $X$ such that $T(X) = t$ (e.g., if $T(X)$ is the mean, then $X = (-1, 1)$, or $X = (1, -1)$, or $X = (0, 0)$ all give the same value $T(X) = 0$.)
+
+    For a fixed value $t$, define $A_t = \{x: T(x) = t\}$. Then, the PMF of $X | T(X) = t$ is:
+    \begin{align*}
+      \frac{f_X(x; \theta)}{q\big(T(x); \theta\big)} &= \frac{g\big(T(x) ; \theta\big)h(x)}{q\big(T(x);\theta\big)}.
+    \end{align*}
+    Using the variable transformation theorem for discrete random variables, we have
+    \begin{align*}
+    q\big(T(x); \theta\big) &= \sum_{y \in A_{T(x)}} f_Y(y;\theta) \\
+    &= \sum_{y \in A_{T(x)}} g\big(T(y) ; \theta\big)h(y) \\
+    &= g\big(T(x)\big) \sum_{y \in A_{T(x)}} h(y),
+    \end{align*}
+    where the last equality comes from the definition of the set $A_{T(x)}$, since $y \in A_{T(x)}$ implies that $T(y) = T(x)$.
+    Therefore, the conditional distribution is:
+        \begin{align*}
+      \frac{f_X(x; \theta)}{q\big(T(x); \theta\big)} &= \frac{g\big(T(x) ; \theta\big)h(x)}{q\big(T(x);\theta\big)} \\
+      &= \frac{g\big(T(x) ; \theta\big)h(x)}{g\big(T(x)\big) \sum_{y \in A_{T(x)}} h(y)} \\
+      &= \frac{h(x)}{\sum_{y \in A_{T(x)}} h(y)}.
+    \end{align*}
+    By assumption, $h(x)$ does not involve the parameter $\theta$, proving that if we can factor the joint pmf, then the conditional distribution $X | T(X)$ does not include $\theta$, or that $T(X)$ is a sufficient statistic for $\theta$.
+
+  }
+
+\end{block}
+
+\framebreak
+
+\begin{itemize}
+  \item The factorization theorem gives us a way to find sufficient statistics:
+  \item Factor the joint pdf / pmf into two parts: one depending on $\theta$, and one part that does not depend on $\theta$. The part without $\theta$ becomes the function $h(x)$. In the remaining part of the function, find the remaining function of the data $T(X)$.
+\end{itemize}
+
+\begin{exampleblock}{Example: Normal (known variance)}
+  Let $X_i \overset{iid}{\sim} N(\mu, \sigma^2)$, with $\sigma^2$ known. Find a sufficient statistic for $\mu$.
+
+  \mode<article>{
+  \begin{proof}
+    We already showed that $T(X) = \bar{X}_n$ is a sufficient statistic for $\mu$.
+    Suppose that we weren't given $T(X)$, but had to instead find it. We can use the factorization theorem to do this.
+    The joint pdf is given by:
+    \begin{align*}
+      f_{X}(x_1, \ldots, x_n) &= \frac{1}{\sqrt{2\pi \sigma^2}} \exp\Big(-\frac{1}{2\sigma^2}\sum_{i=1}^n\big(x_i - \bar{x} + \bar{x} - \mu)^2\big)\Big) \\
+        &= \frac{1}{\sqrt{2\pi \sigma^2}} \exp\Big(-\frac{1}{2\sigma^2}\big[  \sum_{i=1}^n\big(x_i - \bar{x})^2 + n(\bar{x} - \mu)^2\big]\Big) \\
+        &= \frac{1}{\sqrt{2\pi \sigma^2}} \exp\Big(-\frac{1}{2\sigma^2}\sum_{i=1}^n\big(x_i - \bar{x})^2\Big)\exp\Big(-\frac{n}{2\sigma^2}(\bar{x} - \mu)^2\Big)
+    \end{align*}
+    In the expression above, we can let:
+    $$
+    h(x) = \frac{1}{\sqrt{2\pi \sigma^2}} \exp\Big(-\frac{1}{2\sigma^2}\sum_{i=1}^n\big(x_i - \bar{x})^2\Big),
+    $$
+    which is only a function of the data, and not of the parameter $\mu$.
+    This gives us the remaining function $g\big(T(x); \mu\big)$:
+    $$
+    g\big(T(x); \mu\big) = \exp\Big(-\frac{n}{2\sigma^2}(\bar{x} - \mu)^2\Big).
+    $$
+
+    Here, we can find what the sufficient statistic is. In particular, functions of the data in this function are sufficient statistics, by the factorization theorem.
+    Therefore: $T(X) = \bar{X}$ is a sufficient statistic for $\mu$.
+  \end{proof}
+  }
+
+\end{exampleblock}
+
+\framebreak
+
+\begin{itemize}
+  \item The Factorization Theorem gives us a way to find sufficient statistics, but these statistics are not unique.
+  \item For instance, if $T(X)$ is a sufficient statistic, than $cT(X)$ is also sufficient (for any constant $c$).
+  \item Furthermore, the factorization theorem states that the entire vector of data $X$ is itself a sufficient statistic:
+  $$
+  f_X(x; \theta) = f_X(x; \theta) h(x),
+  $$
+  where $h(x) = 1$. This satisfies all conditions of the Factorization Theorem, so $T(X) = X$ is sufficient for $\theta$.
+  \item This leads us to the idea of \alert{minimal sufficiency}.
+\end{itemize}
+
+\framebreak
+
+\begin{block}{Definition: Minimal Sufficient Statistic}
+  A sufficient statistic $T(X)$ is called a \alert{minimal sufficient statistic} if, for any other sufficient statistic $T'(X)$, $T(x)$ is is a function of $T'(x)$.
+\end{block}
+
+\begin{itemize}
+  \item One way of thinking about this is that a minimal sufficient statistic is the \emph{coarsest} possible partition for a sufficient statistic, and thus achieves the greatest possible data reduction for a sufficient statistic.
+  \item In the normal model, for instance, both $T(X) = \bar{X}$ and $T'(X) = X$ were shown to be sufficient. $T'(X) = X$ \alert{cannot} be minimally sufficient, because it cannot be recovered from the mean alone (i.e., $X$ is not a function of $\bar{X}$).
+
+  \framebreak
+
+  \item Finding a minimally sufficient statistic can be difficult, but there are theorems that can be used to help. See, for instance, Theorem~6.2.13 from \citet{casella24}.
+  \item We'll finish discussion about sufficieny with one last example.
+\end{itemize}
+
+\begin{exampleblock}{Joint sufficiency: IID normal model}
+  Let $X_i$ be iid $N(\mu, \sigma^2)$, where both $\mu$ and $\sigma^2$ are unknown. Find a sufficient statistic for $\theta = (\mu, \sigma^2)$.
+
+  \mode<article>{
+    First, consider the joint density:
+    \begin{align*}
+      f(x_1, \ldots, x_n ; \mu, \sigma^2) &= \prod_{i = 1}^n \frac{1}{\sigma \sqrt{2\pi}}\exp\Big[-\frac{1}{2\sigma^2}(x_i - \mu)^2\Big] \\
+      &= \frac{1}{\sigma^n (2\pi)^{n/2}}\exp\Big[-\frac{1}{2\sigma^2} \sum_{i = 1}^n (x_i - \mu)^2\Big] \\
+      &= \frac{1}{\sigma^n (2\pi)^{n/2}}\exp\Big[-\frac{1}{2\sigma^2} \Big(\sum_{i = 1}^n x_i^2 - 2\mu \sum_{i = 1}^n x_i + n\mu^2\Big)\Big].
+    \end{align*}
+    In the final expression above, we have factored the joint pdf into an expression that involves two statistics: $T_1(x) = \sum_i x_i$, and $T_2(x) = \sum_{i = 1} x_i^2$. Using the factorization theorem, we let $h(x) = 1$, and:
+    $$
+    g\big(T_1(x), T_2(x); \mu, \sigma^2) = \frac{1}{\sigma^n (2\pi)^{n/2}}\exp\Big[-\frac{1}{2\sigma^2} \Big(T_2(x) - 2\mu T_1(x) + n\mu^2\Big)\Big],
+    $$
+    showing that $\Big(\sum_i x_i, \sum_i x_i^2\Big)$ is a sufficient statistic for $\theta = (\mu, \sigma^2)$.
+    We will not prove it here, but this actually is a minimal sufficient statistic for $\theta$.
+
+
+    In this example (and all previous examples), we found that the dimension of a minimal sufficient statistic matched the dimensions of the parameter vector $\theta$. The study of when this occurs led to the development of what is called the \alert{exponential family} of probability distributions.
+    This is a really important family because it has very nice properties. This family includes Gaussian, Poisson, binomial, and Gamma distributions.
+  }
+
+\end{exampleblock}
+
+\end{frame}
+
+\begin{frame}[allowframebreaks]{Rao-Blackwell Theorem}
+  \begin{itemize}
+    \item In addition to having desireable proprties, sufficient statistics can be used to improve estimators. This is known as \alert{Rao-Blackwellization}.
+  \end{itemize}
+
+  \begin{block}{The Rao-Blackwell Theorem}
+    TODO: Finish this theorem
+  \end{block}
+
+
+  \framebreak
+
+  \begin{itemize}
+    \item TODO: (page 310, Rice: Rao-Blackwell Theorem states we should use sufficient statistics when available)
+    \item TODO: The MLE is a function of sufficient statistics (page 309 Rice, Corollary A)
+    \item TODO: Theorem 3.2, Pawitan (p 56): The likelihood function is a minimal sufficient statistic.
+  \end{itemize}
+
 \end{frame}
 
 \newcommand\acknowledgments{
 \begin{itemize}
-\item   Compiled on {\today} using \Rlanguage version 4.5.3.
+\item   Compiled on {\today} using \Rlanguage version 4.5.1.
 \item   \parbox[t]{0.75\textwidth}{Licensed under the \link{http://creativecommons.org/licenses/by-nc/4.0/}{Creative Commons Attribution-NonCommercial license}.
     Please share and remix non-commercially, mentioning its origin.}
     \parbox[c]{1.5cm}{\includegraphics[height=12pt]{../cc-by-nc}}
