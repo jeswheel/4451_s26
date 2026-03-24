@@ -72,8 +72,279 @@ Hypothesis Testing}
 \end{frame}
 
 
-\begin{frame}[allowframebreaks]{Definition}
-  TEST
+\begin{frame}[allowframebreaks]{Definitions}
+
+\begin{block}{Definition: Hypothesis}
+  A \alert{hypothesis} is a statement about a population parameter.
+\end{block}
+
+\begin{itemize}
+  \item Example: The mean height $\mu$ of a population is smaller than $6$ ft.
+  % \item Example: The mean effect on blood pressure $\mu$ from drug $A$ is negative.
+  \item The definition of a hypothesis is quite general. The important part is that it makes a statement about a population parameter.
+  \item The goal of a \alert{hypothesis test} is the decide, based on a sample from the population, which hypotheses are true.
+\end{itemize}
+
+\framebreak
+
+\begin{itemize}
+  \item In practice, we usually perform a hypothesis test by considering two complimentary hypotheses. Our goal is to decide which is true, based on data.
+\end{itemize}
+
+\begin{block}{Definition: Null and Alternative Hypothesis}
+  The two complementary hypotheses are called the \alert{null hypothesis} and the \alert{alternative hypothesis}, denoted $H_0$ and $H_1$, respectively.
+\end{block}
+
+\begin{itemize}
+  \item For population parameters, we usually consider hypotheses of the form:
+  $$
+  H_0: \theta \in \Theta_0\, \quad  \text{and}\, \quad H_1: \theta \in \Theta_0^c,
+  $$
+  where $\Theta_0$ is some subset of the parameter space.
+\end{itemize}
+  
+  \framebreak
+  
+  \begin{exampleblock}{Blood Pressure medication}
+    Suppose we are interested in testing a new blood pressure medication against existing treatments.
+    
+    The population parameter of interest is $\theta$, the mean change in blood pressure of this new drug, relative to existing treatments.
+    
+    We may be interested in testing if $\theta \in \Theta_0 = \{0\}$, against $\theta \in \Theta_0^C = \R/\{0\}$, or:
+    $$
+    H_0: \theta = 0, \quad H_1: \theta \neq 0.
+    $$
+  \end{exampleblock}
+  
+  \begin{itemize}
+    \item In a \emph{hypothesis testing problem}, the experimenter must decide to either accept $H_0$ (or equivalently, reject $H_1$), or accept $H_1$ (or equivalently, reject $H_0$).
+    \item We take the approach of \citet{casella24}, and not worry about the particular language used, rather focus on the mathematics and final decision.
+  \end{itemize}
+
+\framebreak
+
+\begin{block}{Definition: Hypothesis tests}
+  A \alert{hypothesis testing procedure}, or \alert{hypothesis test} is a rule that specifies:
+  \begin{enumerate}[(i)]
+  \item For which sample values the decision is made to accept $H_0$ as true.
+  \item For which sample values $H_0$ is rejected and $H_1$ is accepted as true.
+  \end{enumerate}
+  The subset of the sample space for which $H_0$ is rejected is called the \alert{rejection region} or \alert{critical region}. The complement of the rejection region is called the \alert{acceptance region}.
+\end{block}
+
+\framebreak
+
+\begin{itemize}
+  \item Rather than specifying individual possibilities for the sample space, we generalize by considering a \alert{test statistic}: $W(X) = W(X_1, X_2, \ldots, X_n)$, which is a function of the sample.
+\end{itemize}
+
+  \begin{exampleblock}{Example: Coin Flipping}
+    Suppose we have a new coin, with probability of heads $\theta$. In our experiment, we will flip a coin $n = 4$ times.
+    Consider making a hypothesis test for $H_0: \theta = 0.5$ against $H_1: \theta \neq 0.5$.
+    
+    \mode<article>{
+      First, we can specify our test based on the sample space. The sample space consists of heads and tails:
+      $$
+      \Omega = \{HHHH, HHHT, HHTH, \ldots, TTTT\}.
+      $$
+      The null hypothesis states that the probability of tails and heads is equal. Thus, we might define our rejection region as:
+      $$
+      R = \{HHHH, TTTT\}.
+      $$
+      That is, we will reject $H_0$ if we only see heads, or only see tails.
+      
+      Instead of specifying based on the sample space, we can instead use a sample statistic. 
+      Let $X_i = 1$ if the $i$th coin flip is a heads, and $X_i = 0$ if it is a tails.
+      Then, our sample statistic might be:
+      $$
+      W(X_1, X_2, X_3, X_4) = \sum_i X_i
+      $$
+      and we can define the same rejection region using this sample statistic. Namely,
+      $$
+      R = \{\omega \in \Omega: W(\omega) = 0, 4\},
+      $$
+      or, equivalently, 
+      $$
+      R = \{\omega \in \Omega: |W(\omega) - 2| \geq 2\}.
+      $$
+    }
+  \end{exampleblock}
+
+  \framebreak
+
+  \begin{itemize}
+    \item In the example above, we could have picked \emph{any} rejection region that we wanted.
+    \item What we would like to do is develop ways to mathematically compare hypothesis testing frameworks.
+    \item We will discuss a few different ways of developing hypothesis tests, and how to compare different testing frameworks.
+    \item Like with point-estimators, this will involve the consideration of some general principles that should be considered.
+  \end{itemize}
+\end{frame}
+
+\section{Error types and testing paradigms}
+
+\begin{frame}[allowframebreaks]{Testing Paradigms}
+  \begin{itemize}
+    \item There are various disagreements about how to perform / what to prioritize when conducting hypotheses tests.
+    \item We will categorize these ideals into three main groups:
+  \end{itemize}
+    \begin{enumerate}
+      \item \alert{Bayesian hypothesis testing}.
+      \begin{itemize}
+        \item The Bayesian treatment of probability as beliefs enables us to consider probabilities that $H_0$ or $H_1$ is true, based on the posterior distribution. That is, since $\pi(\theta | x)$ is a density for a random variable $\Theta | X = x$, we can consider $P(H_0 \text{ is true} | X) = P(\theta \in \Theta_0 | X)$, and $P(H_1 \text{ is true } | X) = P(\theta \in \Theta_0^C | X)$. 
+        \item See Chapter~8.2.2 of \citet{casella24} for more details and examples.
+      \end{itemize}
+      
+      \framebreak
+      
+    \end{enumerate}
+    \begin{itemize}
+    \item \alert{Frequentist hypothesis testing}
+    \begin{itemize}
+      \item In the Frequentist setting, we cannot consider $P(H_0 \text{ is true} | X)$, since $\theta$ is not random. That is, if $\theta \in H_0$, $P(H_0 \text{ is true }|X) = 1$, and zero otherwise. The thing that is random is the data $X$, not the parameter $\theta$, and consequently the decision to accept or reject is random. Here, we consider the probability of being wrong under various assumptions.
+    \end{itemize}
+    \begin{enumerate}
+      \item[2.] \alert{Neyman-Pearson} approach. This has largely dominated hypothesis testing in 20th / 21st centuries. If you've seen a hypothesis test, it's likely based on this approach.
+      \item[3.] \alert{Fisher} approach. Less commonly used, though sometimes mixed with the \emph{Neyman-Pearson} paradigm.
+    \end{enumerate}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]{Error Types}
+  \begin{itemize}
+    \item We'll largely focus on the Neyman-Pearson paradigm, since that is the most widely used approach.
+    \item To do so, we need to introduce error types. There are two ways we can make an error:
+    \begin{enumerate}
+      \item Conclude that $H_0$ is false, when it is actually true. This is called a \alert{Type I error}.
+      \item Conclude that $H_0$ is true, when it is actually false. This is called a \alert{Type II error}
+    \end{enumerate}
+  \end{itemize}
+
+\begin{table}[ht]
+\centering
+\caption{Decision and error types.}
+\begin{tabular}{|c|c|c|}\hline
+             & $H_0$ True & $H_0$ False \\\hline
+  Accept $H_0$ & correct  & Type II   \\\hline
+  Reject $H_0$ & Type I   & correct \\\hline
+\end{tabular}
+\end{table}
+
+\framebreak
+
+\begin{itemize}
+  \item The Neyman-Pearson approach focuses on these two types of error.
+  \item Because of randomness, we can't completely eliminate both (or either) type of error.
+  \item There's also a tradeoff: tests that have larger-rejection regions are more likely to reject, meaning more likely to have a Type I error, but a lower Type II error. 
+  \mode<article>{Similarly, tests that reject less often are more likely to have Type II errors, less likely to have Type I errors.}
+  \item Thus, efforts to decrease one of the error types typically results in an increase of the other type.
+\end{itemize}
+
+\framebreak
+
+\begin{itemize}
+  \item In the frequentist setting, we are interested in long-run frequencies. That is, for any fixed tests, what are the corresponding rates that we make errors.
+  \begin{itemize}
+    \item Let $\alpha$ be the Type-I error rate.
+    \item Let $\beta$ be the Type-II error rate.
+  \end{itemize}
+\end{itemize}
+
+\mode<presentation>{
+  \alert{Neyman-Pearson Hypothesis Testing}:
+  
+  \begin{itemize}
+          \item Control the Type I error rate $\alpha$ at some pre-determined level (e.g., $\alpha = 0.05$). We call this the \alert{significance level} of the test.
+      \item Within this constraint, we want to also minimize $\beta$, or equivalently, maximize $1-\beta$, which is known as the \alert{power} of the test.
+  \end{itemize}
+}
+
+  \mode<article>{
+  \begin{itemize}
+  \item \alert{Neyman-Pearson Hypothesis Testing}:
+    
+    \begin{itemize}
+      \item Control the Type I error rate $\alpha$ at some pre-determined level (e.g., $\alpha = 0.05$). We call this the \alert{significance level} of the test.
+      \item Within this constraint, we want to also minimize $\beta$, or equivalently, maximize $1-\beta$, which is known as the \alert{power} of the test.
+    \end{itemize}
+  \end{itemize}
+  }
+  
+  \framebreak
+
+  \begin{exampleblock}{Example: Flipping a coin}
+    Consider the experiment of flipping a coin $n = 10$ times. We would like to test the hypothesis $H_0: \theta = 0.5$ against $H_1: \theta \neq 0.5$, where $\theta$ is the probability of heads. Find the rejection region for an $\alpha = 0.05$ level test.
+    
+    \mode<article>{
+      First, recognize from our earlier discussions that we will reject $H_0$ if the observed proportion of heads $\sum_i X_i / n$ is much different from $0.5$.
+      That is, we will reject if we see $\sum_i X_i$ being either very large, or very small.
+      What we need to determine is what is considered ``very large" and ``very small" in this context.
+      
+      We would like to control the Type-I error rate at $\alpha = 0.05$; meaning, if we perform this hypothesis many times and $H_0$ is true, we will be wrong only $5\%$ of the time.
+      Thus, if we assume $H_0$ is true, we want the probability of our particular sample $\omega$ to lie in the rejection region to be smaller than $0.05$.
+      We now assume $H_0$ is true, or that $\theta = 0.5$, and calculate the probabilities of individual samples $X \in \{0, 1, 2, \ldots, 9, 10\}$.
+      \begin{align*}
+        P_{\theta \in H_0}(X = 0) &= 0.5^{10} \approx 0.00098 \\
+        P_{\theta \in H_0}(X = 1) &= 10 \times 0.5^{10} \approx 0.00977 \\
+        P_{\theta \in H_0}(X = 2) &\approx \Sexpr{dbinom(2, 10, 0.5) |> round(5)} \\
+        \vdots \\
+        P_{\theta \in H_0}(X = 8) &\approx \Sexpr{dbinom(8, 10, 0.5) |> round(5)} \\
+        P_{\theta \in H_0}(X = 9) &= 10 \times 0.5^{10} \approx 0.00977 \\
+        P_{\theta \in H_0}(X = 10) &= 0.5^{10} \approx 0.00098 \\
+      \end{align*}
+      From these probabilities, we can construct our rejection region $R$. In particular, we want to select $R$ in a way that controls the Type-I error rate at $\alpha = 0.05$, or that $P(X \in R | H_0) \leq 0.05$.
+      The following rejection regions satisfy this condition:
+      $$
+        R_1 = \{0\},\, R_2 = \{10\},\, R_3 = \{1\},\, R_4 = \{9\},\, R_5 = \{0, 1\},\, R_6 = \{9, 10\},\,
+        R_7 = \{2\},\, R_8 = \{8\},\,R_9 = \{0, 1, 9, 10\}.
+      $$
+      Note that all of these rejection regions satisfy $P(X \in R_i | H_0) \leq 0.05$.
+      How do we pick which test to use?
+      
+      Now we recognize that within these conditions, we want to maximize statistical power. That is, what if $\theta \in \Theta_0^{C}$, or $\theta \neq 0.5$? In this case, we want to increase the probability of rejecting! Thus, we want to pick the region $R_i$ that has the largest probability of rejecting, given that $\theta \neq 0.5$.
+      
+      This is a harder calculation, since $\theta \neq 0.5$ gives a large number of possibilities.
+      However, we can immediately eliminate regions $R_i$ that are subsets of other regions. That is, if both $R_i$ and $R_j$ control the Type-I error rate at level $\alpha$, we want to pick one with higher power, and if $R_i \subset R_j$, then:
+      $$
+      P_\theta(X \in R_i| H_1) \leq P_\theta(X \in R_j | H_1),
+      $$
+      regardless of the value $\theta \in H_1$.
+      
+      From this, we can eliminate $R_1, R_2, R_3, R_4, R_5, R_6$ as candidates, since they are all subsets of $R_9 = \{0, 1, 9, 10\}$.
+      This leads us to compare $R_9$ against $R_7 = \{2\}$ and $R_8 = \{8\}$.
+      
+      There's some symmetry in the problem here between $R_7 = \{2\}$ and $R_8 = \{8\}$.
+      Because of this, we'll only consider one of these cases.
+      
+<<echo=FALSE,include=FALSE,eval=FALSE>>=
+probs <- seq(1e-6, 1-(1e-6), length.out = 1000)
+
+R7_power <- dbinom(2, size = 10, prob = probs)
+R9_power <- pbinom(1, size = 10, prob = probs) + (1 - pbinom(8, 10, prob = probs))
+
+plot(
+  x = probs,
+  y = R9_power,
+  type = 'l'
+)
+
+lines(
+  x = probs,
+  y = R7_power,
+  col = 'red' 
+)
+
+lines(
+  x = 1-probs,
+  y = R7_power,
+  col = 'blue' 
+)
+@
+      
+      
+    }
+    
+  \end{exampleblock}
+
 \end{frame}
 
 \section{Likelihood Ratio Tests}
@@ -81,6 +352,17 @@ Hypothesis Testing}
 \section{Evaluating tests}
 
 \section{Confidence Intervals}
+
+\subsection{Exact Confidence Intervals}
+
+\subsection{Wilk's Theorem}
+
+\subsection{Profile Likelihoods}
+
+\subsection{Bootstraping}
+
+\section{Bias reduction methods}
+
 
 \newcommand\acknowledgments{
 \begin{itemize}
