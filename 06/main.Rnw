@@ -102,20 +102,20 @@ Hypothesis Testing}
   $$
   where $\Theta_0$ is some subset of the parameter space.
 \end{itemize}
-  
+
   \framebreak
-  
+
   \begin{exampleblock}{Blood Pressure medication}
     Suppose we are interested in testing a new blood pressure medication against existing treatments.
-    
+
     The population parameter of interest is $\theta$, the mean change in blood pressure of this new drug, relative to existing treatments.
-    
+
     We may be interested in testing if $\theta \in \Theta_0 = \{0\}$, against $\theta \in \Theta_0^C = \R/\{0\}$, or:
     $$
     H_0: \theta = 0, \quad H_1: \theta \neq 0.
     $$
   \end{exampleblock}
-  
+
   \begin{itemize}
     \item In a \emph{hypothesis testing problem}, the experimenter must decide to either accept $H_0$ (or equivalently, reject $H_1$), or accept $H_1$ (or equivalently, reject $H_0$).
     \item We take the approach of \citet{casella24}, and not worry about the particular language used, rather focus on the mathematics and final decision.
@@ -141,7 +141,7 @@ Hypothesis Testing}
   \begin{exampleblock}{Example: Coin Flipping}
     Suppose we have a new coin, with probability of heads $\theta$. In our experiment, we will flip a coin $n = 4$ times.
     Consider making a hypothesis test for $H_0: \theta = 0.5$ against $H_1: \theta \neq 0.5$.
-    
+
     \mode<article>{
       First, we can specify our test based on the sample space. The sample space consists of heads and tails:
       $$
@@ -152,8 +152,8 @@ Hypothesis Testing}
       R = \{HHHH, TTTT\}.
       $$
       That is, we will reject $H_0$ if we only see heads, or only see tails.
-      
-      Instead of specifying based on the sample space, we can instead use a sample statistic. 
+
+      Instead of specifying based on the sample space, we can instead use a sample statistic.
       Let $X_i = 1$ if the $i$th coin flip is a heads, and $X_i = 0$ if it is a tails.
       Then, our sample statistic might be:
       $$
@@ -163,7 +163,7 @@ Hypothesis Testing}
       $$
       R = \{\omega \in \Omega: W(\omega) = 0, 4\},
       $$
-      or, equivalently, 
+      or, equivalently,
       $$
       R = \{\omega \in \Omega: |W(\omega) - 2| \geq 2\}.
       $$
@@ -190,12 +190,12 @@ Hypothesis Testing}
     \begin{enumerate}
       \item \alert{Bayesian hypothesis testing}.
       \begin{itemize}
-        \item The Bayesian treatment of probability as beliefs enables us to consider probabilities that $H_0$ or $H_1$ is true, based on the posterior distribution. That is, since $\pi(\theta | x)$ is a density for a random variable $\Theta | X = x$, we can consider $P(H_0 \text{ is true} | X) = P(\theta \in \Theta_0 | X)$, and $P(H_1 \text{ is true } | X) = P(\theta \in \Theta_0^C | X)$. 
+        \item The Bayesian treatment of probability as beliefs enables us to consider probabilities that $H_0$ or $H_1$ is true, based on the posterior distribution. That is, since $\pi(\theta | x)$ is a density for a random variable $\Theta | X = x$, we can consider $P(H_0 \text{ is true} | X) = P(\theta \in \Theta_0 | X)$, and $P(H_1 \text{ is true } | X) = P(\theta \in \Theta_0^C | X)$.
         \item See Chapter~8.2.2 of \citet{casella24} for more details and examples.
       \end{itemize}
-      
+
       \framebreak
-      
+
     \end{enumerate}
     \begin{itemize}
     \item \alert{Frequentist hypothesis testing}
@@ -234,7 +234,7 @@ Hypothesis Testing}
 \begin{itemize}
   \item The Neyman-Pearson approach focuses on these two types of error.
   \item Because of randomness, we can't completely eliminate both (or either) type of error.
-  \item There's also a tradeoff: tests that have larger-rejection regions are more likely to reject, meaning more likely to have a Type I error, but a lower Type II error. 
+  \item There's also a tradeoff: tests that have larger-rejection regions are more likely to reject, meaning more likely to have a Type I error, but a lower Type II error.
   \mode<article>{Similarly, tests that reject less often are more likely to have Type II errors, less likely to have Type I errors.}
   \item Thus, efforts to decrease one of the error types typically results in an increase of the other type.
 \end{itemize}
@@ -251,7 +251,7 @@ Hypothesis Testing}
 
 \mode<presentation>{
   \alert{Neyman-Pearson Hypothesis Testing}:
-  
+
   \begin{itemize}
           \item Control the Type I error rate $\alpha$ at some pre-determined level (e.g., $\alpha = 0.05$). We call this the \alert{significance level} of the test.
       \item Within this constraint, we want to also minimize $\beta$, or equivalently, maximize $1-\beta$, which is known as the \alert{power} of the test.
@@ -261,24 +261,24 @@ Hypothesis Testing}
   \mode<article>{
   \begin{itemize}
   \item \alert{Neyman-Pearson Hypothesis Testing}:
-    
+
     \begin{itemize}
       \item Control the Type I error rate $\alpha$ at some pre-determined level (e.g., $\alpha = 0.05$). We call this the \alert{significance level} of the test.
       \item Within this constraint, we want to also minimize $\beta$, or equivalently, maximize $1-\beta$, which is known as the \alert{power} of the test.
     \end{itemize}
   \end{itemize}
   }
-  
+
   \framebreak
 
   \begin{exampleblock}{Example: Flipping a coin}
     Consider the experiment of flipping a coin $n = 10$ times. We would like to test the hypothesis $H_0: \theta = 0.5$ against $H_1: \theta \neq 0.5$, where $\theta$ is the probability of heads. Find the rejection region for an $\alpha = 0.05$ level test.
-    
+
     \mode<article>{
       First, recognize from our earlier discussions that we will reject $H_0$ if the observed proportion of heads $\sum_i X_i / n$ is much different from $0.5$.
       That is, we will reject if we see $\sum_i X_i$ being either very large, or very small.
       What we need to determine is what is considered ``very large" and ``very small" in this context.
-      
+
       We would like to control the Type-I error rate at $\alpha = 0.05$; meaning, if we perform this hypothesis many times and $H_0$ is true, we will be wrong only $5\%$ of the time.
       Thus, if we assume $H_0$ is true, we want the probability of our particular sample $\omega$ to lie in the rejection region to be smaller than $0.05$.
       We now assume $H_0$ is true, or that $\theta = 0.5$, and calculate the probabilities of individual samples $X \in \{0, 1, 2, \ldots, 9, 10\}$.
@@ -295,55 +295,124 @@ Hypothesis Testing}
       The following rejection regions satisfy this condition:
       $$
         R_1 = \{0\},\, R_2 = \{10\},\, R_3 = \{1\},\, R_4 = \{9\},\, R_5 = \{0, 1\},\, R_6 = \{9, 10\},\,
-        R_7 = \{2\},\, R_8 = \{8\},\,R_9 = \{0, 1, 9, 10\}.
+        R_7 = \{2\},\, R_8 = \{8\},\,R_9 = \{0, 1, 9, 10\}, \ldots
       $$
-      Note that all of these rejection regions satisfy $P(X \in R_i | H_0) \leq 0.05$.
+      among others.
+      Because all of these rejection regions satisfy $P(X \in R_i | H_0) \leq 0.05$.
       How do we pick which test to use?
-      
+
       Now we recognize that within these conditions, we want to maximize statistical power. That is, what if $\theta \in \Theta_0^{C}$, or $\theta \neq 0.5$? In this case, we want to increase the probability of rejecting! Thus, we want to pick the region $R_i$ that has the largest probability of rejecting, given that $\theta \neq 0.5$.
-      
+
       This is a harder calculation, since $\theta \neq 0.5$ gives a large number of possibilities.
       However, we can immediately eliminate regions $R_i$ that are subsets of other regions. That is, if both $R_i$ and $R_j$ control the Type-I error rate at level $\alpha$, we want to pick one with higher power, and if $R_i \subset R_j$, then:
       $$
       P_\theta(X \in R_i| H_1) \leq P_\theta(X \in R_j | H_1),
       $$
       regardless of the value $\theta \in H_1$.
-      
+
       From this, we can eliminate $R_1, R_2, R_3, R_4, R_5, R_6$ as candidates, since they are all subsets of $R_9 = \{0, 1, 9, 10\}$.
-      This leads us to compare $R_9$ against $R_7 = \{2\}$ and $R_8 = \{8\}$.
-      
-      There's some symmetry in the problem here between $R_7 = \{2\}$ and $R_8 = \{8\}$.
-      Because of this, we'll only consider one of these cases.
-      
-<<echo=FALSE,include=FALSE,eval=FALSE>>=
+      This leads us to compare the power of a test based on $R_9$ against one based on sets like $R_{10} = {2, 10}$.
+      One idea is to plot $\beta_9(\theta) = P_\theta(X \in R_9)$ and $\beta_{10}(\theta) = P_{\theta}(X \in R_{10})$, as a function of $\theta$.
+
+\begin{figure}[ht]
+<<echo=FALSE>>=
 probs <- seq(1e-6, 1-(1e-6), length.out = 1000)
 
 R7_power <- dbinom(2, size = 10, prob = probs)
 R9_power <- pbinom(1, size = 10, prob = probs) + (1 - pbinom(8, 10, prob = probs))
+R10_power <- dbinom(2, size = 10, prob = probs) + dbinom(10, size = 10, prob = probs)
 
 plot(
   x = probs,
   y = R9_power,
-  type = 'l'
+  type = 'l',
+  ylab = "Power",
+  xlab = "Proportion"
 )
+
+# lines(
+#   x = probs,
+#   y = R7_power,
+#   col = 'red'
+# )
 
 lines(
   x = probs,
-  y = R7_power,
-  col = 'red' 
-)
-
-lines(
-  x = 1-probs,
-  y = R7_power,
-  col = 'blue' 
+  y = R10_power,
+  col = 'red'
 )
 @
-      
-      
+\caption{\label{fig:binomTest}Power functions for two possible hypothesis tests, with corresponding rejection regions $R_9$ (black line) and $R_{10}$ (red line), respectively.}
+\end{figure}
+
+  In Figure~\ref{fig:binomTest}, we see that we get higher-power using the test based on rejection region $R_9$ whenever $\theta < 0.23$, or $\theta > 0.55$. However, in the interval $\theta \in (0.23, 0.55)$, the test with region $R_{10}$ is more powerful.
+  If there is a strong prior belief that $\theta \in (0.23, 0.55)$, then the test using rejection region $R_{10}$ may be preferred.
+
+  However, the region $R_{10}$ as a very odd property: when $\theta \in (0, 0.2)$, the power \emph{decreases} the further away we get from the null hypothesis $\theta = 0.5$.
+  We call this type of a test \emph{biased}.
+
+  \begin{block}{Definition: biased tests}
+    A test with power function $\beta(\theta)$ is \emph{unbiased} if $\beta(\theta_1) \geq \beta(\theta_2)$ for every $\theta_1 \in \Theta_0^C$ and $\theta_2 \in \Theta_0$.
+    That is, the power is at least as large for all values belonging to the alternative hypothesis than the power for values belonging to the null hypothesis.
+  \end{block}
+
+  One way to avoid biased tests is to design rejection regions so that more extreme deviations from the null hypothesis are not excluded if a less-extreme value is included. For example, if $2 \in R$, then $0, 1 \in R$, since these are more extreme deviations from the null.
+
+  From this logic, we can conclude that the test based on the rejection region $R_9 = \{0, 1, 9, 10\}$ is the most powerful $\alpha = 0.05$ level, unbiased test.
     }
-    
   \end{exampleblock}
+
+\framebreak
+
+\begin{itemize}
+  \item What we derived on the previous slide is a type of \alert{exact hypothesis test}. That is, because we knew the exact distribution of both the data $X_1, \ldots, X_n$ and the sample statistic $W(X_1, \ldots, X_n) = \sum_i X_i$, we could pick a rejection region based on the distribution of $W(X_1, \ldots, X_n)$.
+  \item Other type of exact tests are available. Perhaps the most famous is the $t$-test: If $X_i$ are iid Normal$(\mu, \sigma^2)$, then $T = (\bar{X} - \mu) / (S/\sqrt{n})$ follows \alert{exactly} a $t$-distribution with $df = n-1$ (see Chapter~6 from last semester).
+  \item Most often, however, an exact test is not available, and we will need an alternative way to derive tests and rejection regions.
+  \item Before we present these methods, we will introduce P-values and Fisher's approach to hypothesis testing.
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[allowframebreaks]{P-values and Fisher's approach}
+  \begin{itemize}
+    \item Informally, the P-value can be interpreted as the probability of observing something as extreme or more extreme, if $H_0$ is true.
+    \item If the P-value is small, that provides evidence that $H_0$ is not true.
+    \item A technical definition of a P-value is given in 8.3.26 of \citet{casella24}.
+    \item The rejection-region framework presented above is mathematically equivalent to computing a P-value, and comparing to the test size $\alpha = 0.05$.
+
+    \framebreak
+
+    \item In the binomial example, consider observing $X = 1$. With respect to $H_0: \theta = 0.5$ and $H_1: \theta \neq 0.5$, there are 3 other events that are as extreme (or more extreme) than $X=1$, namely: $X \in \{0, 1, 9, 10\}$.
+    \item Thus, the P-value is: $P_{\theta = 0.5}\big(X \in \{0, 1, 9, 10\}\big) \approx \Sexpr{2 * pbinom(1, 10, 0.5) |> round(3)}$.
+    \item Since P-value $\,< \alpha = 0.05$, we reject the null hypothesis and conclude that $H_1$ is true.
+
+    \framebreak
+
+    \item The Neyman-Pearson framework used above implies: the long-run error Type~I error rate of repeating this test is less than $\alpha = 0.05$, so we have controlled the Type~I error rate.
+    \item There are many growing complaints about this framework. Two that have persisted (and are relevant to our discussion) include:
+    \begin{itemize}
+      \item The choice $\alpha = 0.05$ (or any other value) is completely arbitrary. What tolerance you have for a Type~I error rate should be problem specific.
+      \item This framework makes the most sense when a study is going to be repeated, since it is formally a statement about the accuracy of many repeated tests, not our single example.
+      % There are many examples of where the outcome of a single test is known to be incorrect or meaningless, but the framework requires us to make that decision anyways in order to maintain Type~I error rate of $\alpha$.
+
+      \mode<article>{For instance, consider this famous anecdote used against this framework: A manufacturing company orders parts from a supplier, and states that they would accept $\alpha = 0.01$ proportion of defectives. The supplier than sent them two seperate boxes, a large one marked ``perfect", and a smaller box labeled ``defectives". The moral: a global confidence statement about long-run repeatability can be meaningless when there are \emph{recognizable} subsets for the statement is either true or false.}
+    \end{itemize}
+  \end{itemize}
+
+  \framebreak
+
+  \begin{itemize}
+  \item Building off of our example, suppose instead we are testing $H_0: \theta = 0.5$ against a \alert{one-sided} alternative: $H_1: \theta < 0.5$, and then we observe $X = 2$. In this case, the P-value is:
+  $$
+  P = P_{\theta = 0.5}\big(X \in \{0, 1, 2\}\big) \approx 0.055 > \alpha = 0.05.
+  $$
+  \item In this example, the Neyman-Pearson framework would select $H_0$, and not $H_1$, without any statement about how close this result is to the arbitrarily chosen $\alpha = 0.05$.
+  \item The Fisherian interpretation of hypothesis tests addresses this issue: rather than picking a pre-determined $\alpha$ value (which is arbitrary), we consider the P-value as a continuous measure of evidence against $H_0$, rather than a binary decision.
+  \item This approach isn't without difficulties, as it is more subjective and does not immediately result in a decision in regards to $H_0$ and $H_1$.
+  \item Despite there existing many valid arguments why a Bayesian framework or Fisherian interpretation may be preferred, the Neyman-Pearson paradigm has largely ``won" in modern science, to the extent that many publication venues will question why you didn't use Neyman-Pearson if you try another approach.
+  \item The American Statistical Association made a formal statement, somewhat discouraging the use of the Neyman-Pearson approach (and P-values in general) in 2016 \citep{asa16}. This has been extremely impactful, and has led to much debate and some controversy \citep{ionides17}.
+  \end{itemize}
+
 
 \end{frame}
 
