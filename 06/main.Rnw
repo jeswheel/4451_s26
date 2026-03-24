@@ -410,13 +410,26 @@ lines(
   \item The Fisherian interpretation of hypothesis tests addresses this issue: rather than picking a pre-determined $\alpha$ value (which is arbitrary), we consider the P-value as a continuous measure of evidence against $H_0$, rather than a binary decision.
   \item This approach isn't without difficulties, as it is more subjective and does not immediately result in a decision in regards to $H_0$ and $H_1$.
   \item Despite there existing many valid arguments why a Bayesian framework or Fisherian interpretation may be preferred, the Neyman-Pearson paradigm has largely ``won" in modern science, to the extent that many publication venues will question why you didn't use Neyman-Pearson if you try another approach.
-  \item The American Statistical Association made a formal statement, somewhat discouraging the use of the Neyman-Pearson approach (and P-values in general) in 2016 \citep{asa16}. This has been extremely impactful, and has led to much debate and some controversy \citep{ionides17}.
+  \item The American Statistical Association made a formal statement, somewhat discouraging the use of the Neyman-Pearson approach (and P-values in general) in 2016 \citep{asa16}. This has been extremely impactful, and has led to debate and some controversy \citep{ionides17}.
   \end{itemize}
 
 
 \end{frame}
 
 \section{Likelihood Ratio Tests}
+
+\begin{frame}[allowframebreaks]{Likelihood Ratio Tests}
+  \begin{itemize}
+    \item We have already considered the likelihood function $L(\theta)$ as a way of measuring uncertainty: the data supports values of $\theta$ with higher values of likelihood than lower values.
+    \item What matters is not the value of the likelihood, but how this value compares to other possible likelihood values.
+    \item This intuition gives rise to Likelihood-Ratios, which can be used to build hypothesis tests for general models and hypotheses.
+    \item We'll see that in many situtations, these tests are optimal within the class of tests that are $\alpha$-level, and unbiased.
+  \end{itemize}
+
+  \framebreak
+
+
+\end{frame}
 
 \section{Evaluating tests}
 
