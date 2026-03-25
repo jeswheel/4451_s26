@@ -58,16 +58,8 @@ Hypothesis Testing}
 
 \begin{frame}[allowframebreaks]{Rough plan}
   \begin{itemize}
-    \item Introduction. Comment / reference to Bayesian hypothesis testing (CB 8.2.2)
-    \item Definition (Casella + Berger 8.1.1, 8.1.2, 8.1.3). Follow with silly example, random tests.
-    \item Introduce likelihood ratios (CB 8.2.1)
-    \item Error types and the power function (CB 8.3.1)
-    \item Neyman-Pearson Paradigm (i.e., fix level $\alpha$ before test, Rice 9.2) + Neyman-Pearson Lemma (CB Theorem 8.3.12)
-    \item Relation of NP to Sufficient Statistics (CB Corollary 8.3.13)
-    \item Karlin-Rubin Theorem (composite hypotheses, CB 8.3.17)
-    \item P-values (CB 8.3.26)
     \item Confidence Intervals (Rice 9.3)
-    \item Profile likelihoods + Wilk's Theorem (Pawitan 3.4)
+    \item Profile likelihoods (Pawitan 3.4)
   \end{itemize}
 \end{frame}
 
@@ -428,16 +420,305 @@ lines(
 
   \framebreak
 
+  \begin{block}{Likelihood Ratio Tests}
+    Let $L(\theta)$ denote the likelihood function for a fixed dataset and model. If $\Theta_0$ denotes the set of $\theta$ values in $H_0$, and $\Theta$ the entire parameter space, then we define 
+    $$
+    \lambda(x) = \frac{\sup_{\Theta_0} L(\theta)}{\sup_{\Theta} L(\theta)}.
+    $$
+    A \alert{likelihood ratio test} is any test that has a rejection region of the form:
+    $$\{x: \lambda(x) \leq c\},$$
+    where $c$ is any number $0 \leq c \leq 1$.
+  \end{block}
+  
+  \begin{itemize}
+    \item Idea: If the maximum likelihood corresponding to the null hypothesis is small relative to possible values in the alternative, then we reject $H_0$.
+    \item It is equivalent to $\lambda^*(x) =  \frac{\sup_{\Theta_0} L(\theta)}{\sup_{\Theta_1} L(\theta)}$, but the former is preferred for practical reasons.
+    \item If the null hypothesis is simple (i.e., $H_0: \theta = d$ for some $d$), then the LRT is the likelihood of $H_0$ divided by the likelihood of the MLE.
+  \end{itemize}
+  
+  \framebreak
+  
+  \begin{exampleblock}{Likelihood Ratio Test: Normal distribution}
+    Let $X_i$ be iid $N(\theta, 1)$ random variables. Consider testing $H_0: \theta = \theta_0$, against $H_1: \theta \neq \theta_0$, where $\theta_0$ is some fixed number. Derive the likelihood ratio test for this hypothesis testing scenario.
+    
+    \mode<article>{
+      Here, $\Theta_0 = \{\theta_0\}$ is only one value, so in the numerator of the likelihood ratio, we have $L(\theta_0)$.
+      We have previously derived that the MLE for this Normal model is $\hat{\theta} = \bar{x}_n$. Thus, the likelihood ratio is:
+      $$
+      \lambda(x) = \frac{L(\theta_0)}{L(\bar{x}_n}.
+      $$
+      Any likelihood ratio test is designed so that we will reject when this ratio is smaller than some constant $c$ (to be decided later).
+      % For this reason, we will substitute in the value $\lambda(x)$, for convenience. 
+      Now, we will plug in the known expression for the likelihood function:
+      \begin{align*}
+      \lambda(x) &= \frac{(2\pi)^{-n/2}\exp\Big(-\sum_{i = 1}^n (x_i - \theta_0)^2/2\Big)}{(2\pi)^{-n/2}\exp\Big(-\sum_{i = 1}^n (x_i - \bar{x}_n)^2/2\Big)} \\
+      &= \exp\Big[-\frac{1}{2}\Big(\sum_{i = 1}^n (x_i - \theta_0)^2 + \sum_{i=1}^n(x_i - \bar{x}_n)^2\Big)\Big] \\
+      &= \exp\big[-n(\bar{x}_n - \theta_0)^2/2\big],
+      \end{align*}
+      where the last expression is a result of the standard procedure of expanding the quadratic and combining like-terms.
+      
+      Thus, the likelihood ratio for fixed $x$ is:
+      $$
+      \lambda(x) = \exp\big[-n(\bar{x}_n - \theta_0)^2/2\big],
+      $$
+      and we will reject whenever we see $\lambda(x)$ that is smaller than some constant $c$, or we will reject whenever
+      $$
+      \exp\big[-n(\bar{x}_n - \theta_0)^2/2\big] < c.
+      $$
+      
+      Often, we will want to simplify this expression in terms of a sufficient statistic, which can typically be done using logarithms.
+      Here, we know that $\bar{x}_n$ is sufficient for $\theta$. Thus, taking logs:
+      $$
+      -\frac{n}{2}(\bar{x}_n - \theta_0)^2 < \log c,
+      $$
+      which implies that we will reject whenever
+      $$
+      (\bar{x}_n - \theta_0)^2 > -2(\log c) / n.
+      $$
+      
+      Finally, we note that the value of $c$ has not yet been determined. We will reject when c is small, but how small specifically hasn't been selected. We can aid this choice by considering the transformation $c' = -2 \log c / n$.
+      In particular, rejecting when $\lambda(x) < c$ is equivalent to rejecting when we see large differences between the mean and $\theta_0$:
+      $$
+      (\bar{x}_n - \theta_0)^2 > c',
+      $$
+      or by taking square roots, we reject when:
+      $$
+      |\bar{x}_n - \theta_0| > c'',
+      $$
+      for a new constant $c''$.
+      
+      To calibrate this test (picking the value of $c''$), we can try to find the rejection region that makes this a $\alpha = 0.05$ level test (or other choice of $\alpha$).
+      
+      In particular, we are rejecting the test if we see large values of $|\bar{x}_n - \theta_0|$.
+      However, since $X_i$ are $N(\theta, 1)$, then $\bar{X}_n$ are $N(\theta, 1/n)$.
+      Thus, if we want Type~I error rate less than $\alpha = 0.05$, we will assume the null $H_0: \theta = \theta_0$ is true, and then:
+      $$
+      \bar{X}_n - \theta_0 \sim N(0, 1/n),
+      $$
+      and we need to solve for $c''$ in the following equation:
+      \begin{align*}
+      \alpha &= P\big(|\bar{X}_n - \theta_0| > c''\big) \\
+      &= 2P\big(\bar{X}_n - \theta_0 < -c''\big) \\
+      &= 2P\Big(\frac{\bar{X}_n - \theta_0}{1/\sqrt{n}} < -\sqrt{n}c''\Big) \\
+      &= 2P\big(Z < -\sqrt{n}c''\big),
+      \end{align*}
+      where $Z \sim N(0, 1)$.
+      Thus,
+      $$
+      \alpha = 2\Phi(-\sqrt{n}c'') \implies \Phi^{-1}(\alpha / 2) = -\sqrt{n}c'' \implies c'' = -\Phi^{-1}(\alpha / 2) / \sqrt{n}.
+      $$
+      
+      It may not look like it yet, but this gives us the standard $Z$ test. Remember, we are comparing:
+      \begin{align*}
+        |\bar{X}_n - \theta_0| &> c'' \\
+        &= -\Phi^{-1}(\alpha / 2) / \sqrt{n},
+      \end{align*}
+      so if we multiply by $1/\sigma = \sqrt{n}$ (here, $\sigma$ is just used to remind us that the standard deviation of $\bar{X}_n$ is $1/\sqrt{n}$), then we reject if:
+      $$
+      \frac{|\bar{X}_n - \theta_0|}{1/\sqrt{n}} < -\Phi^{-1}(\alpha / 2).
+      $$
+      If we pick $\alpha = 0.05$, then $-\Phi^{-1}(\alpha / 2) = 1.96$, and the rejection region is:
+      $$
+      R = \Big\{x: \frac{\bar{X}_n - \theta_0}{1/\sqrt{n}} > 1.96\Big\} \, \bigcup \, \Big\{x: \frac{\bar{X}_n - \theta_0}{1/\sqrt{n}} < -1.96\Big\},
+      $$
+      which is the standard rejection region for a $Z$-test (normal data, known variance). 
+    }
+    
+  \end{exampleblock}
+
+\framebreak
+  
+  \begin{itemize}
+    \item Recall that the likelihood function $L(\theta)$ can equivalently be expressed in terms of sufficient statistics.
+    \item Similarly, the likelihood ratio $\lambda(x)$ can be expressed in terms of sufficient statistics, rather than the entire data.
+    \item When possible, it is convenient to consider the likelihood ratio test in terms of minimal sufficient statistics.
+    \item See Theorem~8.2.4 of \citet{casella24} for formal details.
+  \end{itemize}
 
 \end{frame}
+  
 
-\section{Evaluating tests}
+\begin{frame}[allowframebreaks]{Likelihood ratio tests in practice}
+
+\begin{itemize}
+  \item The LRT is a very common approach to finding a hypothesis test.
+  \item Often, it will result in \alert{exact tests}, where we pick a rejection region based on the known properties of a sufficient statistic (like the sample mean or variance).
+  \item As previously noted, the likelihood ratio test results in an optimal test in many situations. We will study the theory of when this happens in practice.
+  \item Finally, we will discuss theory that enables likelihood ratio tests in practice, even when the exact distribution of a sufficient statistic is not available.
+\end{itemize}
+
+\framebreak
+
+\begin{block}{Definition: Uniformly Most Powerful Test}
+  Let $\beta(\theta)$ be the power function of a hypothesis test testing $H_0: \theta \in \Theta_0$.
+  We consider the class $\mathcal{C}$ of all level-$\alpha$ tests.
+  A test is said to be a uniformly most powerful (UMP) level $\alpha$ test if:
+    \begin{itemize}
+      \item The test size (Type-I error rate) is less than or equal to $\alpha$.
+      \item $\beta(\theta) \geq \beta'(\theta)$ for all $\theta \in \Theta_0^c$ for any other test in class $\mathcal{C}$ that has power function $\beta'(\theta)$.
+    \end{itemize}
+    Typically, we assume the class of interest $\mathcal{C}$ is the class of unbiased tests.
+\end{block}
+
+\framebreak
+
+\begin{block}{Definition: Simple vs Composite Hypotheses}
+  We say that a hypothesis is \alert{simple} if the corresponding sample space is a single value. E.g., $\Theta_0 = \{\theta_0\}$.
+  
+  If a sample space is not simple (i.e., it contains more than one parameter), we say that the hypothesis is \alert{composite}. E.g., $\Theta_0^C = \R/\{\theta_0\}.$
+\end{block}
+
+\framebreak
+
+\begin{block}{Neyman-Pearson Lemma}
+  Consider testing two simple hypotheses: $H_0: \theta = \theta_0$ against $H_1: \theta = \theta_1$.
+  
+  Then, a hypothesis test is uniformly most powerful (unbiased) level-$\alpha$ test if and only if it is a likelihood ratio test.
+\end{block}
+
+\begin{itemize}
+  \item A formal proof is outside the scope of this class, but see the Neyman-Pearson Lemma proof sketch in Section~9.2 of \citet{rice07} for more details.
+\end{itemize}
+
+\framebreak
+
+\begin{block}{Definition: Monotone Likelihood Ratios}
+  A family of distributions with pdf (or pmf) given by $f(x;\theta)$ is said to have a monotone likelihood ratio (MLR) if, for every $\theta_2 > \theta_1$, $f(x; \theta_2) / f(x; \theta_1)$ is a monotone (non-decreasing or non-increasing) function of $T(x)$, a univariate statistic (usually $T(x)$ is a sufficient statistic).
+\end{block}
+
+\begin{exampleblock}{Example: Poisson distributions}
+  Let $X_1, \ldots, X_n$ be iid from Poisson$(\lambda)$. Show that this family of distributions has a monotone likelihood ratio.
+  
+  \mode<article>{
+    \begin{proof}
+      The joint probability mass function for the sample is:
+$$f(\mathbf{x} \mid \lambda) = \prod_{i=1}^n \frac{e^{-\lambda} \lambda^{x_i}}{x_i!} = \frac{e^{-n\lambda} \lambda^{\sum_{i=1}^n x_i}}{\prod_{i=1}^n x_i!}$$
+Using the factorization theorem, we see that $T = \sum_i X_i$ is a univariate sufficient statistic for $\lambda$.
+
+Now suppose that $\lambda_2 > \lambda_1 > 0$. We evaluate the likelihood ratio:
+$$\frac{f(\mathbf{x} \mid \lambda_2)}{f(\mathbf{x} \mid \lambda_1)} = \frac{e^{-n\lambda_2} \lambda_2^{\sum_{i=1}^n x_i} / \prod_{i=1}^n x_i!}{e^{-n\lambda_1} \lambda_1^{\sum_{i=1}^n x_i} / \prod_{i=1}^n x_i!}$$
+
+Simplifying this ratio, we obtain:
+$$\frac{f(\mathbf{x} \mid \lambda_2)}{f(\mathbf{x} \mid \lambda_1)} = e^{-n(\lambda_2 - \lambda_1)} \left( \frac{\lambda_2}{\lambda_1} \right)^{\sum_{i=1}^n x_i}$$
+
+Because $\lambda_2 > \lambda_1$, the base of the exponent $\frac{\lambda_2}{\lambda_1}$ is strictly greater than $1$. Therefore, the likelihood ratio is a strictly increasing function of the sufficient statistic $T(\mathbf{x}) = \sum_{i=1}^n x_i$.
+
+Thus, the Poisson family of distributions possesses a monotone likelihood ratio in $T(\mathbf{X}) = \sum_{i=1}^n X_i$.
+    \end{proof}
+  }
+  
+\end{exampleblock}
+
+\framebreak
+
+\begin{itemize}
+  \item The MLR property is both convenient, and common.
+  \item In fact, you can show that any (regular) exponential family distribution has the MLR property. This includes the following distributions:
+  \begin{itemize}
+  \mode<presentation>{
+    \item Normal, Gamma, Beta, Bernoulli, Poison, Exponential, Chi-squared, Dirichlet, Categorical, Wishart, Inverse Wishart, Geometric
+  }
+  \mode<article>{
+    \item Normal
+    \item gamma
+    \item beta
+    \item Bernoulli
+    \item Poisson
+    \item exponential
+    \item chi-squared
+    \item Dirichlet
+    \item categorical
+    \item Wishart
+    \item Geometric
+    \item inverse Wishart
+  }
+  \end{itemize}
+  \item This list is not all distributions with the MLR property, but going forward you may assume any of these distributions do have this property.
+  \item The MLR property will be used to extend the Neyman-Pearson Lemma to composite hypotheses.
+\end{itemize}
+
+\framebreak
+
+\begin{block}{The Karlin-Rubin Theorem}
+  Consider testing composite hypothesis $H_0: \theta \leq \theta_0$ against $H_1: \theta > \theta_0$ (or, equivalently, we can change the direction of the inequalities, or test the simple hypothesis $H_0: \theta = \theta_0$ against the composite $H_1: \theta > \theta_0$).
+  If there exists a sufficient statistic $T$ for $\theta$ and the family of pdfs (or pmfs) has a the MLR property, then an unbiased hypothesis test is uniformly most powerful level-$\alpha$ test if and only if it is a likelihood ratio test.
+\end{block}
+
+\begin{itemize}
+  \item If $T(X)$ is the sufficient statistic with MLR property, it can be shown that the Karlin-Rubin Theorem implies that the best possible level-$\alpha$ test is rejecting if and only if $T > c$, with $c$ chosen such that $P(T > c) = \alpha$.
+  \item See Theorem~8.3.17 of \citet{casella24} for more details.
+  \item This result gives strong support for using a likelihood-ratio test.
+  Common difficulties include:
+  \begin{itemize}
+    \item Showing that $f(x; \theta)$ has a MLR.
+    \item If it does, calibrating $c$ such that $P(T > c) = \alpha$. To do this, we either need to know the distribution of $T$, or approximate it. The later can be done by simulation, or Wilks' Theorem
+  \end{itemize}
+\end{itemize}
+
+\framebreak
+
+\begin{block}{Wilks' Theorem}
+  Consider performing the likelihood ratio test for testing $H_0: \theta = \theta_0$ against $H_1: \theta \neq \theta_0$. Under $H_0$ and mild conditions on the likelihood function (See Miscellanea~10.6.2 from \citet{casella24}),
+  $$
+  -2\log \lambda(x) = -2 \log \frac{L(\theta_0)}{L(\hat{\theta})} \dlim \chi^2_{p},
+  $$
+  as $n\rightarrow \infty$, where $p$ is the difference in the number of free-parameters in the null and alternative hypotheses.
+  
+  \mode<article>{
+  \begin{proof}
+    Here is just a proof sketch; the formal proof follows closely that of the derivation of the CLT, and the consistency of the MLE. In fact, the miscellanea conditions alluded to are the same as those used for the consistency of the MLE, namely: data are iid; the parameter is identifiable (i.e., $f(x;\theta_1) = f(x; \theta_2)$ implies that $\theta_1 = \theta_2$); the log-likelihood is three times differentiable (and bounded); the MLE is an interior point of $\Theta$; and we can exchange the integral and derivative of the density function.
+    These are a lot of conditions that need to be checked, but they are quite weak; nearly all density functions we have discussed and are familiar with satisfy these conditions, and in general it's harder to find density functions that don't satisfy these conditions.
+    
+    Like many theorems in statistics, this is a Taylor-Series expansion of the log-likelihood. In the univariate case:
+    \begin{align*}
+      \ell(\theta) = \ell(\hat{\theta}) + \ell'(\hat{\theta})(\theta - \hat{\theta}) + \ell''(\hat{\theta})\frac{(\theta - \hat{\theta})^2}{2!} + \ldots
+    \end{align*}
+    
+    Now we relate this to $-2\log \lambda(x) = -2\ell (\theta_0) + 2\ell(\hat{\theta})$, by substituting in this expression for $\ell(\theta_0)$:
+    $$
+    -2\log \lambda(x) \approx \frac{(\theta - \hat{\theta})^2}{-\ell''(\hat{\theta})},
+    $$
+    where we used the fact that $\ell'(\hat{\theta}) = 0$.
+    
+    The denominator is how we defined the obversed Fisher's Information, namely:
+    $$
+    -\ell''(\hat{\theta}) = I_n(\hat{\theta}),
+    $$
+    which converges to the expected information $\mathcal{I}(\theta_0)$, where $\theta_0$ is the true generating parameter, which we assumed as part of the null distribution.
+    Thus, applying Slutksy's Theorem, we see that the quantity $(\theta - \hat{\theta})^2 / -\ell''(\hat{\theta})$ converges to a $\chi^2_1$ distribution (i.e., after rearranging the numerator and denominator, we can use the consistency theorem of the MLE to express $-2\log \lambda(x)$ as the square of something that converges to a standard normal, which is how we defined a $\chi^2_1$ random variable last semester.)
+  \end{proof}
+  }
+  
+\end{block}
+
+\framebreak
+
+\begin{itemize}
+  \item Wilks' Theorem gives us a way to calibrate an approximate LRT. Suppose we are testing one-parameter, and want $\alpha = 0.05$. Then, we want to solve for $c$ in the LRT:
+  \begin{align*}
+    P(\lambda(x) < c) &= 0.05 \\
+    P(\log \lambda(x) < c') &= 0.05 \\
+    P(-2\log \lambda(x) > c'') &= 0.05
+  \end{align*}
+  Using the approximation now that $-2 \log \lambda(x) \approx \chi^2_1$, we can find $c''$ using software $c'' = \Sexpr{qchisq(0.95, df = 1) |> round(2)}$.
+  \item Thus, an approximate test rejects when:
+  $$
+  -2\log \lambda(x) > \Sexpr{qchisq(0.95, df = 1) |> round(2)}.
+  $$
+  
+  \framebreak
+  
+  \item How good is this approximation? \alert{very good.}
+  \item Not only do we have asymptotic properties, \citet[][Section~2.9]{pawitan01} demonstrates that, due to the invariance property of the MLE and likelihood ratios, the test is \alert{exact} if there exists some one-to-one transformation $g(\cdot)$ \emph{that we do not need to know} such that $g(X_i)$ are normally distributed.
+  \item Combining these results, even if no such transformation $g$ exists, there likely exists a transformation $g$ where $g(X_i)$ are approximately normal, or at least symmetric, in which case the asymptotic approximation is accurate with even very small $n$.
+  
+\end{itemize}
+
+\end{frame}
 
 \section{Confidence Intervals}
 
 \subsection{Exact Confidence Intervals}
-
-\subsection{Wilk's Theorem}
 
 \subsection{Profile Likelihoods}
 
