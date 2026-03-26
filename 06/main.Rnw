@@ -718,13 +718,226 @@ Thus, the Poisson family of distributions possesses a monotone likelihood ratio 
 
 \section{Confidence Intervals}
 
-\subsection{Exact Confidence Intervals}
+\begin{frame}[allowframebreaks]{Interval Estimation}
+  \begin{itemize}
+    \item We conclude by discussing \alert{interval estimators}.
+    \item Rather than just getting a point estimate $\hat{\theta}$ for a parameter $\theta$, we estimate an entire interval $I$.
+  \end{itemize}
+  
+  \begin{block}{Definition: Interval estimate}
+    An \emph{interval estimate} of a real-valued parameter $\theta$ is any pair of functions $L(X)$ and $U(X)$ of a sample $X = (X_1, \ldots, X_n)$ that satisfy $L(X) \leq U(X)$ for all $X$.
+    
+    If $X = x^*$ is observed, then the inference $L(x^*) \leq \theta \leq U(x^*)$ is made.
+    
+    The random interval $I(X) = \big(L(X), U(X)\big)$ is called an \alert{interval estimator}.
+  \end{block}
+ 
+ \framebreak
+ 
+ \begin{itemize}
+  \item There are many different types of interval estimators, both Bayesian and Frequentist.
+  \item Here, we will focus on the Frequentist \alert{confidence interval}, as these are the most widely used.
+ \end{itemize}
+  
+  \begin{block}{Definition: Coverage probability}
+    For an interval estimator $I(X) = \Big(L(X), U(X)\Big)$ of a parameter $\theta$, the \alert{coverage probability} of $I(X)$ is the probability that the random interval covers the true parameter, $\theta$. That is,
+    $$
+    P_\theta\big(\theta \in I(X)\big).
+    $$
+    Above, the interval $I(X)$ is what is random, and $\theta$ is fixed. 
+    \mode<article>{Note the coverage probability is a function of $\theta$.}
+  \end{block}
+  
+  \framebreak
+  
+  \begin{itemize}
+    \item For any interval estimator, we're interested in the \emph{worst} performance, or the minimum coverage probability.
+  \end{itemize}
+  
+  \begin{block}{Definition: Confidence coefficient.}
+    For an interval estimator $I(X)$ of a parameter $\theta$, the \alert{confidence coefficient} of $I(X)$ is the infimum of the coverage probabilities:
+    $$
+    \inf_\theta P_{\theta}\big(\theta \in I(X)\big).
+    $$
+  \end{block}
+  
+  \begin{itemize}
+    \item Sometimes we are interested in \emph{confidence sets}, rather than just intervals, though intervals are the most common.
+    \item A given interval estimator $I(X)$, combined with a confidence coefficient, gives rise to a \alert{confidence interval}.
+    \mode<article>{
+      That is, an interval estimator $I(X)$ with confidence coefficient $1-\alpha$ is called a $1-\alpha$ confidence interval.
+    }
+  \end{itemize}
+  
+  \framebreak
+  
+  \begin{exampleblock}{Uniform confidence interval}
+    Let $X_1, \ldots, X_n$ be iid from Uniform$(0, \theta)$. Based on previous homework, the MLE for $\theta$ is $X_{(n)}$, the maximum of the observations.
+    
+    Find a $1 - \alpha$ confidence set for $\theta$, of the form: $I(X) = [aX_{(n)}, bX_{(n)}]$, with $1 \leq a < b$.
+    
+    \mode<article>{
+      % First, we will simplify by performing a transformation. Let $Y_i = X_{i} / \theta$, for all $i$. Then, $Y_{(n)} = X_{(n)} / \theta$.
+      First, not that we have the lower bound on $a > 1$, since $X_{(n)} \leq \theta$.
+      Now we will derive probabilities:
+      % First, we will derive the probability that $\theta \in I(X)$, for arbitrary $a$, $b$ and $\theta$. 
+      \begin{align*}
+        P_\theta\big(\theta \in [aX_{(n)}, bX_{(n)}]\big) &= P_\theta\big(aX_{(n)} \leq \theta \leq bX_{(n)}\big) \\ 
+        &= P_{\theta}\Big(\frac{1}{b} \leq \frac{X_{(n)}}{\theta} \leq \frac{1}{a}\Big).
+      \end{align*}
+      Now if $X_i$ are iid $N(0, \theta)$, then last semester we found the cdf of $X_{(n)}$ to be: $f_Y(t) = ny^{n-1}/\theta^n$, so the pdf of $Y = X_{(n)} / \theta$ can be shown to be:
+      $$
+      f_Y(t) = ny^{n-1}, \quad 0 \leq y \leq 1.
+      $$
+      Therefore:
+      $$
+      P_{\theta}\Big(\frac{1}{b} \leq \frac{X_{(n)}}{\theta} \leq \frac{1}{a}\Big) = \int_{1/b}^{1/a} ny^{n-1}\, dy = \Big(\frac{1}{a}\Big)^n - \Big(\frac{1}{b}\Big)^n.
+      $$
+      Importantly, this function is a constant. That is, the value of $\theta$ does not matter.
+      As a result, any choice of $1 \leq a < b$ that satisfy:
+      $$
+      1 - \alpha = \Big(\frac{1}{a}\Big)^n - \Big(\frac{1}{b}\Big)^n
+      $$
+      gives us a $1-\alpha$ confidence set.
+      In this case, we will treat $n$ as some fixed number (i.e., the number of observations for a particular dataset).
+      
+      Though there are an infinite number of choices that satisfy this condition, the possible set of values for $a$ is bounded above. We can see this by noting that the coverage probability $\Big(\frac{1}{a}\Big)^n - \Big(\frac{1}{b}\Big)^n$ is a decreasing function of both $a$ and $b$, and $a < b$. If $a\rightarrow \infty$, then because $b > a$, we can see that the confidence coefficient shrinks to zero, and therefore $a$ must be bounded above.
+      Similar logic can be used to find the maximum possible value for $a$ by taking the limit as $b\rightarrow \infty$, then
+      $$
+      1 - \alpha = \Big(\frac{1}{a}\Big)^n \implies a = (1 - \alpha)^{-n}
+      $$
+      With this selection, the interval estimator is:
+      $$
+      I_{b = \infty}(X) = \big[(1 - \alpha)^{-1/n}, \infty\big).
+      $$
+      
+      While valid, one concern about this interval is that it is very large. In particular, we have $1-\alpha$ coverage, but we our interval estimator is unbounded! Even for small $n$, say $n=10$, our lower bound using this interval estimator is $aX_{(n)} = 1.005X_{(n)}$ for $\alpha = 0.05$.
+      In other words, in order for the estimator to have $95\%$ coverage, we need our interval to get very close to including $X_{(n)}$.
+      
+      We might instead want to consider an interval with the smallest possible width, while still maintaining the confidence coefficient $1-\alpha$.
+      The interval length is $g(X_{(n)}; a, b) = (b - a)X_{(n)}$. Thus, we want to minimize $b - a$, under the constraint that $1 - \alpha = \Big(\frac{1}{a}\Big)^n - \Big(\frac{1}{b}\Big)^n$. Using this constraint, we can either solve for $a$ or $b$ in terms of the other variable, and minimize the interval length $g$ using this new expression.
+      After doing so, we find that the minimum length occurs when $a = 1$, in which case we can solve:
+      $$
+      1 - \alpha = 1 - (b)^{-n} \implies b = \alpha^{-1/n}.
+      $$
+      Thus, the minimum length $1-\alpha$ confidence interval of the form $[aX_{(n)}, bX_{(n)}]$ is:
+      $$
+      [X_{(n)}, \alpha^{-1/n}X_{(n)}].
+      $$
+      
+      % TODO: Homework problem. What about an interval of the same type, but instead of minimum distance, we want to split the tail probabilities? Right now, all error is going on the high-side, since our lower bound is $X_{(n)}$. However, we're reasonably confidence that we didn't observe the maximum value (the probability of this is zero), so instead, why don't we split the probabilities between upper and lower errors? i.e., $P(\theta < aX_{(n)}) = \alpha / 2$, and $P(\theta > bX_{(n)}) = \alpha/2$.
+      % TODO: Homework problem. What about interval of type [Y + c, Y + d], or even setting c to be zero? See 7.3.13 CB.
+    }
+    
+  \end{exampleblock}
+  
+\end{frame}
 
-\subsection{Profile Likelihoods}
+\begin{frame}[allowframebreaks]{Finding Confidence Intervals}
+  \begin{itemize}
+    \item We'll next cover a few ways that confidence intervals can be created.
+    \item If the exact sampling distribution of a point estimator is known, we can often derive \alert{exact} confidence intervals.
+    \item In practice, however, this often is not possible.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]{Duality of confidence intervals and hypothesis tests}
+  \begin{itemize}
+    \item The most common way to find confidence intervals is to connect them with a hypothesis test.
+    \item That is, we can find a $\alpha$-level hypothesis test, and \emph{invert} the test to get a confidence interval.
+  \end{itemize}
+  
+  \begin{exampleblock}{Inverting a normal test}
+    Let $X_1, \ldots, X_n$ be iid from $N(\mu, \sigma^2)$.
+    Treating $\sigma^2$ as fixed, find a $1-\alpha$ confidence set for $\mu$ by inverting a hypothesis test.
+    
+    \mode<article>{
+      Our Normal$(\mu, 1)$ example from the hypothesis testing section can readily be adapted to show that, for fixed $\sigma^2$, the UMP level $\alpha$ unbiased test for $H_0: \mu = \mu_0$ against $H_1: \mu \neq \mu_0$ is found by creating the rejection region:
+      $$
+      R = \big\{x: |\bar{x}_n - \mu_0| > z_{\alpha/2}\sigma / \sqrt{n}\big\}.
+      $$
+      (For clarity, when we derived this test, we had $\sigma = 1$, and we standardized the mean by considering the region as:
+      $$
+      \frac{|\bar{x}_n - \mu_0|}{\sigma / \sqrt{n}} > z_{\alpha/2},
+      $$
+      where $z_{\alpha/2}$ is the $\alpha-2$ quantile of the standard normal, such that if $Z\sim N(0, 1)$, then $P(Z \leq \alpha / 2) = 1 - \alpha/2$).
+      
+      To find a $1-\alpha$ confidence set, we will invert this hypothesis test. That is, we will find the acceptance region $A = R^C$, and solve for $\mu_0$.
+      In particular, if we reject for large differences, we accept for ``small" differences:
+      \begin{align*}
+      A &= \big\{x: |\bar{x}_n - \mu_0| \leq z_{\alpha/2}\sigma/\sqrt{n}\big\} \\
+        &= \big\{x: \bar{x}_n - z_{\alpha/2}\sigma/\sqrt{n} \leq \mu_0 \leq \bar{x}_n + z_{\alpha/2}\sigma/\sqrt{n} \big\}.
+      \end{align*}
+      By design, if $\mu = \mu_0$, the probability that $x$ falls into the acceptance region is $1-\alpha$. Thus, this simple inversion of the hypothesis gives:
+      $$
+      P_\mu\Big( \bar{x}_n - z_{\alpha/2}\frac{\sigma}{\sqrt{n}} \leq \mu \leq \bar{x}_n + z_{\alpha/2}\frac{\sigma}{\sqrt{n}}\Big) = 1-\alpha.
+      $$
+      Thus, we have the $1-\alpha$ confidence interval found on the left and right side of the inequalities:
+      $$
+      I(X) = \Big(\bar{x}_n - z_{\alpha/2}\frac{\sigma}{\sqrt{n}}, \bar{x}_n + z_{\alpha/2}\frac{\sigma}{\sqrt{n}}\Big).
+      $$
+    }
+    
+  \end{exampleblock}
+  
+  \framebreak
+  
+  \begin{itemize}
+    \item This example can be extended to a more general setting. Proof is left as an exercise.
+  \end{itemize}
+  
+  \begin{block}{Theorem: Duality of hypothesis tests and confidence intervals}
+    Consider the hypothesis test of $H_0: \theta = \theta_0$. This involves the specification of a rejection region $R_{\theta_0}(x)$, which depends on the null value $\theta_0$. Similarly, we define the acceptance region as $A_{\theta_0}(x) = R_{\theta_0}^c(x)$.
+    
+    The set of all parameter values $\theta$ such that a fixed $x$ lies in the acceptance region $A_{\theta_0}(x)$ is denoted $C(x) = \{\theta_0: x \in A_{\theta_0}(x)\}$.
+    
+    $C(x)$ is a $1-\alpha$ confidence set for $\theta$ if and only if $A_{\theta_0}(x)$ is the acceptance region of a $\alpha$-level hypothesis test.
+  \end{block}
+  
+  \framebreak
+  
+  \begin{itemize}
+    \item The last theorem gives us a way to systematically build confidence intervals: create a hypothesis test, and find the values of $\theta$ where the null hypothesis would be accepted.
+    \item Theorem 9.3.5 of \citet{casella24} implies that if a UMP level-$\alpha$ test is inverted, the resulting confidence set will have uniformly better coverage than any other $1-\alpha$ confidence set.
+    \item This gives strong motivation to invert likelihood ratio tests to obtain confidence sets.
+    
+    \framebreak
+
+  \item Like hypothesis testing, we also can consider two primary types of confidence intervals:
+  \begin{itemize}
+    \item \emph{Exact} confidence intervals, which require knowing the distribution of the lower and upper bound of $I(X)$. Where possible, these are preferred.
+    \item \emph{Approximate} confidence intervals, which can be found using various strategies \mode<article>{(discussed on the next slide)}.
+  \end{itemize}
+  
+  \framebreak
+  
+  \begin{itemize}
+    \item There are several ways to get approximate confidence intervals. Here are perhaps the three most common:
+    \begin{itemize}
+      \item \alert{Wald-Intervals}. This is likely what you have seen in Math 3350, and was hinted at in Chapter~05. Since $\sqrt{\mathcal{I}_n(\theta_0)}(\hat{\theta} - \theta_0)$ limits to a standard normal, an approximate $1-\alpha$ confidence interval is given by:
+      $$
+      I(X) = \Big(\hat{\theta} - z_{\alpha/2}I_{n}^{-1/2}(\hat{\theta}), \hat{\theta} + z_{\alpha/2}I_{n}^{-1/2}(\hat{\theta})\Big)
+      $$
+      \item \alert{Likelihood based sets}. This involves inverting a likelihood ratio test, and using the approximation $-2\lambda(x) \approx \chi^2_1$, assuming we are estimating only one parameter. In this case, the approximate confidence set is given by:\
+      $$
+      C(X) = \Big\{\theta: 2 \log \frac{L(\hat{\theta})}{L(\theta)} < \chi^2_{df=1, 1-\alpha}\Big\}.
+      $$
+      \item \alert{Bootstrap based intervals}. Both parametric and non-parametric bootstrapping methods.
+    \end{itemize}
+  \end{itemize}
+  
+  
+  \end{itemize}
+    
+  
+\end{frame}
 
 \subsection{Bootstraping}
 
-\section{Bias reduction methods}
+\subsection{Profile Likelihoods}
+
+
+% \section{Bias reduction methods}
 
 
 \newcommand\acknowledgments{
