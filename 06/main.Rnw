@@ -906,7 +906,7 @@ Thus, the Poisson family of distributions possesses a monotone likelihood ratio 
   \item Like hypothesis testing, we also can consider two primary types of confidence intervals:
   \begin{itemize}
     \item \emph{Exact} confidence intervals, which require knowing the distribution of the lower and upper bound of $I(X)$. Where possible, these are preferred.
-    \item \emph{Approximate} confidence intervals, which can be found using various strategies \mode<article>{(discussed on the next slide)}.
+    \item \emph{Approximate} confidence intervals, which can be found using various strategies \mode<article>{(discussed on the next slide).}
   \end{itemize}
   
   \framebreak
@@ -926,13 +926,200 @@ Thus, the Poisson family of distributions possesses a monotone likelihood ratio 
     \end{itemize}
   \end{itemize}
   
-  
   \end{itemize}
     
   
 \end{frame}
 
 \subsection{Bootstraping}
+
+\begin{frame}[allowframebreaks]{Introduction}
+  \begin{itemize}
+    \item The \alert{Boostrapping} technique was first formally described by Brad Efron in the late 1970s.
+    \item The idea is quite simple, but theoretical guarantees are very technical.
+    \item Idea: When the distribution of a sample statistic (or estimator) is unkown or complex, we will approximate the distribution using randomly drawn samples.
+    \item Perhaps surprisingly, the bootstrap can be shown to have faster convergence rates than the standard Wald confidence intervals (normal approximation).
+    \item Two main forms: \alert{parameteric} and \alert{non-parametric}.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]{Parametric Bootstrap}
+  \begin{itemize}
+    \item The \emph{parametric bootstrap} focuses on parameters of fixed families of distributions.
+    \item Idea: The MLE converges very quickly to $\theta_0$, so even in finite samples, $\hat{\theta} \approx \theta_0$. For a fixed model $F_\theta$, we want the sampling distribution of $\hat{\theta}$ under $F_{\theta_0}$, so replace this with the sampling distribution of $F_{\hat{\theta}}$.
+    \begin{itemize}
+      \item Fit $\hat{\theta}$ using data $X_1, \ldots, X_n$, given model $F_{\theta}$.
+      \item For $b = 1, 2, \ldots, B$, generate a bootstrap sample: $X^{(b)}_1, X^{(b)}_2, \ldots, X^{(b)}_n$.
+      \item Fit $\hat{\theta}^{(b)}$ for each bootstrap sample $b$, use these estimates approximate the sampling distribution of $\hat{\theta}$.
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]{Nonparametric Bootstrap}
+  \begin{itemize}
+    \item The other form of Bootstrap has similar convergence guarantees, but works more generally in situations where we cannot simulate from the probability distribution in question.
+    \item As with all bootstrap, we will base our estimates on samples drawn from a new distribution. This time, we will draw from the empirical distribution.
+    \begin{itemize}
+      \item Fit $\hat{\theta}$ using data $X_1, \ldots, X_n$, given model $F_\theta$.
+      \item Create $b = 1, \ldots, B$ bootstrap samples by sampling iid from the empirical distribution $\hat{F}$. (This is done by sampling, with replacement, from the observed data).
+      \item Recompute estimate $\hat{\theta}^{(b)}$, for each sample $X^{(b)}_1, X^{(b)}_2, \ldots, X^{(b)}_n$, and use these values to approximate the sampling distribution.
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+  
+\begin{frame}[allowframebreaks]{Example: Poisson confidence intervals}
+  \begin{itemize}
+    \item We will wrap up this discussion by building a confidence interval for $\lambda$ using 5 different approachs:
+    \begin{enumerate}
+      \item Wald confidence intervals (easy).
+      \item Likelihood-Ratio based intervals (moderate).
+      \item Exact intervals (difficult).
+      \item Parametric Bootstrap (easy).
+      \item Non-parametric Bootstrap (easy).
+    \end{enumerate}
+  \end{itemize}
+  
+  \framebreak
+
+
+<<include=FALSE,echo=FALSE>>=
+set.seed(123456)
+X <- rpois(n = 25, lambda = 15)
+@
+
+
+  \begin{itemize}
+    \item We have $n = 25$ observations, $X_1, \ldots, X_n$.
+    \item We wish to model the data as Poisson$(\lambda)$.
+    \item A minimal sufficient statistic for $\lambda$ is $\sum_i X_i$. We will use:
+    $$
+    \sum_i X_i = \Sexpr{sum(X)}
+    $$
+    \item Real data will be given later for the non-parametric bootstrap example.
+  \end{itemize}
+
+  \mode<article>{
+
+Given the data:
+\begin{itemize}
+    \item Sample size: $n = \Sexpr{length(X)}$
+    \item Sample mean: $\hat{\lambda} = \bar{X} = \Sexpr{mean(X)}$
+    \item Sum of observations: $Y = \sum_{i=1}^n X_i = n\bar{X} = \Sexpr{sum(X)}$
+\end{itemize}
+We know that the sum of independent Poisson variables is also Poisson distributed, so $Y \sim \text{Poisson}(n\lambda)$. 
+
+\subsection*{1. Wald Confidence Interval}
+The Wald interval relies on the asymptotic normality of the Maximum Likelihood Estimator (MLE). By the Central Limit Theorem, as $n \to \infty$:
+\[
+\frac{\hat{\lambda} - \lambda}{\text{SE}(\hat{\lambda})} \xrightarrow{d} \mathcal{N}(0,1)
+\]
+The variance of $\hat{\lambda}$ is $\text{Var}(\bar{X}) = \frac{\lambda}{n}$. Substituting the MLE for $\lambda$ gives the estimated standard error: $\text{SE}(\hat{\lambda}) = \sqrt{\frac{\hat{\lambda}}{n}}$. The $(1 - \alpha)$ Wald confidence interval is:
+\[
+\hat{\lambda} \pm z_{1-\alpha/2} \sqrt{\frac{\hat{\lambda}}{n}}
+\]
+Plugging in the provided data for a 95\% confidence interval ($z_{0.975} \approx 1.96$):
+\[
+14.44 \pm 1.96 \sqrt{\frac{14.44}{25}} \implies 14.44 \pm 1.49 \implies (12.95, 15.93)
+\]
+
+TODO: Update numbers in example above (and all other examples) using the actual data.
+
+\subsection*{Exact test}
+
+TODO: Update this with work from paper. 
+
+A confidence interval can be fundamentally understood as the set of all parameter values that would not be rejected by a hypothesis test. For a two-sided test at significance level $\alpha$, we test $H_0: \lambda = \lambda_0$ against $H_A: \lambda \neq \lambda_0$. 
+
+Let $Y = \sum_{i=1}^n X_i$, where $Y \sim \text{Poisson}(n\lambda_0)$. Let $F(y; \mu)$ denote the cumulative distribution function (CDF) of a Poisson distribution with mean $\mu$.
+
+Instead of defining the rejection region by a symmetric distance (which is not ideal for the asymmetric Poisson distribution), we reject $H_0$ if the observed sum $y$ falls into either the extreme lower or upper tail of the distribution under $H_0$. We fail to reject $H_0$ if:
+\[
+P(Y \leq y \mid n\lambda_0) \geq \frac{\alpha}{2} \quad \text{and} \quad P(Y \geq y \mid n\lambda_0) \geq \frac{\alpha}{2}
+\]
+
+To find the exact confidence interval limits $[\lambda_L, \lambda_U]$, we find the values of $\lambda$ that make our observed data $y$ sit exactly on the boundary of these rejection regions.
+
+\textbf{Upper Bound ($\lambda_U$):} We find the largest possible value of $\lambda$ such that observing a sum as small as $y$ (or smaller) still has a probability of exactly $\alpha/2$. 
+\[
+P(Y \leq y \mid n\lambda_U) = \frac{\alpha}{2} \implies F(y; n\lambda_U) = \frac{\alpha}{2}
+\]
+
+\textbf{Lower Bound ($\lambda_L$):} We find the smallest possible value of $\lambda$ such that observing a sum as large as $y$ (or larger) still has a probability of exactly $\alpha/2$. 
+\[
+P(Y \geq y \mid n\lambda_L) = \frac{\alpha}{2} \implies 1 - P(Y \leq y-1 \mid n\lambda_L) = \frac{\alpha}{2}
+\]
+\[
+F(y-1; n\lambda_L) = 1 - \frac{\alpha}{2}
+\]
+
+Thus, the exact $(1-\alpha)$ confidence interval is found by taking the inverse CDF (the quantile function) to solve these equations for $\lambda_L$ and $\lambda_U$. For our data ($y=361$, $n=25$, $\alpha=0.05$), the equations are:
+\[
+F(361; 25\lambda_U) = 0.025 \quad \text{and} \quad F(360; 25\lambda_L) = 0.975
+\]
+By numerically solving these functions, we obtain the exact interval bounds.
+
+
+\textbf{Now for the likelihood-ratio based confidence intervals}
+
+Let $X_1, X_2, \dots, X_n$ be independent and identically distributed random variables such that $X_i \sim \text{Poisson}(\lambda)$. We are given the following data:
+\begin{itemize}
+    \item Sample size: $n = 25$
+    \item Sum of observations: $Y = \sum_{i=1}^n X_i = 361$
+    \item Sample mean (MLE): $\hat{\lambda} = \frac{Y}{n} = 14.44$
+\end{itemize}
+
+The joint likelihood function for $n$ i.i.d. Poisson observations is:
+\[
+L(\lambda) = \prod_{i=1}^n \frac{e^{-\lambda} \lambda^{X_i}}{X_i!} = \frac{e^{-n\lambda} \lambda^{\sum X_i}}{\prod X_i!}
+\]
+Taking the natural logarithm yields the log-likelihood function, $\ell(\lambda)$:
+\[
+\ell(\lambda) = -n\lambda + Y \log(\lambda) - \sum_{i=1}^n \log(X_i!)
+\]
+
+To maximize the log-likelihood, we take the derivative with respect to $\lambda$ and set it to zero:
+\[
+\frac{d}{d\lambda} \ell(\lambda) = -n + \frac{Y}{\lambda} = 0 \implies \hat{\lambda} = \frac{Y}{n} = \bar{X}
+\]
+For our data, the MLE is $\hat{\lambda} = 14.44$. The maximized log-likelihood is simply $\ell(\hat{\lambda})$.
+
+We wish to test $H_0: \lambda = \lambda_0$ against $H_A: \lambda \neq \lambda_0$. The likelihood ratio test statistic compares the log-likelihood evaluated at the null value $\lambda_0$ to the maximum possible log-likelihood evaluated at $\hat{\lambda}$. 
+
+The test statistic is defined as:
+\[
+\Lambda(\lambda_0) = 2 \left[ \ell(\hat{\lambda}) - \ell(\lambda_0) \right]
+\]
+Substituting our log-likelihood function into this equation (and noting that the $\sum \log(X_i!)$ terms cancel out):
+\[
+\Lambda(\lambda_0) = 2 \left[ \left( -n\hat{\lambda} + Y \log(\hat{\lambda}) \right) - \left( -n\lambda_0 + Y \log(\lambda_0) \right) \right]
+\]
+Factoring and rearranging terms gives:
+\[
+\Lambda(\lambda_0) = 2 \left[ n(\lambda_0 - \hat{\lambda}) + Y \log\left(\frac{\hat{\lambda}}{\lambda_0}\right) \right]
+\]
+
+By Wilks' Theorem, as $n \to \infty$, the distribution of the test statistic under the null hypothesis converges to a Chi-squared distribution with 1 degree of freedom:
+\[
+\Lambda(\lambda_0) \xrightarrow{d} \chi^2_1
+\]
+Using the duality of hypothesis tests and confidence intervals, the $100(1-\alpha)\%$ confidence set consists of all values of $\lambda_0$ that we fail to reject at the $\alpha$ significance level. We fail to reject if $\Lambda(\lambda_0) \le \chi^2_{1-\alpha, 1}$.
+
+Therefore, the exact confidence interval is the set of all $\lambda$ satisfying:
+\[
+2 \left[ n(\lambda - \hat{\lambda}) + Y \log\left(\frac{\hat{\lambda}}{\lambda}\right) \right] \le \chi^2_{1-\alpha, 1}
+\]
+
+For a 95\% confidence interval ($\alpha = 0.05$), the critical value is $\chi^2_{0.95, 1} \approx 3.841$. Substituting our observed data ($n = 25$, $Y = 361$, $\hat{\lambda} = 14.44$), the interval is defined by all $\lambda$ such that:
+\[
+2 \left[ 25(\lambda - 14.44) + 361 \log\left(\frac{14.44}{\lambda}\right) \right] \le 3.841
+\]
+Because $\lambda$ appears in both a linear and a logarithmic term, this inequality cannot be solved algebraically. Numerical root-finding methods yield the approximate bounds:
+\[
+(13.00, 15.98)
+\]
+  }
+  
+\end{frame}
 
 \subsection{Profile Likelihoods}
 
