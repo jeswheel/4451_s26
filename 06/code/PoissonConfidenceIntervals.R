@@ -16,7 +16,7 @@ for (b in 1:B) {
   boot_estimates[b] <- mean(boot_sample)
 }
 
-# Bootstrap estimated variance: 
+# Bootstrap estimated variance:
 var(boot_estimates)
 
 # Exact variance:
@@ -32,7 +32,7 @@ cat("Parametric Bootstrap Interval: (", round(boot_L, 2), ",", round(boot_U, 2),
 # Exact Confidence Intervals ----------------------------------------------
 
 vals_lambda <- seq(12, 19, length.out = 10000)
-n <- 25
+n <- length(X)
 
 plot(x = vals_lambda, y = ppois(sum(X), lambda = n * vals_lambda), type = 'l')
 abline(h = 0.025, lty = 'dashed', col = 'red')
@@ -41,11 +41,11 @@ abline(h = 0.975, lty = 'dashed', col = 'red')
 
 # 1. Calculate Lower Bound (lambda_L)
 lower_func <- function(lam) { ppois(sum(X), lambda = n * lam) - 0.975 }
-lambda_L <- uniroot(lower_func, interval = c(0, 50))$root
+lambda_L <- uniroot(lower_func, interval = c(min(X), mean(X)))$root
 
 # 2. Calculate Upper Bound (lambda_U)
-upper_func <- function(lam) { ppois(sum(X), lambda = n * lam) - 0.025 }
-lambda_U <- uniroot(upper_func, interval = c(0, 50))$root
+upper_func <- function(lam) { ppois(sum(X), lambda = n * lam - 1) - 0.025 }
+lambda_U <- uniroot(upper_func, interval = c(mean(X), max(X)))$root
 
 # Print the interval
 cat("Exact Interval: (", round(lambda_L, 2), ",", round(lambda_U, 2), ")\n")
@@ -68,7 +68,7 @@ for (b in 1:B) {
   np_boot_estimates[b] <- mean(np_boot_sample)
 }
 
-# Bootstrap estimated variance: 
+# Bootstrap estimated variance:
 var(np_boot_estimates)
 
 # Exact variance:
@@ -86,7 +86,7 @@ cat("Non-Parametric Bootstrap Interval: (", round(np_boot_L, 2), ",", round(np_b
 
 # Define the Likelihood Ratio equation
 lr_eq <- function(lam) {
-  2 * (n * (lam - mean(X)) + sum(X) * log(mean(X) / lam)) - qchisq(0.95, df = 1)
+  2 * (length(X) * (lam - mean(X)) + sum(X) * log(mean(X) / lam)) - qchisq(0.95, df = 1)
 }
 
 # Find the roots
@@ -105,9 +105,9 @@ df_CI <- data.frame(
 
 library(ggplot2)
 
-ggplot(df_CI, aes(y = method)) + 
-  geom_segment(aes(x = lower, xend = upper)) + 
-  theme_bw() + 
-  geom_vline(xintercept = 15) + 
-  geom_vline(xintercept = mean(X), linetype = 'dashed') + 
+ggplot(df_CI, aes(y = method)) +
+  geom_segment(aes(x = lower, xend = upper)) +
+  theme_bw() +
+  geom_vline(xintercept = 15) +
+  geom_vline(xintercept = mean(X), linetype = 'dashed') +
   scale_x_continuous(limits = c(min(X), max(X)))

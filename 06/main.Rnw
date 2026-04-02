@@ -421,7 +421,7 @@ lines(
   \framebreak
 
   \begin{block}{Likelihood Ratio Tests}
-    Let $L(\theta)$ denote the likelihood function for a fixed dataset and model. If $\Theta_0$ denotes the set of $\theta$ values in $H_0$, and $\Theta$ the entire parameter space, then we define 
+    Let $L(\theta)$ denote the likelihood function for a fixed dataset and model. If $\Theta_0$ denotes the set of $\theta$ values in $H_0$, and $\Theta$ the entire parameter space, then we define
     $$
     \lambda(x) = \frac{\sup_{\Theta_0} L(\theta)}{\sup_{\Theta} L(\theta)}.
     $$
@@ -429,18 +429,18 @@ lines(
     $$\{x: \lambda(x) \leq c\},$$
     where $c$ is any number $0 \leq c \leq 1$.
   \end{block}
-  
+
   \begin{itemize}
     \item Idea: If the maximum likelihood corresponding to the null hypothesis is small relative to possible values in the alternative, then we reject $H_0$.
     \item It is equivalent to $\lambda^*(x) =  \frac{\sup_{\Theta_0} L(\theta)}{\sup_{\Theta_1} L(\theta)}$, but the former is preferred for practical reasons.
     \item If the null hypothesis is simple (i.e., $H_0: \theta = d$ for some $d$), then the LRT is the likelihood of $H_0$ divided by the likelihood of the MLE.
   \end{itemize}
-  
+
   \framebreak
-  
+
   \begin{exampleblock}{Likelihood Ratio Test: Normal distribution}
     Let $X_i$ be iid $N(\theta, 1)$ random variables. Consider testing $H_0: \theta = \theta_0$, against $H_1: \theta \neq \theta_0$, where $\theta_0$ is some fixed number. Derive the likelihood ratio test for this hypothesis testing scenario.
-    
+
     \mode<article>{
       Here, $\Theta_0 = \{\theta_0\}$ is only one value, so in the numerator of the likelihood ratio, we have $L(\theta_0)$.
       We have previously derived that the MLE for this Normal model is $\hat{\theta} = \bar{x}_n$. Thus, the likelihood ratio is:
@@ -448,7 +448,7 @@ lines(
       \lambda(x) = \frac{L(\theta_0)}{L(\bar{x}_n}.
       $$
       Any likelihood ratio test is designed so that we will reject when this ratio is smaller than some constant $c$ (to be decided later).
-      % For this reason, we will substitute in the value $\lambda(x)$, for convenience. 
+      % For this reason, we will substitute in the value $\lambda(x)$, for convenience.
       Now, we will plug in the known expression for the likelihood function:
       \begin{align*}
       \lambda(x) &= \frac{(2\pi)^{-n/2}\exp\Big(-\sum_{i = 1}^n (x_i - \theta_0)^2/2\Big)}{(2\pi)^{-n/2}\exp\Big(-\sum_{i = 1}^n (x_i - \bar{x}_n)^2/2\Big)} \\
@@ -456,7 +456,7 @@ lines(
       &= \exp\big[-n(\bar{x}_n - \theta_0)^2/2\big],
       \end{align*}
       where the last expression is a result of the standard procedure of expanding the quadratic and combining like-terms.
-      
+
       Thus, the likelihood ratio for fixed $x$ is:
       $$
       \lambda(x) = \exp\big[-n(\bar{x}_n - \theta_0)^2/2\big],
@@ -465,7 +465,7 @@ lines(
       $$
       \exp\big[-n(\bar{x}_n - \theta_0)^2/2\big] < c.
       $$
-      
+
       Often, we will want to simplify this expression in terms of a sufficient statistic, which can typically be done using logarithms.
       Here, we know that $\bar{x}_n$ is sufficient for $\theta$. Thus, taking logs:
       $$
@@ -475,7 +475,7 @@ lines(
       $$
       (\bar{x}_n - \theta_0)^2 > -2(\log c) / n.
       $$
-      
+
       Finally, we note that the value of $c$ has not yet been determined. We will reject when c is small, but how small specifically hasn't been selected. We can aid this choice by considering the transformation $c' = -2 \log c / n$.
       In particular, rejecting when $\lambda(x) < c$ is equivalent to rejecting when we see large differences between the mean and $\theta_0$:
       $$
@@ -486,9 +486,9 @@ lines(
       |\bar{x}_n - \theta_0| > c'',
       $$
       for a new constant $c''$.
-      
+
       To calibrate this test (picking the value of $c''$), we can try to find the rejection region that makes this a $\alpha = 0.05$ level test (or other choice of $\alpha$).
-      
+
       In particular, we are rejecting the test if we see large values of $|\bar{x}_n - \theta_0|$.
       However, since $X_i$ are $N(\theta, 1)$, then $\bar{X}_n$ are $N(\theta, 1/n)$.
       Thus, if we want Type~I error rate less than $\alpha = 0.05$, we will assume the null $H_0: \theta = \theta_0$ is true, and then:
@@ -507,7 +507,7 @@ lines(
       $$
       \alpha = 2\Phi(-\sqrt{n}c'') \implies \Phi^{-1}(\alpha / 2) = -\sqrt{n}c'' \implies c'' = -\Phi^{-1}(\alpha / 2) / \sqrt{n}.
       $$
-      
+
       It may not look like it yet, but this gives us the standard $Z$ test. Remember, we are comparing:
       \begin{align*}
         |\bar{X}_n - \theta_0| &> c'' \\
@@ -521,13 +521,13 @@ lines(
       $$
       R = \Big\{x: \frac{\bar{X}_n - \theta_0}{1/\sqrt{n}} > 1.96\Big\} \, \bigcup \, \Big\{x: \frac{\bar{X}_n - \theta_0}{1/\sqrt{n}} < -1.96\Big\},
       $$
-      which is the standard rejection region for a $Z$-test (normal data, known variance). 
+      which is the standard rejection region for a $Z$-test (normal data, known variance).
     }
-    
+
   \end{exampleblock}
 
 \framebreak
-  
+
   \begin{itemize}
     \item Recall that the likelihood function $L(\theta)$ can equivalently be expressed in terms of sufficient statistics.
     \item Similarly, the likelihood ratio $\lambda(x)$ can be expressed in terms of sufficient statistics, rather than the entire data.
@@ -536,7 +536,7 @@ lines(
   \end{itemize}
 
 \end{frame}
-  
+
 
 \begin{frame}[allowframebreaks]{Likelihood ratio tests in practice}
 
@@ -564,7 +564,7 @@ lines(
 
 \begin{block}{Definition: Simple vs Composite Hypotheses}
   We say that a hypothesis is \alert{simple} if the corresponding sample space is a single value. E.g., $\Theta_0 = \{\theta_0\}$.
-  
+
   If a sample space is not simple (i.e., it contains more than one parameter), we say that the hypothesis is \alert{composite}. E.g., $\Theta_0^C = \R/\{\theta_0\}.$
 \end{block}
 
@@ -572,7 +572,7 @@ lines(
 
 \begin{block}{Neyman-Pearson Lemma}
   Consider testing two simple hypotheses: $H_0: \theta = \theta_0$ against $H_1: \theta = \theta_1$.
-  
+
   Then, a hypothesis test is uniformly most powerful (unbiased) level-$\alpha$ test if and only if it is a likelihood ratio test.
 \end{block}
 
@@ -588,7 +588,7 @@ lines(
 
 \begin{exampleblock}{Example: Poisson distributions}
   Let $X_1, \ldots, X_n$ be iid from Poisson$(\lambda)$. Show that this family of distributions has a monotone likelihood ratio.
-  
+
   \mode<article>{
     \begin{proof}
       The joint probability mass function for the sample is:
@@ -606,7 +606,7 @@ Because $\lambda_2 > \lambda_1$, the base of the exponent $\frac{\lambda_2}{\lam
 Thus, the Poisson family of distributions possesses a monotone likelihood ratio in $T(\mathbf{X}) = \sum_{i=1}^n X_i$.
     \end{proof}
   }
-  
+
 \end{exampleblock}
 
 \framebreak
@@ -663,23 +663,23 @@ Thus, the Poisson family of distributions possesses a monotone likelihood ratio 
   -2\log \lambda(x) = -2 \log \frac{L(\theta_0)}{L(\hat{\theta})} \dlim \chi^2_{p},
   $$
   as $n\rightarrow \infty$, where $p$ is the difference in the number of free-parameters in the null and alternative hypotheses.
-  
+
   \mode<article>{
   \begin{proof}
     Here is just a proof sketch; the formal proof follows closely that of the derivation of the CLT, and the consistency of the MLE. In fact, the miscellanea conditions alluded to are the same as those used for the consistency of the MLE, namely: data are iid; the parameter is identifiable (i.e., $f(x;\theta_1) = f(x; \theta_2)$ implies that $\theta_1 = \theta_2$); the log-likelihood is three times differentiable (and bounded); the MLE is an interior point of $\Theta$; and we can exchange the integral and derivative of the density function.
     These are a lot of conditions that need to be checked, but they are quite weak; nearly all density functions we have discussed and are familiar with satisfy these conditions, and in general it's harder to find density functions that don't satisfy these conditions.
-    
+
     Like many theorems in statistics, this is a Taylor-Series expansion of the log-likelihood. In the univariate case:
     \begin{align*}
       \ell(\theta) = \ell(\hat{\theta}) + \ell'(\hat{\theta})(\theta - \hat{\theta}) + \ell''(\hat{\theta})\frac{(\theta - \hat{\theta})^2}{2!} + \ldots
     \end{align*}
-    
+
     Now we relate this to $-2\log \lambda(x) = -2\ell (\theta_0) + 2\ell(\hat{\theta})$, by substituting in this expression for $\ell(\theta_0)$:
     $$
     -2\log \lambda(x) \approx \frac{(\theta - \hat{\theta})^2}{-\ell''(\hat{\theta})},
     $$
     where we used the fact that $\ell'(\hat{\theta}) = 0$.
-    
+
     The denominator is how we defined the obversed Fisher's Information, namely:
     $$
     -\ell''(\hat{\theta}) = I_n(\hat{\theta}),
@@ -688,7 +688,7 @@ Thus, the Poisson family of distributions possesses a monotone likelihood ratio 
     Thus, applying Slutksy's Theorem, we see that the quantity $(\theta - \hat{\theta})^2 / -\ell''(\hat{\theta})$ converges to a $\chi^2_1$ distribution (i.e., after rearranging the numerator and denominator, we can use the consistency theorem of the MLE to express $-2\log \lambda(x)$ as the square of something that converges to a standard normal, which is how we defined a $\chi^2_1$ random variable last semester.)
   \end{proof}
   }
-  
+
 \end{block}
 
 \framebreak
@@ -705,13 +705,13 @@ Thus, the Poisson family of distributions possesses a monotone likelihood ratio 
   $$
   -2\log \lambda(x) > \Sexpr{qchisq(0.95, df = 1) |> round(2)}.
   $$
-  
+
   \framebreak
-  
+
   \item How good is this approximation? \alert{very good.}
   \item Not only do we have asymptotic properties, \citet[][Section~2.9]{pawitan01} demonstrates that, due to the invariance property of the MLE and likelihood ratios, the test is \alert{exact} if there exists some one-to-one transformation $g(\cdot)$ \emph{that we do not need to know} such that $g(X_i)$ are normally distributed.
   \item Combining these results, even if no such transformation $g$ exists, there likely exists a transformation $g$ where $g(X_i)$ are approximately normal, or at least symmetric, in which case the asymptotic approximation is accurate with even very small $n$.
-  
+
 \end{itemize}
 
 \end{frame}
@@ -723,44 +723,44 @@ Thus, the Poisson family of distributions possesses a monotone likelihood ratio 
     \item We conclude by discussing \alert{interval estimators}.
     \item Rather than just getting a point estimate $\hat{\theta}$ for a parameter $\theta$, we estimate an entire interval $I$.
   \end{itemize}
-  
+
   \begin{block}{Definition: Interval estimate}
     An \emph{interval estimate} of a real-valued parameter $\theta$ is any pair of functions $L(X)$ and $U(X)$ of a sample $X = (X_1, \ldots, X_n)$ that satisfy $L(X) \leq U(X)$ for all $X$.
-    
+
     If $X = x^*$ is observed, then the inference $L(x^*) \leq \theta \leq U(x^*)$ is made.
-    
+
     The random interval $I(X) = \big(L(X), U(X)\big)$ is called an \alert{interval estimator}.
   \end{block}
- 
+
  \framebreak
- 
+
  \begin{itemize}
   \item There are many different types of interval estimators, both Bayesian and Frequentist.
   \item Here, we will focus on the Frequentist \alert{confidence interval}, as these are the most widely used.
  \end{itemize}
-  
+
   \begin{block}{Definition: Coverage probability}
     For an interval estimator $I(X) = \Big(L(X), U(X)\Big)$ of a parameter $\theta$, the \alert{coverage probability} of $I(X)$ is the probability that the random interval covers the true parameter, $\theta$. That is,
     $$
     P_\theta\big(\theta \in I(X)\big).
     $$
-    Above, the interval $I(X)$ is what is random, and $\theta$ is fixed. 
+    Above, the interval $I(X)$ is what is random, and $\theta$ is fixed.
     \mode<article>{Note the coverage probability is a function of $\theta$.}
   \end{block}
-  
+
   \framebreak
-  
+
   \begin{itemize}
     \item For any interval estimator, we're interested in the \emph{worst} performance, or the minimum coverage probability.
   \end{itemize}
-  
+
   \begin{block}{Definition: Confidence coefficient.}
     For an interval estimator $I(X)$ of a parameter $\theta$, the \alert{confidence coefficient} of $I(X)$ is the infimum of the coverage probabilities:
     $$
     \inf_\theta P_{\theta}\big(\theta \in I(X)\big).
     $$
   \end{block}
-  
+
   \begin{itemize}
     \item Sometimes we are interested in \emph{confidence sets}, rather than just intervals, though intervals are the most common.
     \item A given interval estimator $I(X)$, combined with a confidence coefficient, gives rise to a \alert{confidence interval}.
@@ -768,21 +768,21 @@ Thus, the Poisson family of distributions possesses a monotone likelihood ratio 
       That is, an interval estimator $I(X)$ with confidence coefficient $1-\alpha$ is called a $1-\alpha$ confidence interval.
     }
   \end{itemize}
-  
+
   \framebreak
-  
+
   \begin{exampleblock}{Uniform confidence interval}
     Let $X_1, \ldots, X_n$ be iid from Uniform$(0, \theta)$. Based on previous homework, the MLE for $\theta$ is $X_{(n)}$, the maximum of the observations.
-    
+
     Find a $1 - \alpha$ confidence set for $\theta$, of the form: $I(X) = [aX_{(n)}, bX_{(n)}]$, with $1 \leq a < b$.
-    
+
     \mode<article>{
       % First, we will simplify by performing a transformation. Let $Y_i = X_{i} / \theta$, for all $i$. Then, $Y_{(n)} = X_{(n)} / \theta$.
       First, not that we have the lower bound on $a > 1$, since $X_{(n)} \leq \theta$.
       Now we will derive probabilities:
-      % First, we will derive the probability that $\theta \in I(X)$, for arbitrary $a$, $b$ and $\theta$. 
+      % First, we will derive the probability that $\theta \in I(X)$, for arbitrary $a$, $b$ and $\theta$.
       \begin{align*}
-        P_\theta\big(\theta \in [aX_{(n)}, bX_{(n)}]\big) &= P_\theta\big(aX_{(n)} \leq \theta \leq bX_{(n)}\big) \\ 
+        P_\theta\big(\theta \in [aX_{(n)}, bX_{(n)}]\big) &= P_\theta\big(aX_{(n)} \leq \theta \leq bX_{(n)}\big) \\
         &= P_{\theta}\Big(\frac{1}{b} \leq \frac{X_{(n)}}{\theta} \leq \frac{1}{a}\Big).
       \end{align*}
       Now if $X_i$ are iid $N(0, \theta)$, then last semester we found the cdf of $X_{(n)}$ to be: $f_Y(t) = ny^{n-1}/\theta^n$, so the pdf of $Y = X_{(n)} / \theta$ can be shown to be:
@@ -800,7 +800,7 @@ Thus, the Poisson family of distributions possesses a monotone likelihood ratio 
       $$
       gives us a $1-\alpha$ confidence set.
       In this case, we will treat $n$ as some fixed number (i.e., the number of observations for a particular dataset).
-      
+
       Though there are an infinite number of choices that satisfy this condition, the possible set of values for $a$ is bounded above. We can see this by noting that the coverage probability $\Big(\frac{1}{a}\Big)^n - \Big(\frac{1}{b}\Big)^n$ is a decreasing function of both $a$ and $b$, and $a < b$. If $a\rightarrow \infty$, then because $b > a$, we can see that the confidence coefficient shrinks to zero, and therefore $a$ must be bounded above.
       Similar logic can be used to find the maximum possible value for $a$ by taking the limit as $b\rightarrow \infty$, then
       $$
@@ -810,10 +810,10 @@ Thus, the Poisson family of distributions possesses a monotone likelihood ratio 
       $$
       I_{b = \infty}(X) = \big[(1 - \alpha)^{-1/n}, \infty\big).
       $$
-      
+
       While valid, one concern about this interval is that it is very large. In particular, we have $1-\alpha$ coverage, but we our interval estimator is unbounded! Even for small $n$, say $n=10$, our lower bound using this interval estimator is $aX_{(n)} = 1.005X_{(n)}$ for $\alpha = 0.05$.
       In other words, in order for the estimator to have $95\%$ coverage, we need our interval to get very close to including $X_{(n)}$.
-      
+
       We might instead want to consider an interval with the smallest possible width, while still maintaining the confidence coefficient $1-\alpha$.
       The interval length is $g(X_{(n)}; a, b) = (b - a)X_{(n)}$. Thus, we want to minimize $b - a$, under the constraint that $1 - \alpha = \Big(\frac{1}{a}\Big)^n - \Big(\frac{1}{b}\Big)^n$. Using this constraint, we can either solve for $a$ or $b$ in terms of the other variable, and minimize the interval length $g$ using this new expression.
       After doing so, we find that the minimum length occurs when $a = 1$, in which case we can solve:
@@ -824,13 +824,13 @@ Thus, the Poisson family of distributions possesses a monotone likelihood ratio 
       $$
       [X_{(n)}, \alpha^{-1/n}X_{(n)}].
       $$
-      
+
       % TODO: Homework problem. What about an interval of the same type, but instead of minimum distance, we want to split the tail probabilities? Right now, all error is going on the high-side, since our lower bound is $X_{(n)}$. However, we're reasonably confidence that we didn't observe the maximum value (the probability of this is zero), so instead, why don't we split the probabilities between upper and lower errors? i.e., $P(\theta < aX_{(n)}) = \alpha / 2$, and $P(\theta > bX_{(n)}) = \alpha/2$.
       % TODO: Homework problem. What about interval of type [Y + c, Y + d], or even setting c to be zero? See 7.3.13 CB.
     }
-    
+
   \end{exampleblock}
-  
+
 \end{frame}
 
 \begin{frame}[allowframebreaks]{Finding Confidence Intervals}
@@ -846,11 +846,11 @@ Thus, the Poisson family of distributions possesses a monotone likelihood ratio 
     \item The most common way to find confidence intervals is to connect them with a hypothesis test.
     \item That is, we can find a $\alpha$-level hypothesis test, and \emph{invert} the test to get a confidence interval.
   \end{itemize}
-  
+
   \begin{exampleblock}{Inverting a normal test}
     Let $X_1, \ldots, X_n$ be iid from $N(\mu, \sigma^2)$.
     Treating $\sigma^2$ as fixed, find a $1-\alpha$ confidence set for $\mu$ by inverting a hypothesis test.
-    
+
     \mode<article>{
       Our Normal$(\mu, 1)$ example from the hypothesis testing section can readily be adapted to show that, for fixed $\sigma^2$, the UMP level $\alpha$ unbiased test for $H_0: \mu = \mu_0$ against $H_1: \mu \neq \mu_0$ is found by creating the rejection region:
       $$
@@ -861,7 +861,7 @@ Thus, the Poisson family of distributions possesses a monotone likelihood ratio 
       \frac{|\bar{x}_n - \mu_0|}{\sigma / \sqrt{n}} > z_{\alpha/2},
       $$
       where $z_{\alpha/2}$ is the $\alpha-2$ quantile of the standard normal, such that if $Z\sim N(0, 1)$, then $P(Z \leq \alpha / 2) = 1 - \alpha/2$).
-      
+
       To find a $1-\alpha$ confidence set, we will invert this hypothesis test. That is, we will find the acceptance region $A = R^C$, and solve for $\mu_0$.
       In particular, if we reject for large differences, we accept for ``small" differences:
       \begin{align*}
@@ -877,30 +877,30 @@ Thus, the Poisson family of distributions possesses a monotone likelihood ratio 
       I(X) = \Big(\bar{x}_n - z_{\alpha/2}\frac{\sigma}{\sqrt{n}}, \bar{x}_n + z_{\alpha/2}\frac{\sigma}{\sqrt{n}}\Big).
       $$
     }
-    
+
   \end{exampleblock}
-  
+
   \framebreak
-  
+
   \begin{itemize}
     \item This example can be extended to a more general setting. Proof is left as an exercise.
   \end{itemize}
-  
+
   \begin{block}{Theorem: Duality of hypothesis tests and confidence intervals}
     Consider the hypothesis test of $H_0: \theta = \theta_0$. This involves the specification of a rejection region $R_{\theta_0}(x)$, which depends on the null value $\theta_0$. Similarly, we define the acceptance region as $A_{\theta_0}(x) = R_{\theta_0}^c(x)$.
-    
+
     The set of all parameter values $\theta$ such that a fixed $x$ lies in the acceptance region $A_{\theta_0}(x)$ is denoted $C(x) = \{\theta_0: x \in A_{\theta_0}(x)\}$.
-    
+
     $C(x)$ is a $1-\alpha$ confidence set for $\theta$ if and only if $A_{\theta_0}(x)$ is the acceptance region of a $\alpha$-level hypothesis test.
   \end{block}
-  
+
   \framebreak
-  
+
   \begin{itemize}
     \item The last theorem gives us a way to systematically build confidence intervals: create a hypothesis test, and find the values of $\theta$ where the null hypothesis would be accepted.
     \item Theorem 9.3.5 of \citet{casella24} implies that if a UMP level-$\alpha$ test is inverted, the resulting confidence set will have uniformly better coverage than any other $1-\alpha$ confidence set.
     \item This gives strong motivation to invert likelihood ratio tests to obtain confidence sets.
-    
+
     \framebreak
 
   \item Like hypothesis testing, we also can consider two primary types of confidence intervals:
@@ -908,9 +908,9 @@ Thus, the Poisson family of distributions possesses a monotone likelihood ratio 
     \item \emph{Exact} confidence intervals, which require knowing the distribution of the lower and upper bound of $I(X)$. Where possible, these are preferred.
     \item \emph{Approximate} confidence intervals, which can be found using various strategies \mode<article>{(discussed on the next slide).}
   \end{itemize}
-  
+
   \framebreak
-  
+
   \begin{itemize}
     \item There are several ways to get approximate confidence intervals. Here are perhaps the three most common:
     \begin{itemize}
@@ -925,10 +925,10 @@ Thus, the Poisson family of distributions possesses a monotone likelihood ratio 
       \item \alert{Bootstrap based intervals}. Both parametric and non-parametric bootstrapping methods.
     \end{itemize}
   \end{itemize}
-  
+
   \end{itemize}
-    
-  
+
+
 \end{frame}
 
 \subsection{Bootstraping}
@@ -966,8 +966,8 @@ Thus, the Poisson family of distributions possesses a monotone likelihood ratio 
     \end{itemize}
   \end{itemize}
 \end{frame}
-  
-\begin{frame}[allowframebreaks]{Example: Poisson confidence intervals}
+
+\begin{frame}[allowframebreaks,fragile]{Example: Poisson confidence intervals}
   \begin{itemize}
     \item We will wrap up this discussion by building a confidence interval for $\lambda$ using 5 different approachs:
     \begin{enumerate}
@@ -978,7 +978,7 @@ Thus, the Poisson family of distributions possesses a monotone likelihood ratio 
       \item Non-parametric Bootstrap (easy).
     \end{enumerate}
   \end{itemize}
-  
+
   \framebreak
 
 
@@ -1006,67 +1006,157 @@ Given the data:
     \item Sample mean: $\hat{\lambda} = \bar{X} = \Sexpr{mean(X)}$
     \item Sum of observations: $Y = \sum_{i=1}^n X_i = n\bar{X} = \Sexpr{sum(X)}$
 \end{itemize}
-We know that the sum of independent Poisson variables is also Poisson distributed, so $Y \sim \text{Poisson}(n\lambda)$. 
+We know that the sum of independent Poisson variables is also Poisson distributed, so $Y \sim \text{Poisson}(n\lambda)$.
 
-\subsection*{1. Wald Confidence Interval}
+\subsection*{Wald Confidence Interval}
 The Wald interval relies on the asymptotic normality of the Maximum Likelihood Estimator (MLE). By the Central Limit Theorem, as $n \to \infty$:
-\[
+$$
 \frac{\hat{\lambda} - \lambda}{\text{SE}(\hat{\lambda})} \xrightarrow{d} \mathcal{N}(0,1)
-\]
+$$
 The variance of $\hat{\lambda}$ is $\text{Var}(\bar{X}) = \frac{\lambda}{n}$. Substituting the MLE for $\lambda$ gives the estimated standard error: $\text{SE}(\hat{\lambda}) = \sqrt{\frac{\hat{\lambda}}{n}}$. The $(1 - \alpha)$ Wald confidence interval is:
-\[
+$$
 \hat{\lambda} \pm z_{1-\alpha/2} \sqrt{\frac{\hat{\lambda}}{n}}
-\]
+$$
 Plugging in the provided data for a 95\% confidence interval ($z_{0.975} \approx 1.96$):
-\[
-14.44 \pm 1.96 \sqrt{\frac{14.44}{25}} \implies 14.44 \pm 1.49 \implies (12.95, 15.93)
-\]
-
-TODO: Update numbers in example above (and all other examples) using the actual data.
+$$
+\Sexpr{mean(X)} \pm 1.96 \sqrt{\frac{\Sexpr{mean(X)}}{\Sexpr{length(X)}}} \implies \Sexpr{mean(X)} \pm \Sexpr{round(1.96*sqrt(mean(X)/length(X)), 2)} \implies (\Sexpr{round(mean(X) - 1.96*sqrt(mean(X)/length(X)), 2)}, \Sexpr{round(mean(X) + 1.96*sqrt(mean(X)/length(X)), 2)})
+$$
 
 \subsection*{Exact test}
 
-TODO: Update this with work from paper. 
+TODO: Update this with work from paper.
 
-A confidence interval can be fundamentally understood as the set of all parameter values that would not be rejected by a hypothesis test. For a two-sided test at significance level $\alpha$, we test $H_0: \lambda = \lambda_0$ against $H_A: \lambda \neq \lambda_0$. 
+An exact confidence interval may be constructed by inverting an exact hypothesis test.
+We will restrict ourselves to confidence intervals that have equal two-side rejection probabilities.
+That is, we want to reject if we see $\hat{\lambda} = \bar{X}_n$ smaller than some cutoff $L(\lambda_0)$, or larger than some cutoff $U(\lambda_0)$, where $\lambda_0$ is the null value of a hypothesis test $H_0: \lambda = \lambda_0$, and:
+\begin{align*}
+  P_{\lambda_0}\big(\bar{X}_n &< L(\lambda_0)\big) \leq \alpha/2 \\
+  P_{\lambda_0}\big(\bar{X}_n &> U(\lambda_0)\big) \leq \alpha/2.
+\end{align*}
+For symmetry, and to retain as much power as possible, we pick $L$ and $U$ so that the bounds are tight.
 
-Let $Y = \sum_{i=1}^n X_i$, where $Y \sim \text{Poisson}(n\lambda_0)$. Let $F(y; \mu)$ denote the cumulative distribution function (CDF) of a Poisson distribution with mean $\mu$.
+<<eval=FALSE,include=FALSE,echo=FALSE>>=
+## If you want to plot the null-distribution of sum(X), with lambda_0 = 15.
+vals <- seq(12, 18, length.out = 1000)*25
+y <- dpois(round(vals), 15*25)
+plot(x = vals, y = y, type = 'l')
+@
 
-Instead of defining the rejection region by a symmetric distance (which is not ideal for the asymmetric Poisson distribution), we reject $H_0$ if the observed sum $y$ falls into either the extreme lower or upper tail of the distribution under $H_0$. We fail to reject $H_0$ if:
-\[
-P(Y \leq y \mid n\lambda_0) \geq \frac{\alpha}{2} \quad \text{and} \quad P(Y \geq y \mid n\lambda_0) \geq \frac{\alpha}{2}
-\]
+For this test, this means that the rejection region is:
+$$
+R_{\lambda_0}(X) = \{X: \bar{X} < L(\lambda_0), \bar{X} > U(\lambda_0)\},
+$$
+or that the acceptance region is:
+$$
+A_{\lambda_0}(X) = R_{\lambda_0}^c(X) = \{X: L(\lambda_0) \leq \bar{X} \leq U(\lambda_0)\}.
+$$
 
-To find the exact confidence interval limits $[\lambda_L, \lambda_U]$, we find the values of $\lambda$ that make our observed data $y$ sit exactly on the boundary of these rejection regions.
+To get a confidence interval, we now need to invert this set in order to find $C(x)$, which is the set of all parameter values $\theta$ such that a fixed $X$ lies in the acceptance region $A_{\lambda_0}(X)$. That is,
+$$
+C_\lambda(x^*) = \{\lambda_0: x^* \in A_{\lambda_0}(X)\}.
+$$
+Recall that this is ``flipping" the acceptance region of $X$, into an interval of values of $\lambda$ where our observed data $x^*$ would lie in the acceptance region.
+In other words, we want to find all $\lambda_0$ such that:
+$$
+L(\lambda_0) \leq \bar{x}^* \leq U(\lambda_0),
+$$
+while retaining:
+\begin{align*}
+  P_{\lambda_0}\big(\bar{X}_n &< L(\lambda_0)\big) = \alpha/2 \\
+  P_{\lambda_0}\big(\bar{X}_n &< U(\lambda_0)\big) = \alpha/2.
+\end{align*}
+How to do so is not immediately obvious, and the strategy will depend on the particular distribution.
 
-\textbf{Upper Bound ($\lambda_U$):} We find the largest possible value of $\lambda$ such that observing a sum as small as $y$ (or smaller) still has a probability of exactly $\alpha/2$. 
-\[
-P(Y \leq y \mid n\lambda_U) = \frac{\alpha}{2} \implies F(y; n\lambda_U) = \frac{\alpha}{2}
-\]
+Our next task is the find the entire range of $\lambda_0$ such that $L(\lambda_0) \leq \bar{x}_n^* = \Sexpr{mean(X)}$, and then repeat that exercise for $U(\lambda_0)$.
+Note that, for the Poisson$(\lambda_0)$ distribution, increasing $\lambda_0$ will ``shift" the entire distribution to the right, and decreasing $\lambda_0$ will ``shift" the entire distribution to the left.
+Thus, if we think about continuing to increase the distribution to the right (increasing $\lambda_0$) until we can't anymore, we find that the biggest that $\lambda_0$ could possibly be is when:
+$$
+L(\lambda_0) = \bar{x}^*_n,
+$$
+while keeping:
+\begin{align*}
+P_{\lambda_0}\big(\bar{X}_n < L(\lambda_0)\big) &= \frac{\alpha}{2} \\
+P_{\lambda_0}\big(\bar{X}_n < \bar{x}_n^*\big) &= \frac{\alpha}{2} \\
+P_{\lambda_0}\big(n\bar{X}_n < n\bar{x}_n^*\big) &= \frac{\alpha}{2}
+\end{align*}
 
-\textbf{Lower Bound ($\lambda_L$):} We find the smallest possible value of $\lambda$ such that observing a sum as large as $y$ (or larger) still has a probability of exactly $\alpha/2$. 
-\[
-P(Y \geq y \mid n\lambda_L) = \frac{\alpha}{2} \implies 1 - P(Y \leq y-1 \mid n\lambda_L) = \frac{\alpha}{2}
-\]
-\[
-F(y-1; n\lambda_L) = 1 - \frac{\alpha}{2}
-\]
+Now under $H_0: \lambda = \lambda_0$, $n\bar{X}_n = \sum_i X_i \sim \text{Pois}(n\lambda_0)$.
+Thus, we can find the value of the upper-bound (the largest $\lambda_0$ could possibly be while keeping $P_{\lambda_0}\big(\hat{\lambda} < L(\lambda_0)\big)$) by using the CDF of the Poisson distribution, and plugging in our data $n\bar{x}_n^* = \Sexpr{sum(X)}$, and $n = \Sexpr{length(X)}$:
+\begin{align*}
+  P_{\lambda_0}\big(n\bar{X}_n < n\bar{x}_n^*\big)&= \frac{\alpha}{2} \\
+  P_{\lambda_0}\big(n\bar{X}_n \leq n\bar{x}_n^* - 1\big)&= \frac{\alpha}{2}\\
+  F_{\lambda_0}\big(\Sexpr{sum(X) - 1}\big) &= \frac{\alpha}{2}\\
+  e^{-\Sexpr{length(X)}\lambda_0}\sum_{j = 0}^{\Sexpr{sum(X) - 1}}\frac{(\Sexpr{length(X)}\lambda_0)^j}{j!} &= \frac{\alpha}{2}
+\end{align*}
 
-Thus, the exact $(1-\alpha)$ confidence interval is found by taking the inverse CDF (the quantile function) to solve these equations for $\lambda_L$ and $\lambda_U$. For our data ($y=361$, $n=25$, $\alpha=0.05$), the equations are:
-\[
-F(361; 25\lambda_U) = 0.025 \quad \text{and} \quad F(360; 25\lambda_L) = 0.975
-\]
-By numerically solving these functions, we obtain the exact interval bounds.
+Thus, the upper-bound for our confidence interval is found by solving the equation:
+$$
+e^{-\Sexpr{length(X)}\lambda_0}\sum_{j = 0}^{\Sexpr{sum(X) - 1}}\frac{(\Sexpr{length(X)}\lambda_0)^j}{j!} = \frac{\alpha}{2}
+$$
+for $\lambda_0$.
+
+You can show that there is not a closed form solution to this equation, so we will find the value using some numeric root-finding scheme by considering a function:
+$$
+f(\lambda_0) = e^{-\Sexpr{length(X)}\lambda_0}\sum_{j = 0}^{\Sexpr{sum(X) - 1}}\frac{(\Sexpr{length(X)}\lambda_0)^j}{j!} -\frac{\alpha}{2},
+$$
+<<echo=FALSE>>=
+upperFun <- function(lam) {
+  ppois(sum(X), lambda = length(X) * lam - 1) - 0.025
+}
+lambdaU <- uniroot(upperFun, interval = c(mean(X), max(X)))$root
+# lambdaU
+@
+and finding the root $\lambda_0 = 0$.
+For a level $\alpha = 0.05$ test ($95\%$ confidence interval), we can use software to find the root, which we get the upper bound of $\Sexpr{round(lambdaU, 3)}$.
+See the lecture code for more details.
 
 
-\textbf{Now for the likelihood-ratio based confidence intervals}
+We repeat this exercise to find the lower-bound for $\lambda_0$.
+Again, decreasing $\lambda_0$ as low as possible will show that the smallest value of $\lambda_0$, where $\bar{x}^*_n = \Sexpr{mean(X)}$ would lie in the acceptance region is found when:
 
-Let $X_1, X_2, \dots, X_n$ be independent and identically distributed random variables such that $X_i \sim \text{Poisson}(\lambda)$. We are given the following data:
-\begin{itemize}
-    \item Sample size: $n = 25$
-    \item Sum of observations: $Y = \sum_{i=1}^n X_i = 361$
-    \item Sample mean (MLE): $\hat{\lambda} = \frac{Y}{n} = 14.44$
-\end{itemize}
+$$
+U(\lambda_0) = \bar{x}^*_n,
+$$
+while keeping:
+\begin{align*}
+P_{\lambda_0}\big(\bar{X}_n > U(\lambda_0)\big) &= \frac{\alpha}{2} \\
+P_{\lambda_0}\big(\bar{X}_n > \bar{x}_n^*\big) &= \frac{\alpha}{2} \\
+P_{\lambda_0}\big(n\bar{X}_n > n\bar{x}_n^*\big) &= \frac{\alpha}{2}
+\end{align*}
+
+Now under $H_0: \lambda = \lambda_0$, $n\bar{X}_n = \sum_i X_i \sim \text{Pois}(n\lambda_0)$.
+Thus, we can find the value of the lower-bound (the smallest $\lambda_0$ could possibly be while keeping $P_{\lambda_0}\big(\hat{\lambda} > L(\lambda_0)\big)$) by using the CDF of the Poisson distribution, and plugging in our data $n\bar{x}_n^* = \Sexpr{sum(X)}$, and $n = \Sexpr{length(X)}$:
+\begin{align*}
+  P_{\lambda_0}\big(n\bar{X}_n > n\bar{x}_n^*\big)&= \frac{\alpha}{2} \\
+  1 - P_{\lambda_0}\big(n\bar{X}_n \leq n\bar{x}_n^*\big)&= \frac{\alpha}{2}\\
+  P_{\lambda_0}\big(n\bar{X}_n \leq n\bar{x}_n^*\big) &= 1 - \frac{\alpha}{2}\\
+  F_{\lambda_0}\big(\Sexpr{sum(X)}\big) &= 1-\frac{\alpha}{2}\\
+  e^{-\Sexpr{length(X)}\lambda_0}\sum_{j = 0}^{\Sexpr{sum(X)}}\frac{(\Sexpr{length(X)}\lambda_0)^j}{j!} &= 1-\frac{\alpha}{2}
+\end{align*}
+<<echo=FALSE>>=
+lowerFun <- function(lam) {
+  ppois(sum(X), lambda = length(X) * lam ) - 0.975
+}
+lambdaL <- uniroot(lowerFun, interval = c(min(X), mean(X)))$root
+# lambdaU
+@
+We again solve the equation for $\lambda_0$ using software and $\alpha = 0.05$, resulting in the lower bound $\Sexpr{round(lambdaL, 3)}$.
+
+Combining these, we get our exact $95\%$ confidence region for $\lambda$:
+$$
+C(x^*) = (\Sexpr{lambdaL |> round(2)}, \Sexpr{lambdaU |> round(2)}).
+$$
+
+\subsection*{Likelihood Ratio Confidence Interval}
+
+% Let $X_1, X_2, \dots, X_n$ be independent and identically distributed random variables such that $X_i \sim \text{Poisson}(\lambda)$. We are given the following data:
+% \begin{itemize}
+%     \item Sample size: $n = 25$
+%     \item Sum of observations: $Y = \sum_{i=1}^n X_i = 361$
+%     \item Sample mean (MLE): $\hat{\lambda} = \frac{Y}{n} = 14.44$
+% \end{itemize}
+
+To get confidence intervals based on an inverted likelihood ratio test and Wilk's Theorem, we need to consider the likelihood function.
 
 The joint likelihood function for $n$ i.i.d. Poisson observations is:
 \[
@@ -1074,55 +1164,110 @@ L(\lambda) = \prod_{i=1}^n \frac{e^{-\lambda} \lambda^{X_i}}{X_i!} = \frac{e^{-n
 \]
 Taking the natural logarithm yields the log-likelihood function, $\ell(\lambda)$:
 \[
-\ell(\lambda) = -n\lambda + Y \log(\lambda) - \sum_{i=1}^n \log(X_i!)
+\ell(\lambda) = -n\lambda + \sum X_i \log(\lambda) - \sum_{i=1}^n \log(X_i!)
 \]
+The likelihood ratio test for $H_0: \lambda = \lambda_0$ and Wilk's approximation uses:
+\begin{align*}
+-2\log \frac{\sup_{\lambda \in \Lambda_0} L(\lambda)}{\sup_{\lambda \in \Lambda} L(\lambda)} &= 2 \log\frac{L(\hat{\lambda})}{L(\lambda_0)} \\
+&= 2\big(\ell(\hat{\lambda}) - \ell(\lambda_0)\big) \\
+&\sim \chi^2_1.
+\end{align*}
 
-To maximize the log-likelihood, we take the derivative with respect to $\lambda$ and set it to zero:
-\[
-\frac{d}{d\lambda} \ell(\lambda) = -n + \frac{Y}{\lambda} = 0 \implies \hat{\lambda} = \frac{Y}{n} = \bar{X}
-\]
-For our data, the MLE is $\hat{\lambda} = 14.44$. The maximized log-likelihood is simply $\ell(\hat{\lambda})$.
+% To maximize the log-likelihood, we take the derivative with respect to $\lambda$ and set it to zero:
+% \[
+% \frac{d}{d\lambda} \ell(\lambda) = -n + \frac{\sum X_i}{\lambda} = 0 \implies \hat{\lambda} = \frac{\sum X_i}{n} = \bar{X}
+% \]
+% For our data, the MLE is $\hat{\lambda} = 14.44$. The maximized log-likelihood is simply $\ell(\hat{\lambda})$.
 
-We wish to test $H_0: \lambda = \lambda_0$ against $H_A: \lambda \neq \lambda_0$. The likelihood ratio test statistic compares the log-likelihood evaluated at the null value $\lambda_0$ to the maximum possible log-likelihood evaluated at $\hat{\lambda}$. 
-
-The test statistic is defined as:
-\[
-\Lambda(\lambda_0) = 2 \left[ \ell(\hat{\lambda}) - \ell(\lambda_0) \right]
-\]
+% We wish to test $H_0: \lambda = \lambda_0$ against $H_A: \lambda \neq \lambda_0$.
+% The likelihood ratio test statistic compares the log-likelihood evaluated at the null value $\lambda_0$ to the maximum possible log-likelihood evaluated at $\hat{\lambda}$.
+%
+% The test statistic is defined as:
+% \[
+% \Lambda(\lambda_0) = 2 \left[ \ell(\hat{\lambda}) - \ell(\lambda_0) \right]
+% \]
 Substituting our log-likelihood function into this equation (and noting that the $\sum \log(X_i!)$ terms cancel out):
 \[
-\Lambda(\lambda_0) = 2 \left[ \left( -n\hat{\lambda} + Y \log(\hat{\lambda}) \right) - \left( -n\lambda_0 + Y \log(\lambda_0) \right) \right]
+2\big(\ell(\hat{\lambda}) - \ell(\lambda_0)\big) = 2 \left[ \left( -n\hat{\lambda} + \sum_i X_i \log(\hat{\lambda}) \right) - \left( -n\lambda_0 + \sum_i X_i \log(\lambda_0) \right) \right]
 \]
 Factoring and rearranging terms gives:
 \[
-\Lambda(\lambda_0) = 2 \left[ n(\lambda_0 - \hat{\lambda}) + Y \log\left(\frac{\hat{\lambda}}{\lambda_0}\right) \right]
+2 \left[ n(\lambda_0 - \hat{\lambda}) + \sum_i X_i \log\left(\frac{\hat{\lambda}}{\lambda_0}\right) \right]
 \]
 
 By Wilks' Theorem, as $n \to \infty$, the distribution of the test statistic under the null hypothesis converges to a Chi-squared distribution with 1 degree of freedom:
 \[
-\Lambda(\lambda_0) \xrightarrow{d} \chi^2_1
+2 \left[ n(\lambda_0 - \hat{\lambda}) + \sum_i X_i \log\left(\frac{\hat{\lambda}}{\lambda_0}\right) \right] \xrightarrow{d} \chi^2_1
 \]
-Using the duality of hypothesis tests and confidence intervals, the $100(1-\alpha)\%$ confidence set consists of all values of $\lambda_0$ that we fail to reject at the $\alpha$ significance level. We fail to reject if $\Lambda(\lambda_0) \le \chi^2_{1-\alpha, 1}$.
+Using the duality of hypothesis tests and confidence intervals, the $100(1-\alpha)\%$ confidence set consists of all values of $\lambda_0$ that we fail to reject at the $\alpha$ significance level.
+We fail to reject if $2$ times the different in log-likelihoods is $\leq \chi^2_{1-\alpha, 1}$.
 
-Therefore, the exact confidence interval is the set of all $\lambda$ satisfying:
+Therefore, the exact confidence interval is the set of all $\lambda_0$ satisfying:
 \[
-2 \left[ n(\lambda - \hat{\lambda}) + Y \log\left(\frac{\hat{\lambda}}{\lambda}\right) \right] \le \chi^2_{1-\alpha, 1}
+2 \left[ n(\lambda_0 - \hat{\lambda}) + \sum_i X_i \log\left(\frac{\hat{\lambda}}{\lambda_0}\right) \right] \leq \chi^2_{1-\alpha, 1}
 \]
 
-For a 95\% confidence interval ($\alpha = 0.05$), the critical value is $\chi^2_{0.95, 1} \approx 3.841$. Substituting our observed data ($n = 25$, $Y = 361$, $\hat{\lambda} = 14.44$), the interval is defined by all $\lambda$ such that:
+For a 95\% confidence interval ($\alpha = 0.05$), the critical value is $\chi^2_{0.95, 1} \approx 3.841$. Substituting our observed data ($n = \Sexpr{length(X)}$, $\sum_i X_i = \Sexpr{sum(X)}$, $\hat{\lambda} = \Sexpr{mean(X)}$), the interval is defined by all $\lambda$ such that:
 \[
-2 \left[ 25(\lambda - 14.44) + 361 \log\left(\frac{14.44}{\lambda}\right) \right] \le 3.841
+2 \left[ \Sexpr{length(X)}(\lambda - \Sexpr{mean(X)}) + \Sexpr{sum(X)} \log\left(\frac{\Sexpr{mean(X)}}{\lambda}\right) \right] \le 3.841
 \]
 Because $\lambda$ appears in both a linear and a logarithmic term, this inequality cannot be solved algebraically. Numerical root-finding methods yield the approximate bounds:
+<<echo=FALSE>>=
+lr_eq <- function(lam) {
+  2 * (length(X) * (lam - mean(X)) + sum(X) * log(mean(X) / lam)) - qchisq(0.95, df = 1)
+}
+
+# Find the roots
+lambda_L_LR <- uniroot(lr_eq, interval = c(min(X), mean(X)))$root
+lambda_U_LR <- uniroot(lr_eq, interval = c(mean(X), max(X)))$root
+@
+
 \[
-(13.00, 15.98)
+(\Sexpr{round(lambda_L_LR, 2)}, \Sexpr{round(lambda_U_LR, 2)})
 \]
-  }
-  
+}
+
 \end{frame}
 
 \subsection{Profile Likelihoods}
 
+\begin{frame}[allowframebreaks]{Profile likelihoods}
+  \begin{itemize}
+    \item The profile likelihood is used when $\theta$ is multivariate.
+    \item In this setting, the likelihood function $L(\theta)$ is difficult to visualize.
+    \item Informally, the profile likelihood considers the contribution to the likelihood of a single parameter, after integrating out other parameter values.
+    \item This is particularly useful if there are \alert{nuisance} parameters, or we are particularly interested in only one of the parameters in the vector $\theta$.
+  \end{itemize}
+
+  \framebreak
+
+  \begin{itemize}
+    \item We'll split the parameter vector into two parts: $\theta = (\phi, \nu)$, and $\phi$ and $\nu$ can both be multivariate themselves.
+    \item For this class, we'll assume that $\phi \in \R$ is the parameter of interest, and $\nu \in \R^{\nu_d}$ is a nuisance parameter vector.
+  \end{itemize}
+
+  \begin{block}{Definition: Profile likelihood}
+    If $\theta = (\phi, \nu)$ is a parameter vector with likelihood $L(\theta) = L(\phi, \nu)$, the \alert{profile likelihood} of $\phi$ is defined as:
+    $$
+    L_p(\phi) = \sup_{\nu} L(\phi, \nu),
+    $$
+    where the maximization of $\nu$ is taken with the fixed value of $\phi$. Formally:
+    $$
+    L_p(\phi) = \sup_{\theta \in \{(\phi_0, \nu) \in \Theta: \phi_0 = \phi\}} L(\theta).
+    $$
+  \end{block}
+
+\framebreak
+
+\begin{exampleblock}{Gaussian profile likelihood}
+  Let $X_1, \ldots, X_n$ be iid from $N(\mu, \sigma^2)$. We're often primarily interested in the parameter $\mu$, and not $\sigma^2$.
+  Find the profile likelihood function $L_p(\mu)$, treating $\sigma^2$ as a nuisance parameter.
+  Compare $L_p(\mu)$ to the function $L^*(\mu) = L(\mu, \hat{\sigma}^2)$.
+
+  % TODO: Example 3.10 of Pawitan.
+\end{exampleblock}
+
+\end{frame}
 
 % \section{Bias reduction methods}
 
