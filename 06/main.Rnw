@@ -1260,12 +1260,129 @@ lambda_U_LR <- uniroot(lr_eq, interval = c(mean(X), max(X)))$root
 \framebreak
 
 \begin{exampleblock}{Gaussian profile likelihood}
-  Let $X_1, \ldots, X_n$ be iid from $N(\mu, \sigma^2)$. We're often primarily interested in the parameter $\mu$, and not $\sigma^2$.
+  Let $X_1, \ldots, X_n$ be iid from $N(\mu, \sigma^2)$, where both parameters are unknown. We're often primarily interested in the parameter $\mu$, and not $\sigma^2$.
   Find the profile likelihood function $L_p(\mu)$, treating $\sigma^2$ as a nuisance parameter.
   Compare $L_p(\mu)$ to the function $L^*(\mu) = L(\mu, \hat{\sigma}^2)$.
 
-  % TODO: Example 3.10 of Pawitan.
+
+  \mode<article>{
+    The joint likelihood function for all data is given by:
+    $$
+    L(\theta) = \Big(\frac{1}{\sqrt{2\pi\sigma^2}}\Big)^n\exp\Big\{-\frac{1}{2\sigma^2}\sum_i (x_i - \mu)^2\Big\}.
+    $$
+    A direct likelihood-inference without referencing the estimation error of $\sigma^2$ is not meaningful, because the error of the estimate of $\mu$ depends on $\sigma^2$.
+    What we would like to do is ``profile out" $\sigma^2$, meaning we look at the univariate contribution of $\mu$ for all possible values of $\sigma^2$.
+
+    To compute the profile of $\mu$, we need to maximize the likelihood of $L(\mu, \sigma^2)$, where we treat $\mu$ as a fixed value.
+    If $\mu$ is fixed, then by taking the logarithm, and first derivative with respect to $\sigma^2$, we can maximize $\sigma^2$ for a fixed $\mu$:
+    $$
+    \hat{\sigma}^2_{\mu} = \frac{1}{n}\sum_i (x_i - \mu)^2.
+    $$
+    Thus, the profile likelihood of $\mu$ is defined as:
+    \begin{align*}
+    L_p(\mu) &= \sup_{\sigma^2} L(\mu, \sigma^2) \\
+    &= L(\mu, \hat{\sigma}^2_{\mu}) \\
+    &= \Big(\frac{1}{\sqrt{2\pi\hat{\sigma}^2_{\mu}}}\Big)^n\exp\Big\{-\frac{1}{2\hat{\sigma}^2_{\mu}}\sum_i (x_i - \mu)^2\Big\} \\
+    &= (2\pi)^{-n/2} \times \big(\hat{\sigma}^2_{\mu}\big)^{-n/2} \exp\Big\{-\frac{1}{2}\frac{n}{\sum_i (x_i - \mu)^2}\sum_i(x_i - \mu)^2\Big\} \\
+    &= (2\pi)^{-n/2} \times \big(\hat{\sigma}^2_{\mu}\big)^{-n/2} \exp\Big\{\frac{-n}{2}\Big\} \\
+    &= (2\pi)^{-n/2}e^{-n/2} \Big(\frac{1}{n}\sum_{i} (x_i - \mu)^2\Big)^{-n/2}.
+    \end{align*}
+    Note that this is different from the \emph{likelihood slice}, where we evaluate the likelihood while fixing $\sigma^2$ at the MLE: $\hat{\sigma}^2_{MLE}$:
+    \begin{align*}
+    L(\mu, \hat{\sigma}^2_{MLE}) &= \Big(\frac{1}{\sqrt{2\pi\hat{\sigma}^2_{MLE}}}\Big)^n\exp\Big\{-\frac{1}{2\hat{\sigma}^2_{MLE}}\sum_i (x_i - \mu)^2\Big\}.
+    \end{align*}
+    Just like with the likelihood function, we're primarily interested in the areas of high (profile) likelihood.
+    Later, we'll argue that only the ratio of profile-likelihoods is of interest, so any constants (with respect to $\mu$) are not important. Thus, treating both of these expressions as only functions of $\mu$, and ignoring constants:
+    \begin{align*}
+      L_p(\mu) &= C_1 \Big(\frac{1}{n}\sum_{i} (x_i - \mu)^2\Big)^{-n/2} \\
+      L(\mu, \hat{\sigma}^2_{MLE}) &= C_2 \exp\Big\{-\frac{1}{2\hat{\sigma}^2_{MLE}}\sum_i (x_i - \mu)^2\Big\}.
+    \end{align*}
+    We will compare these by standardizing so that the maximum is at the value $1$, since only relative values are of importance.
+  }
 \end{exampleblock}
+
+\end{frame}
+
+\begin{frame}[fragile]{Profile vs Slice Comparison}
+
+\begin{figure}[ht]
+<<echo=FALSE>>=
+# Values from Pawitan example 3.10
+X <- c(0.88, 1.07, 1.27, 1.54, 1.91, 2.27, 3.84, 4.50, 4.64, 9.41)
+
+mu_MLE <- mean(X)
+
+sigma2_MLE <- (length(X) - 1) / length(X) * var(X)
+
+vals <- seq(0, 6, length.out = 1000)
+
+max_like <- prod(dnorm(X, mean = mu_MLE, sd = sqrt(sigma2_MLE)))
+
+slice_mu <- purrr:::map_dbl(
+  .x = vals, .f = function(mu) prod(dnorm(X, mu, sd = sqrt(sigma2_MLE)))
+) / max_like
+
+my_profile_fun <- function(mu) {
+  (2 * pi * exp(1) * mean((X - mu)^2))^(-length(X)/2)
+}
+
+profile_mu <- purrr:::map_dbl(
+  .x = vals, .f = my_profile_fun
+) / max_like
+
+plot(x = vals, y = profile_mu, type = 'l', xlab = 'mu', ylab = 'Likelihood')
+lines(x = vals, y = slice_mu, col = 'red')
+@
+\caption{Profile for $\mu$ (black curve) vs slice at $\hat{\sigma}^2_{MLE}$ (red line). The profile accounts for uncertainty involved in the estimation of $\sigma^2$.}
+\end{figure}
+
+\end{frame}
+
+\begin{frame}[allowframebreaks]{Calibrating Profiles Likelihoods}
+  \begin{itemize}
+    \item Profile likelihoods can readily be used to compute confidence intervals.
+    \item Formally, this is a form of a likelihood-ratio-test based confidence interval, and application of Wilk's Theorem.
+    \item In particular, if we fix nuisance parameters $\eta$ at the MLE, then Wilk's theorem will also apply to profile likelihoods.
+    \item This works because the maximum of the profile likelihood is the maximum of the complete likelihood.
+  \end{itemize}
+
+  \framebreak
+
+  \begin{block}{Profile Likelihood Tests and Intervals}
+    Let $\theta = (\phi, \nu)$ be the parameter vector of interest, and $\nu$ a vector of nuisance parameters. Then,
+    \begin{align*}
+      -2 \log \frac{L_p(\phi_0)}{L_p(\hat{\phi})} &\sim \chi^2_p,
+    \end{align*}
+    where $p$ is the dimension of $\phi$.
+
+    \mode<article>{
+    \begin{proof}
+      Suppose that we have parameter vector $\theta = (\phi, \nu)$. We have the null-hypothesis $\phi = \phi_0$, which doesn't have any direct statement about the nuisance vector $\nu$. Thus, the null set $\Theta_0 = \{(\phi, \theta) \in \Theta: \phi = \phi_0\}$. Then, the standard likelihood ratio test gives:
+      \begin{align*}
+      \Lambda &= \frac{\sup_{\theta \in \Theta_0}L(\theta)}{\sup_{\theta \in \Theta}L(\theta)} \\
+      &= \frac{\sup_{\theta \in \{(\phi, \theta) \in \Theta: \phi = \phi_0\}}L(\phi, \nu)}{\sup_{\phi} \sup_{\nu} L(\theta)} \\
+      &= \frac{L_p(\phi)}{L_p(\hat{\phi})}.
+      \end{align*}
+      Then, we get the result by Wilk's Theorem applied to the last line.
+    \end{proof}
+    }
+
+  \end{block}
+
+  \framebreak
+
+  \begin{itemize}
+    \item This result implies that, for even high-dimensional models, we can get approximate $1-\alpha$ level confidence intervals for any parameter $\phi$ by considering values of $\phi$ with large profile (log)-likelihoods:
+    $$
+    C(x) = \Big\{
+    \phi: 2\big(\ell_p(\hat{\phi}) - \ell_p(\phi)\big) < \chi^2_{p, (1-\alpha)}\Big\}.
+    $$
+    \item Because the maximum of the profile is the same point as the MLE, then we just need to compare profile likelihood values of $\phi$ to the likelihood at the MLE.
+    \item For instance, if $\alpha= 0.05$ and the dimension of $\phi$ is 1, then the confidence interval is any value $\phi$ that is within $1.92$ units of the MLE:
+    $$
+    C(x) =  \Big\{\phi: \ell(\hat{\theta}) - \ell_p(\phi) < 1.92\Big\}
+    $$
+  \end{itemize}
 
 \end{frame}
 
