@@ -1382,6 +1382,8 @@ lines(x = vals, y = slice_mu, col = 'red')
     $$
     C(x) =  \Big\{\phi: \ell(\hat{\theta}) - \ell_p(\phi) < 1.92\Big\}
     $$
+    \item In practice, these types of intervals are easy to compute numerically, even when likelihood function is intractable.
+    \item Multiple studies have shown that these intervals are extremely accurate, especially in regards to alternatives like Wald-based intervals \citep[one of my own:][]{wheeler25}.
   \end{itemize}
 
 \end{frame}
