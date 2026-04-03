@@ -125,6 +125,8 @@ Please read the [grading rubric](rubric_homework.html) before submitting homewor
 [TeX file](hw04/hw04.tex)
 * [Homework 5](hw05/hw05.pdf), due Wed March 11, 11:59pm.
 [TeX file](hw05/hw05.tex)
+* [Homework 6](hw06/hw06.pdf), due Wed Apr 8, 11:59pm.
+[TeX file](hw06/hw06.tex)
 
 <!--- 
 
