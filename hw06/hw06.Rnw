@@ -60,10 +60,62 @@
 {\large{\textbf{Homework 6}}}
 \end{center}
 
+\noindent\textbf{Note on Regularity Conditions:} For all problems in this assignment, you may assume that the standard Fisher regularity conditions hold.
+Specifically, you may assume that the support of the distribution does not depend on the parameter $\theta$, and that the density functions are sufficiently smooth to allow the interchange of integration (or summation) and differentiation.
+You may proceed directly to using the second derivative formulation:
+$$
+\mathcal{I}(\theta) = -E\left[ \frac{\partial^2}{\partial \theta^2} \ln f(X; \theta) \right]
+$$
+
 \begin{enumerate}
 
-  \item (POINT NUMBER)
+  \item (5 points) Let $X_1,\ldots, X_n$ be iid random variables with density function
+  $$
+  f(x_i; \theta) = (\theta + 1)x^\theta, \quad 0 \leq x \leq 1.
+  $$
 
+  \begin{enumerate}
+    \item (2 points) Find the MLE of $\theta$.
+    \item (3 points) Find the asymptotic variance of the MLE.
+  \end{enumerate}
+
+
+  \item (5 points) Let $X_1, \ldots, X_n$ be an iid sample from a Poisson distribution with parameter $\lambda > 0$. The pmf of a Poisson$(\lambda)$ random variable is given by:
+  $$
+  P(X = x) = \frac{\lambda^xe^{-\lambda}}{x!}, \quad \text{for } x \in \{0, 1, 2, \ldots\}
+  $$
+
+\begin{enumerate}
+  \item (1 point) Calculate the Observed Fisher Information of all points, $I_n(\lambda)$.
+  \item (1 points) Calculate the expected Fisher Information for all observations, $\mathcal{I}_n(\lambda)$.
+
+  \item (1 point) Compare both $I_n(\lambda)$ and $\mathcal{I}_n(\lambda)$ at the MLE: $\lambda = \hat{\lambda}$.
+  \item (2 points) Derive the asymptotic variance of the MLE, and compare to the exact variance of the estimator.
+\end{enumerate}
+
+\item (5 points) Let $X_1, \ldots, X_n$ be an iid sample from a Normal distribution with known mean $\mu = 0$, and unknown variance $\theta = \sigma^2$. The density of a single observation is:
+$$
+f(x; \theta) = \frac{1}{\sqrt{2\pi\theta}} \exp\Big(-\frac{x^2}{2\theta}\Big).
+$$
+
+\begin{enumerate}
+  \item (2 point) Find the score function for $\theta$.
+  \item (3 points) Calculate the (expected) Fisher Information $\mathcal{I}_n(\theta)$.
+\end{enumerate}
+
+\item (5 points) In class, it was briefly argued that if $X_1, \ldots, X_n$ are iid, then the joint information $\mathcal{I}(\theta)$ is just $n$ times the individual information:
+$$
+\mathcal{I}(\theta) = n\mathcal{I}_1(\theta).
+$$
+Your task is to generalize this result for independent (not necessarily identical) random variables.
+
+\begin{itemize}
+  \item Let $X$ and $Y$ be independent random variables with density functions $f_X(x; \theta)$ and $f_Y(y; \theta)$, respectively (note that they do share the same parameter value $\theta$, but do not necessarily have to come from the same distribution).
+  Show that if $\mathcal{I}_X(\theta)$, $\mathcal{I}_Y(\theta)$, and $\mathcal{I}_{X, Y}(\theta)$ are the individual informations and joint information (based on the joint density), respectively, then:
+  $$
+  \mathcal{I}_{X, Y}(\theta) = \mathcal{I}_X(\theta) + \mathcal{I}_Y(\theta)
+  $$
+\end{itemize}
 
 \end{enumerate}
 
