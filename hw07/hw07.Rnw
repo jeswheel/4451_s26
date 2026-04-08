@@ -1,0 +1,96 @@
+\documentclass[10pt,twoside]{article}
+\usepackage[marginparsep=1em]{geometry}
+\geometry{lmargin=1.0in,rmargin=1.0in, bmargin=1.2in,  tmargin=1.2in}
+\usepackage[dvipsnames,svgnames,table]{xcolor}
+\usepackage{graphicx}
+\usepackage{amssymb}
+\usepackage{epstopdf}
+\usepackage{verbatim}
+\usepackage{enumerate}
+\usepackage{bm}
+\usepackage{amsthm}
+\usepackage{float}
+\usepackage{amsmath}
+\usepackage{fancyhdr}
+\usepackage{hyperref}
+\usepackage{mathtools}
+
+%%%%  SHORTCUT COMMANDS  %%%%
+\newcommand{\ds}{\displaystyle}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\T}{\mathcal{T}}
+\newcommand{\arc}{\rightarrow}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\RP}{\mathbb{R}(+)}
+\newcommand{\Rs}{\mathbb{R}^{**}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\B}{\mathcal{B}}
+\newcommand{\PX}{\mathcal{P}(X)}
+\newcommand*\rot{\rotatebox{90}}
+\newcommand*\OK{\ding{51}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\Answer}{\vspace{2mm}\textbf{\underline{Answer}}\\}
+\newcolumntype{L}{>{$}l<{$}}
+\newcolumntype{C}{>{$}c<{$}}
+\newcommand{\GL}{\text{GL}}
+\newcommand{\SL}{\text{SL}}
+\newcommand{\Var}{\text{Var}}
+
+\newcommand{\stirling}[2]{\genfrac{\{}{\}}{0pt}{}{#1}{#2}}
+
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\sectionmark}[1]{\markright{\thesection.\ #1}}
+\lhead{\fancyplain{}{}}
+\fancyhead[RE,RO]{Math 4451, Spring 2026}
+\fancyfoot[RE,RO]{\thepage}
+
+
+\begin{document}
+\begin{flushright}
+\begin{minipage}{.33\textwidth}
+\rightline{YOUR NAME}
+\rightline{\href{mailto:YOUR EMAIL}{YOUR EMAIL}}
+\rightline{\today}
+\end{minipage}
+\end{flushright}
+
+\begin{center}
+{\large{\textbf{Homework 7}}}
+\end{center}
+
+\begin{enumerate}
+  \item You are testing the lifespan of a new type of computer part. Let $X_1, X_2, \ldots, X_n$ be independent and identically distributed lifespans of a sample of $n$ of these parts. A common model for the lifespan of an electrical component is the exponential distribution. We will parameterize this distribution by its unknown mean, $\theta$. The probability density function (PDF) is:
+  $$f_X(x; \theta) = \frac{1}{\theta} e^{-x/\theta}, \quad x > 0$$
+  \begin{enumerate}
+    \item (1 point) \label{prob:expMin} Suppose an impatient technician decides to estimate the mean lifespan by only recording the lifespan of the very first computer part to fail. That is, let $Y = \min(X_1, X_2, \ldots, X_n)$, and we want to find an unbiased estimator of $\theta$ based only on $Y$ (you may use the densities for order statistics derived last semester).
+    \item (1 point) Calculate the variance of your estimator in part~\ref{prob:expMin}.
+    Note that it may be helpful to compare the density of your estimate and compare to known distributions.
+    % \item Find an unbiased estimator of $\lambda$ based only on $Y = \min\{X_1, \ldots, X_n\}$. (Hint, consider the order statistics formulas from last semester).
+    \item (1 point) Now derive the maximum likelihood estimator $\hat{\theta}$ for $\theta$.
+    \item (1 point) \label{prob:expBias} Calculate the Bias of the MLE.
+    \item (1 point) Calculate the Variance of the MLE.
+    \item (1 point) Is the MLE a consistent estimator of $\theta$? Why or why not.
+    \item (1 point) Which estimator do you prefer and why?
+    \item (1 point) Let $\tilde{\theta}$ be some other estimator with the property that $E[\tilde{\theta}] = E[\hat{\theta}]$ (i.e., another estimator with the same bias from part~\ref{prob:expBias}). What is the absolute lowest possible variance for the estimate $\tilde{\theta}$? Does $\hat{\theta}$ achieve this lower bound?
+  \end{enumerate}
+  \item Suppose you are helping an engineer analyze the magnitude of background static noise in a new wireless communication channel. You measure the noise amplitude over $n$ independent trials, resulting in the sample $X_1, X_2, \ldots, X_n$.
+
+  You model the noise amplitude using a Rayleigh distribution, which depends on the parameter $\theta$, and has pdf:
+  $$
+  f(x; \theta) = \frac{x}{\theta} \exp\Big\{-\frac{x^2}{2\theta}\Big\}, \quad x > 0.
+  $$
+  For your own reference, note that $E[X^2] = 2\theta$, and $\Var(X^2) = 4\theta^2$.
+  \begin{enumerate}
+    \item (1 point) Write down the log-likelihood function, $\ell(\theta)$, for all $n$ observations.
+    \item (1 point) Find the MLE of $\theta$ for this model.
+    \item (1 point) Calculate the bias and variance of the MLE. Is the MLE a consistent estimator?
+    \item (1 point) Calculate the Fisher Information $\mathcal{I}_n(\theta)$ for the entire sample (Note: you can use the expected value of the second derivative of the log-likelihood).
+    \item (1 point) Let $\tilde{\theta}$ be some other estimator with the property that $E[\tilde{\theta}] = E[\hat{\theta}]$ (i.e., another estimator with the same bias from part (c)). What is the absolute lowest possible variance for the estimate $\tilde{\theta}$? Does $\hat{\theta}$ achieve this lower bound?
+  \end{enumerate}
+\end{enumerate}
+
+
+\end{document}
