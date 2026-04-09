@@ -1,0 +1,110 @@
+\documentclass[10pt,twoside]{article}
+\usepackage[marginparsep=1em]{geometry}
+\geometry{lmargin=1.0in,rmargin=1.0in, bmargin=1.2in,  tmargin=1.2in}
+\usepackage[dvipsnames,svgnames,table]{xcolor}
+\usepackage{graphicx}
+\usepackage{amssymb}
+\usepackage{epstopdf}
+\usepackage{verbatim}
+\usepackage{enumerate}
+\usepackage{bm}
+\usepackage{amsthm}
+\usepackage{float}
+\usepackage{amsmath}
+\usepackage{fancyhdr}
+\usepackage{hyperref}
+\usepackage{mathtools}
+
+%%%%  SHORTCUT COMMANDS  %%%%
+\newcommand{\ds}{\displaystyle}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\T}{\mathcal{T}}
+\newcommand{\arc}{\rightarrow}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\RP}{\mathbb{R}(+)}
+\newcommand{\Rs}{\mathbb{R}^{**}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\B}{\mathcal{B}}
+\newcommand{\PX}{\mathcal{P}(X)}
+\newcommand*\rot{\rotatebox{90}}
+\newcommand*\OK{\ding{51}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\Answer}{\vspace{2mm}\textbf{\underline{Answer}}\\}
+\newcolumntype{L}{>{$}l<{$}}
+\newcolumntype{C}{>{$}c<{$}}
+\newcommand{\GL}{\text{GL}}
+\newcommand{\SL}{\text{SL}}
+\newcommand{\Var}{\text{Var}}
+
+\newcommand{\stirling}[2]{\genfrac{\{}{\}}{0pt}{}{#1}{#2}}
+
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\sectionmark}[1]{\markright{\thesection.\ #1}}
+\lhead{\fancyplain{}{}}
+\fancyhead[RE,RO]{Math 4451, Spring 2026}
+\fancyfoot[RE,RO]{\thepage}
+
+
+\begin{document}
+\begin{flushright}
+\begin{minipage}{.33\textwidth}
+\rightline{YOUR NAME}
+\rightline{\href{mailto:YOUR EMAIL}{YOUR EMAIL}}
+\rightline{\today}
+\end{minipage}
+\end{flushright}
+
+\begin{center}
+{\large{\textbf{Homework 8}}}
+\end{center}
+
+\begin{enumerate}
+  \item While UMVUE estimators are desirable, there are not always available.
+  Instead, we can sometimes further restrict our class of estimators to unbiased, and linear.
+  In this class of estimators, we often what the Best Linear Unbiased Estimator (BLUE) of a parameter $\theta$.
+  That is, among all linear, unbiased estimators, we want the estimator with minimum variance.
+
+  Suppose you are measure the concentration $\theta$ of a chemical in a water sample.
+  You have two machines to measure the chemical, and both machines are \textbf{unbiased}.
+  If $X_1, X_2$ represent measurements from machine 1 and machine 2, respectively, then $E[X_1] = \theta$, and $E[X_2] = \theta$.
+  However, the machines have different variance in their estimates: $\Var(X_1) = \sigma^2_1$, and $\Var(X_2) = \sigma^2_2$.
+
+  There are three different proposals of how to estimate $\theta$, the true unknown chemical concentration:
+  \begin{enumerate}[(A)]
+    \item $\hat{\theta}_A = 0.5 X_1 + 0.5 X_2$.
+    \item $\hat{\theta}_B = 0.2 X_1 + 0.8 X_2$.
+    \item $\hat{\theta}_C = 0.5 X_1 + 0.4 X_2$.
+  \end{enumerate}
+
+\begin{enumerate}
+  \item Which of the three estimators are \textbf{Unbiased}?
+  \item If $\sigma^2_1 = \sigma^2_2$, which of the three estimators has the lowest variance? What about lowest variance amongst only the unbiased estimators?
+  \item Consider any \emph{linear} estimator, $\hat{\mu} = aX_1 + bX_2$. Find a rule for $a$ and $b$ such that $\hat{\mu}$ is unbiased.
+  \item Find the BLUE of $\theta$ using $X_1$ and $X_2$. That is, the linear estimator of $\theta$ that is unbiased and minimizes the variance of the estimator (hint: since we want small variance, restrict yourselves to values $0 \leq a, b \leq 1$).
+\end{enumerate}
+
+\item A factory produces computer chips. Each chip has a probability $\theta$ of being defective. The factory manager wants to know the probability of drawing \textbf{two defective chips in a row}.
+Assuming the chip quality is independent across manufactured chips, the parameter we want to estimate is $\theta = p^2$.
+
+A natural model for this scenario is that $X_1, X_2, \ldots, X_n$ are iid Bernoulli$(p)$.
+
+\begin{enumerate}
+  \item \label{prob:binomMLE} Use the invariance property of the MLE to find the MLE of $\theta = p^2$.
+  \item Calculate the bias of the MLE estimate found in Problem~\ref{prob:binomMLE}.
+  \item Consider the alternative estimator $\hat{\theta}_2 = X_1X_2$ (the product of the first two observations). Show that $\hat{\theta}_2$ is unbiased for $\theta = p^2$.
+  \item Because the $\hat{\theta}_2$ only depends on the first two observations, it's not a very good estimator. We want to improve this using the \textbf{Rao-Blackwell Theorem}. Find a sufficient statistic, $T$ for $p$ (note that if $T$ is sufficient for $p$, it is sufficient for $p^2$). (HINT: there are many possible solutions. You'll want to simplify as much as possible to solve Problem~\ref{prob:RB}).
+  \item \label{prob:RB} With your sufficient statistic $T$, apply the Rao-Blackwell theorem to find an improved unbiased estimator:
+  $$
+  \hat{\theta}_{RB} = E\big[ \hat{\theta}_2 | T\big] = E\big[ X_1X_2 | T\big].
+  $$
+  This will involve some counting practice from last semester. In particular, $X_1X_2$ is either $0$ or $1$. Therefore, $E\big[ X_1X_2 | T\big] = P(X_1X_2 = 1 | T) = P(X_1 = 1, X_2 = 1 | T)$. Thus, if we know $T = t$, what is the probability that the first two observations are equal to $1$?
+\end{enumerate}
+
+
+\end{enumerate}
+
+
+\end{document}
