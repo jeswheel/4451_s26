@@ -1190,7 +1190,7 @@ Point Estimation: Principles and Theory}
     \end{align*}
     Using the variable transformation theorem for discrete random variables, we have
     \begin{align*}
-    q\big(T(x); \theta\big) &= \sum_{y \in A_{T(x)}} f_Y(y;\theta) \\
+    q\big(T(x); \theta\big) &= \sum_{y \in A_{T(x)}} f_X(y;\theta) \\
     &= \sum_{y \in A_{T(x)}} g\big(T(y) ; \theta\big)h(y) \\
     &= g\big(T(x)\big) \sum_{y \in A_{T(x)}} h(y),
     \end{align*}
