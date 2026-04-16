@@ -431,13 +431,14 @@ lines(
   \framebreak
 
   \begin{exampleblock}{Likelihood Ratio Test: Normal distribution}
-    Let $X_i$ be iid $N(\theta, 1)$ random variables. Consider testing $H_0: \theta = \theta_0$, against $H_1: \theta \neq \theta_0$, where $\theta_0$ is some fixed number. Derive the likelihood ratio test for this hypothesis testing scenario.
+    Let $X_i$ be iid $N(\theta, 1)$ random variables. Consider testing $H_0: \theta = \theta_0$, against $H_1: \theta \neq \theta_0$, where $\theta_0$ is some fixed number.
+    Derive the likelihood ratio test for this hypothesis testing scenario.
 
     \mode<article>{
       Here, $\Theta_0 = \{\theta_0\}$ is only one value, so in the numerator of the likelihood ratio, we have $L(\theta_0)$.
       We have previously derived that the MLE for this Normal model is $\hat{\theta} = \bar{x}_n$. Thus, the likelihood ratio is:
       $$
-      \lambda(x) = \frac{L(\theta_0)}{L(\bar{x}_n}.
+      \lambda(x) = \frac{L(\theta_0)}{L(\bar{x}_n)}.
       $$
       Any likelihood ratio test is designed so that we will reject when this ratio is smaller than some constant $c$ (to be decided later).
       % For this reason, we will substitute in the value $\lambda(x)$, for convenience.
