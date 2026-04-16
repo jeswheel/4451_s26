@@ -1090,7 +1090,7 @@ Point Estimation: Principles and Theory}
   \begin{itemize}
     \item If we take some statistic sufficient $T$ (could be an estimator), then after accounting for $T$, there is no more information available about $\theta$ in the available data.
     \item Formally, a sufficient statistic suggests that we could throw away all of the data, except the sufficient statistic, and not lose any information about the parameter $\theta$.
-    \item If we reduce the data + model to a point estimate, we want this to not result in information loss. 
+    \item If we reduce the data + model to a point estimate, we want this to not result in information loss.
   \end{itemize}
 
   \framebreak
@@ -1305,7 +1305,7 @@ Point Estimation: Principles and Theory}
   \end{itemize}
 
   \begin{block}{The Rao-Blackwell Theorem}
-    Let $\hat{\theta}$ be an estimator of $\theta$, with $E[\hat{\theta}] < \infty$. Suppose that $T(X)$ is a sufficient statistic for $\theta$, and define $\tilde{\theta} = E\big[\hat{\theta}| T(X)\big]$. Then, for all $\theta$, 
+    Let $\hat{\theta}$ be an estimator of $\theta$, with $E[\hat{\theta}] < \infty$. Suppose that $T(X)$ is a sufficient statistic for $\theta$, and define $\tilde{\theta} = E\big[\hat{\theta}| T(X)\big]$. Then, for all $\theta$,
     $$
     E\big[(\tilde{\theta} - \theta)^2\big] \leq E\big[(\hat{\theta} - \theta)^2\big].
     $$
@@ -1317,33 +1317,33 @@ Point Estimation: Principles and Theory}
   \begin{itemize}
     \item The Rao-Blackwell theorem implies that any estimator that is not a function of a sufficient statistic can be improved by conditioning on a sufficient statistic.
     \item This provides strong rationale for basing estimators on sufficient statistics (if they exist), and provides strong support for the MLE as an estimator.
-    \item This theorem can be expanded to find UMVUE estimators, using the Lehmann–Scheff\'e Theorem: if $T(X)$ is a \emph{complete} (definition not given), and $\hat{\theta}$ is unbiased, then $\tilde{\theta} = E[\hat{\theta}|T(X)]$ is UMVUE. 
+    \item This theorem can be expanded to find UMVUE estimators, using the Lehmann–Scheff\'e Theorem: if $T(X)$ is a \emph{complete} (definition not given), and $\hat{\theta}$ is unbiased, then $\tilde{\theta} = E[\hat{\theta}|T(X)]$ is UMVUE.
   \end{itemize}
 
   \framebreak
 
   \begin{block}{Lemma: Sufficiency of the MLE}
     If $T(X)$ is sufficient for $\theta$, then the MLE is a function of $T(X)$. Thus, the MLE is a minimal sufficient statistic.
-    
+
     \mode<article>{
       \begin{proof}
-        Let $f_X(x; \theta)$ denote the likelihood. 
+        Let $f_X(x; \theta)$ denote the likelihood.
         If $T(X)$ is sufficient for $\theta$, then the factorization theorem implies that there exists some functions $g$ and $h$ such that
         $$
         f_X(x; \theta) = g\big(T(X), \theta\big)h(x) \propto g\big(T(X), \theta\big),
         $$
         since $h$ does not involve $\theta$.
-        Thus, to find the MLE, we need only to maximize a function of the sufficient statistic $g\big(T(X), \theta)$. 
+        Thus, to find the MLE, we need only to maximize a function of the sufficient statistic $g\big(T(X), \theta)$.
       \end{proof}
     }
-    
+
   \end{block}
-  
+
   \framebreak
-  
+
   \begin{block}{Lemma: The likelihood function is sufficient}
     If $T(X)$ is sufficient for $\theta$, then the likelihood function $L(\theta)$ is a function of $T$. Thus, the likelihood function is minimal sufficient.
-    
+
     \mode<article>{
     \begin{proof}
     This is just a proof sketch, based on Theorem 3.2 of \citet{pawitan01}. First, we need to note that the likelihood function is formally a type of statistic: for any fixed model, the likelihood is uniquely determined by the data alone.
@@ -1355,14 +1355,14 @@ Point Estimation: Principles and Theory}
     where $\theta_0$ is any valid value of $\theta$, then by defining
     $$
     g(t, \theta) = L(t) / L(\theta_0)
-    $$ for any value $\theta_0$, and $h(x) = L(\theta_0)$, the factorization theorem states that $T(X)$ is a sufficient statistic.
-    
+    $$ for any value $\theta_0$, and $h(x) = 1 / L(\theta_0)$, the factorization theorem states that $T(X)$ is a sufficient statistic.
+
     Then, we note that the likelihood function is the same whether we use all of the data $X$ or any sufficient statistic $T(X)$, so the likelihood is both sufficient, and a function of any other sufficient statistic $T(X)$, making it minimally sufficient.
     \end{proof}
     }
-    
+
   \end{block}
-  
+
   \framebreak
 
   \begin{itemize}
@@ -1374,7 +1374,7 @@ Point Estimation: Principles and Theory}
 
 \newcommand\acknowledgments{
 \begin{itemize}
-\item   Compiled on {\today} using \Rlanguage version 4.5.1.
+\item   Compiled on {\today} using \Rlanguage version 4.5.3.
 \item   \parbox[t]{0.75\textwidth}{Licensed under the \link{http://creativecommons.org/licenses/by-nc/4.0/}{Creative Commons Attribution-NonCommercial license}.
     Please share and remix non-commercially, mentioning its origin.}
     \parbox[c]{1.5cm}{\includegraphics[height=12pt]{../cc-by-nc}}
