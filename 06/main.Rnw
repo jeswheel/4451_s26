@@ -56,14 +56,6 @@ Hypothesis Testing}
 
 \end{frame}
 
-\begin{frame}[allowframebreaks]{Rough plan}
-  \begin{itemize}
-    \item Confidence Intervals (Rice 9.3)
-    \item Profile likelihoods (Pawitan 3.4)
-  \end{itemize}
-\end{frame}
-
-
 \begin{frame}[allowframebreaks]{Definitions}
 
 \begin{block}{Definition: Hypothesis}
@@ -1023,8 +1015,6 @@ $$
 $$
 
 \subsection*{Exact test}
-
-TODO: Update this with work from paper.
 
 An exact confidence interval may be constructed by inverting an exact hypothesis test.
 We will restrict ourselves to confidence intervals that have equal two-side rejection probabilities.
