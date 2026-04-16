@@ -10,7 +10,7 @@ output: html_document
 |:-----------------------|:------------------------:|
 | Lecture slides   | [pdf](slides.pdf) |
 | Lecture notes    | [pdf](notes.pdf) |
-<!-- | Annotated Slides | [pdf](annotatedSlides.pdf) | -->
+| Annotated Slides | [pdf](annotatedSlides.pdf) |
 <!-- | Discussion Problems | [pdf](discussionProbs.pdf) | -->
 ----------------------
 
