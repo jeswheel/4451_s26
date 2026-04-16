@@ -295,7 +295,7 @@ Hypothesis Testing}
       regardless of the value $\theta \in H_1$.
 
       From this, we can eliminate $R_1, R_2, R_3, R_4, R_5, R_6$ as candidates, since they are all subsets of $R_9 = \{0, 1, 9, 10\}$.
-      This leads us to compare the power of a test based on $R_9$ against one based on sets like $R_{10} = {2, 10}$.
+      This leads us to compare the power of a test based on $R_9$ against one based on sets like $R_{10} = \{2, 10\}$.
       One idea is to plot $\beta_9(\theta) = P_\theta(X \in R_9)$ and $\beta_{10}(\theta) = P_{\theta}(X \in R_{10})$, as a function of $\theta$.
 
 \begin{figure}[ht]
