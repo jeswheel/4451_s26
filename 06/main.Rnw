@@ -801,7 +801,7 @@ Thus, the Poisson family of distributions possesses a monotone likelihood ratio 
       $$
       With this selection, the interval estimator is:
       $$
-      I_{b = \infty}(X) = \big[(1 - \alpha)^{-1/n}, \infty\big).
+      I_{b = \infty}(X) = \big[(1 - \alpha)^{-1/n}X_{(n)}, \infty\big).
       $$
 
       While valid, one concern about this interval is that it is very large. In particular, we have $1-\alpha$ coverage, but we our interval estimator is unbounded! Even for small $n$, say $n=10$, our lower bound using this interval estimator is $aX_{(n)} = 1.005X_{(n)}$ for $\alpha = 0.05$.
