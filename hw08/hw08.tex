@@ -129,10 +129,10 @@
   \end{enumerate}
 
 \begin{enumerate}
-  \item Which of the three estimators are \textbf{Unbiased}?
-  \item If $\sigma^2_1 = \sigma^2_2$, which of the three estimators has the lowest variance? What about lowest variance amongst only the unbiased estimators?
-  \item Consider any \emph{linear} estimator, $\hat{\mu} = aX_1 + bX_2$. Find a rule for $a$ and $b$ such that $\hat{\mu}$ is unbiased.
-  \item Find the BLUE of $\theta$ using $X_1$ and $X_2$. That is, the linear estimator of $\theta$ that is unbiased and minimizes the variance of the estimator (hint: since we want small variance, restrict yourselves to values $0 \leq a, b \leq 1$).
+  \item (2 points) Which of the three estimators are \textbf{Unbiased}?
+  \item (1 point) If $\sigma^2_1 = \sigma^2_2$, which of the three estimators has the lowest variance? What about lowest variance amongst only the unbiased estimators?
+  \item (2 points) Consider any \emph{linear} estimator, $\hat{\mu} = aX_1 + bX_2$. Find a rule for $a$ and $b$ such that $\hat{\mu}$ is unbiased.
+  \item (2 points) Find the BLUE of $\theta$ using $X_1$ and $X_2$. That is, the linear estimator of $\theta$ that is unbiased and minimizes the variance of the estimator (hint: since we want small variance, restrict yourselves to values $0 \leq a, b \leq 1$).
 \end{enumerate}
 
 \item A factory produces computer chips. Each chip has a probability $\theta$ of being defective. The factory manager wants to know the probability of drawing \textbf{two defective chips in a row}.
@@ -141,11 +141,11 @@ Assuming the chip quality is independent across manufactured chips, the paramete
 A natural model for this scenario is that $X_1, X_2, \ldots, X_n$ are iid Bernoulli$(p)$.
 
 \begin{enumerate}
-  \item \label{prob:binomMLE} Use the invariance property of the MLE to find the MLE of $\theta = p^2$.
-  \item Calculate the bias of the MLE estimate found in Problem~\ref{prob:binomMLE}.
-  \item Consider the alternative estimator $\hat{\theta}_2 = X_1X_2$ (the product of the first two observations). Show that $\hat{\theta}_2$ is unbiased for $\theta = p^2$.
-  \item Because the $\hat{\theta}_2$ only depends on the first two observations, it's not a very good estimator. We want to improve this using the \textbf{Rao-Blackwell Theorem}. Find a sufficient statistic, $T$ for $p$ (note that if $T$ is sufficient for $p$, it is sufficient for $p^2$). (HINT: there are many possible solutions. You'll want to simplify as much as possible to solve Problem~\ref{prob:RB}).
-  \item \label{prob:RB} With your sufficient statistic $T$, apply the Rao-Blackwell theorem to find an improved unbiased estimator:
+  \item (1 point) \label{prob:binomMLE} Use the invariance property of the MLE to find the MLE of $\theta = p^2$.
+  \item (2 points) Calculate the bias of the MLE estimate found in Problem~\ref{prob:binomMLE}.
+  \item (1 point) Consider the alternative estimator $\hat{\theta}_2 = X_1X_2$ (the product of the first two observations). Show that $\hat{\theta}_2$ is unbiased for $\theta = p^2$.
+  \item (1 point) Because the $\hat{\theta}_2$ only depends on the first two observations, it's not a very good estimator. We want to improve this using the \textbf{Rao-Blackwell Theorem}. Find a sufficient statistic, $T$ for $p$ (note that if $T$ is sufficient for $p$, it is sufficient for $p^2$). (HINT: there are many possible solutions. You'll want to simplify as much as possible to solve Problem~\ref{prob:RB}).
+  \item (3 points) \label{prob:RB} With your sufficient statistic $T$, apply the Rao-Blackwell theorem to find an improved unbiased estimator:
   $$
   \hat{\theta}_{RB} = E\big[ \hat{\theta}_2 | T\big] = E\big[ X_1X_2 | T\big].
   $$

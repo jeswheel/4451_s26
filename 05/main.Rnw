@@ -881,12 +881,12 @@ Point Estimation: Principles and Theory}
     \mode<article>{
       First we need to find the expected Fisher's information. Since the data are iid, we have $\mathcal{I}_n(\theta)$, denoting the information for the entire collection of observations $X_1, X_2, \ldots, X_n$, is equal to:
       $$
-      \mathcal{I}_n(\theta) = n\mathcal{I}(\theta)
+      \mathcal{I}_n(\theta) = n\mathcal{I}_1(\theta)
       $$
       where $\mathcal{I}(\theta)$ is the information for a single observation.
       Using the second characterization of Fisher's Information (i.e., using the fact that we can exchange derivative and integral for this family):
       \begin{align*}
-        \mathcal{I}(\theta) &= -E\Big[\frac{\partial^2}{\partial \theta^2} \log f(X_i; \theta)\Big] \\
+        \mathcal{I}_1(\theta) &= -E\Big[\frac{\partial^2}{\partial \theta^2} \log f(X_i; \theta)\Big] \\
         &= -E\Big[\frac{\partial^2}{\partial \theta^2} \log \frac{e^{-\lambda}\lambda^X_i}{X_i!}\Big] \\
         &= -E\Big[\frac{\partial^2}{\partial \theta^2} \big(-\lambda + X_i \log \lambda - \log X_i!\big)\Big] \\
         &= -E\Big[\frac{\partial^2}{\partial \theta^2} \big(-1 + X_i/\lambda\big)\Big] \\
@@ -1190,7 +1190,7 @@ Point Estimation: Principles and Theory}
     \end{align*}
     Using the variable transformation theorem for discrete random variables, we have
     \begin{align*}
-    q\big(T(x); \theta\big) &= \sum_{y \in A_{T(x)}} f_Y(y;\theta) \\
+    q\big(T(x); \theta\big) &= \sum_{y \in A_{T(x)}} f_X(y;\theta) \\
     &= \sum_{y \in A_{T(x)}} g\big(T(y) ; \theta\big)h(y) \\
     &= g\big(T(x)\big) \sum_{y \in A_{T(x)}} h(y),
     \end{align*}
